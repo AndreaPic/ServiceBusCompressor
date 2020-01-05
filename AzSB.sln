@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SBCompressor", "SBCompressor\SBCompressor.csproj", "{864C4EAD-BD8B-436D-8FE2-25E21D8E5D7F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SBCompressorTests", "SBCompressorTests\SBCompressorTests.csproj", "{4271E019-2873-4D04-BCD3-DB3CDF0178EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{864C4EAD-BD8B-436D-8FE2-25E21D8E5D7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{864C4EAD-BD8B-436D-8FE2-25E21D8E5D7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{864C4EAD-BD8B-436D-8FE2-25E21D8E5D7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{864C4EAD-BD8B-436D-8FE2-25E21D8E5D7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4271E019-2873-4D04-BCD3-DB3CDF0178EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4271E019-2873-4D04-BCD3-DB3CDF0178EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4271E019-2873-4D04-BCD3-DB3CDF0178EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4271E019-2873-4D04-BCD3-DB3CDF0178EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {49B58F02-9780-4CE4-A124-6DB6DEA42C5B}
+	EndGlobalSection
+EndGlobal

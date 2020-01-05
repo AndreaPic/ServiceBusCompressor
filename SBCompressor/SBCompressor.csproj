@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageId>SPS.SBCompressor</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Andrea Piccioni</Authors>
+    <Company>Studio Progettazione Software</Company>
+    <AssemblyVersion>0.0.1.0</AssemblyVersion>
+    <FileVersion>0.0.1.0</FileVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.0.2</Version>
+    <PackageTags>Azure Service Bus, .Net Core, CSharp</PackageTags>
+    <PackageProjectUrl />
+    <RepositoryUrl>https://github.com/AndreaPic/ServiceBusCompressor</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>With this library you can send and recevice messages to Azure Service Bus without the size limit of 256Kb.</Description>
+    <Copyright />
+  </PropertyGroup>
+     
+  <ItemGroup>
+    <None Remove="nuget.exe" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="4.1.1" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.0" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <None Update="sbcsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <CopyToPublishDirectory>true</CopyToPublishDirectory>
+      <PackagePath>contentFiles;content</PackagePath>
+    </None>
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <Content Include="ReadMe.txt">
+      <Pack>true</Pack>
+      <PackagePath>ReadMe.txt</PackagePath>
+    </Content>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="sbcsettings.json">
+      <Pack>true</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <CopyToPublishDirectory>true</CopyToPublishDirectory>
+      <PackagePath>contentFiles;content</PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\ResourceMessage.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResourceMessage.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\ResourceMessage.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceMessage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  
+</Project>
