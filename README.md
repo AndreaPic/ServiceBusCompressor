@@ -7,6 +7,10 @@ You can read more details about quota limitations at this [link](https://docs.mi
 
 With this library you can send and read messages bigger then 1Mb without upgrade service bus's tier.
 
+# Nuget Package
+You can use this library building it following this document or you can download its package from nuget at this [link](https://www.nuget.org/packages/SPS.SBCompressor/).
+Please follow the samples below to learn how to use it.
+
 # Issues with those limitation
 ## Chatty messages
 Frequently, to be sure to respect quota limit, the message contains only the identity of the object for which the event was raised and some information about the event.
