@@ -227,6 +227,18 @@ namespace SBCompressor
         /// <summary>
         /// Send EventMessage to service bus
         /// </summary>
+        /// <param name="message">string message to send. It could be a json.</param>
+        /// <returns></returns>
+        public async Task SendAsync(string message)
+        {
+            EventMessage eventMessage = new EventMessage();
+            eventMessage.Body = message;
+            await SendAsync(eventMessage);
+        }
+
+        /// <summary>
+        /// Send EventMessage to service bus
+        /// </summary>
         /// <param name="eventMessage">message to send</param>
         /// <returns></returns>
         public async Task SendAsync(EventMessage eventMessage)
