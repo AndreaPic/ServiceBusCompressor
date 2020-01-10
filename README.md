@@ -1,9 +1,11 @@
 # Azure Service Bus “by design”
 For many right reasons message has size limitation. For example, large message has network latency problem with performance impact, large message has impact on network traffic, message receiver could have problem to manage large message, small is faster than larger and so on.
 
-Azure service bus has many reasons to limit message size and the size limit is 256KB for “Standard tier” and 1MB for (Premium tier). Premium tier has other differences then Standard tier but the price is much higher.
+Azure service bus has many reasons to limit message size and the size limit is 256Kb for “Standard tier” and 1MB for (Premium tier). Premium tier has other differences then Standard tier but the price is much higher.
 
 You can read more details about quota limitations at this [link](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quotas)
+
+With this library you can send and read messages bigger then 1Mb without upgrade service bus's tier.
 
 # Issues with those limitation
 ## Chatty messages
@@ -336,4 +338,5 @@ You must use the blob storage of the previous sample.
 
 # Getting Started using the library as is
 1. Source code
-2. Nuget package
+2. Nuget package. You can use this library building it following this document or you can download its package from nuget at this [link](https://www.nuget.org/packages/SPS.SBCompressor/).
+Please follow the samples below to learn how to use it.
