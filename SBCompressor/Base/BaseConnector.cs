@@ -160,6 +160,20 @@ namespace SBCompressor
                 await client.CloseAsync();
             }
         }
+        /// <summary>
+        /// Close all clients
+        /// </summary>
+        /// <returns></returns>
+        internal static async Task<bool> CloseAsync(string entityName)
+        {
+            TClient client;
+            bool removed = Clients.TryRemove(entityName, out client);
+            if (removed)
+            {
+                await client.CloseAsync();
+            }
+            return removed;
+        }
 
         /// <summary>
         /// Create sender for the queue or topic
