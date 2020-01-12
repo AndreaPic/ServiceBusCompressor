@@ -33,6 +33,34 @@ You can adopt “Premium Tier” so you can exceed the 256Kb, anyway this tier h
 
 “Premium Tier” has much performance than “Standard Tier” so is very expensive. I do not think this is the right solution for the message size problem. Anyway, the message’s size limit remain.
 
+# How to use this library
+## Extension 
+You can use this library as extension of QueueClient, TopicClient or SubscriptionClient in simply way using the extension methods:
+- SendCompressorAsync (in SBCompressor.Extensions.Sender namespace) instead of SendAsync 
+- SubscribeCompressorAsync (in SBCompressor.Extensions.Reader namespace) instead of RegisterMessageHandler
+## Library
+You can use Library object's as explained in samples: ConsoleSenderAppSBC, ConsoleReceiverAppSBC, ConsoleTopicSenderAppSBC, ConsoleTopicReceicerAppSBC
+
+# Getting Started using the library 
+1. Source code
+2. Nuget package. You can use this library building it following this document or you can download its package from nuget at this [link](https://www.nuget.org/packages/SPS.SBCompressor/).
+Please follow the samples below to learn how to use it.
+
+# Getting Started with source code
+This project is a based on .Net Core and has dependencies on Microsoft.Azure.ServiceBus and Microsoft.Azure.Storage.Blob .nuget packages.
+In Samples directory there is a readme.md file to explain how to use and configure them.
+
+## Source Code
+In this there are library, unit tests and saples source code.
+In the root directory there is the AzSB.sln file that include all projects.
+
+In the sulution there are:
+- AzSB.sln (solution with the main library and unit tests)
+- Samples\ConsoleSenderAppSBC\ConsoleSenderAppSBC.sln (example that sends messages to Queue)
+- Samples\ConsoleReceiverAppSBC\ConsoleReceiverAppSBC.sln (example that reads messages from Queue)
+- Samples\ConsoleTopicSenderAppSBC\ConsoleTopicSenderAppSBC.sln (example that sends messages for Topic)
+- Samples\ConsoleTopicReceicerAppSBC\ConsoleTopicReceicerAppSBC.sln (example that reads messages from Topic)
+
 # The proposed solution
 The proposed solution is applicable to all tier from “Basic” to “Standard” and “Premium”.
 
@@ -104,19 +132,6 @@ At this [link](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-life
 This is a good solution but there is no guarantee that every subscriber has read his message before the deletion of the message. 
 You can configure the blob’s lifetime with a “time to live” greater than “Message time to live” so you will have a great and cheap solution.
 
-
-# Getting Started with source code
-This project is a based on .Net Core and has dependencies on Microsoft.Azure.ServiceBus and Microsoft.Azure.Storage.Blob .nuget packages.
-## Source Code
-In this there are library, unit tests and saples source code.
-In the root directory there is the AzSB.sln file that include all projects.
-
-In the sulution there are:
-- AzSB.sln (solution with the main library and unit tests)
-- Samples\ConsoleSenderAppSBC\ConsoleSenderAppSBC.sln (example that sends messages to Queue)
-- Samples\ConsoleReceiverAppSBC\ConsoleReceiverAppSBC.sln (example that reads messages from Queue)
-- Samples\ConsoleTopicSenderAppSBC\ConsoleTopicSenderAppSBC.sln (example that sends messages for Topic)
-- Samples\ConsoleTopicReceicerAppSBC\ConsoleTopicReceicerAppSBC.sln (example that reads messages from Topic)
 
 # Build Library and tests
 Use AzSB to build the SBCompressor Assembly.
@@ -335,8 +350,3 @@ You must use the blob storage of the previous sample.
 7. Run the Console Application
 
 ## How to configure the unit tests
-
-# Getting Started using the library as is
-1. Source code
-2. Nuget package. You can use this library building it following this document or you can download its package from nuget at this [link](https://www.nuget.org/packages/SPS.SBCompressor/).
-Please follow the samples below to learn how to use it.
