@@ -48,6 +48,7 @@ Please follow the samples below to learn how to use it.
 
 # Getting Started with source code
 This project is a based on .Net Core and has dependencies on Microsoft.Azure.ServiceBus and Microsoft.Azure.Storage.Blob .nuget packages.
+Use AzSB solution to build the SBCompressor Library.
 In Samples directory there is a readme.md file to explain how to use and configure them.
 
 ## Source Code
@@ -131,9 +132,3 @@ At this [link](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-life
 
 This is a good solution but there is no guarantee that every subscriber has read his message before the deletion of the message. 
 You can configure the blob’s lifetime with a “time to live” greater than “Message time to live” so you will have a great and cheap solution.
-
-# Build Library and tests
-Use AzSB to build the SBCompressor Assembly.
-After building SBCompressor Assembly you can use the samples to know ho to use SBCompressor Library.
-
-## How to configure the unit tests
