@@ -5,7 +5,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SBCompressor
+namespace SBCompressor.Extensions
 {
     /// <summary>
     /// Extension class for zip and unzip objects

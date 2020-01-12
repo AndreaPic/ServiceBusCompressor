@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.ServiceBus;
 using Newtonsoft.Json;
+using SBCompressor.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

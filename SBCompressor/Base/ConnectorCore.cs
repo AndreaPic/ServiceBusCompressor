@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.ServiceBus.Management;
 using Microsoft.Extensions.Configuration;
+using SBCompressor.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;

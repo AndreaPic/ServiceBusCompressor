@@ -1,9 +1,6 @@
 ﻿using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Core;
-using Microsoft.Azure.ServiceBus.Management;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using SBCompressor.Extensions;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -12,48 +9,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SBCompressor
+namespace SBCompressor.Extensions.Reader
 {
-    /// <summary>
-    /// base class for queue or topic reader\subscriptor
-    /// </summary>
-    /// <typeparam name="TClient">
-    /// Concrete type of client\reader\subscriptor
-    /// </typeparam>
-    public abstract class BaseMessageReader<TClient> : ConnectorCore, IMessageReader
-       where TClient : ClientEntity, IReceiverClient
+    internal class ReaderExtender<TClient>
+       where TClient : IReceiverClient //IQueueClient, ClientEntity, IClientEntity
     {
-        /// <summary>
-        /// Initialize for queue of the connection string
-        /// </summary>
-        /// <param name="entityName">Queue name</param>
-        /// <param name="connectionStringName">name of the connection string in the setting file</param>
-        public BaseMessageReader(string entityName, string connectionStringName) : base (entityName, connectionStringName)
-        {
-            ChunkDictionary = new ConcurrentDictionary<string, List<byte[]>>();
-        }
-
-        /// <summary>
-        /// Subscribe to the queue or topic of the service bus
-        /// </summary>
-        /// <returns></returns>
-        public async Task EnsureSubscribe(Action<MessageReceivedEventArgs> onMessageReceived)
-        {
-            NamespaceInfo namespaceInfo = await CreateNamespaceInfoAsync();
-            bool existSubscription = await CheckExistSubscription();
-            if (existSubscription)
-            {
-                CurrentSubscriptionClient = CreateSubscriptionClient();
-                OnMessageReceived = onMessageReceived;
-                RegisterForMessage();
-            }
-        }
-
-        /// <summary>
-        /// Current client
-        /// </summary>
-        protected TClient CurrentSubscriptionClient { get; private set; }
-
         /// <summary>
         /// Storage manager for very large message
         /// </summary>
@@ -61,31 +21,34 @@ namespace SBCompressor
         /// <summary>
         /// Storage manager for very large message
         /// </summary>
-        private MessageStorage Storage 
-        { 
+        private MessageStorage Storage
+        {
             get
             {
-                if (storage==null)
+                if (storage == null)
                 {
                     storage = new MessageStorage();
                 }
                 return storage;
-            } 
+            }
         }
         /// <summary>
         /// Container for chunks of large messages
         /// </summary>
         private ConcurrentDictionary<string, List<byte[]>> ChunkDictionary { get; set; }
 
-        /// <summary>
-        /// Close the client
-        /// </summary>
-        /// <returns></returns>
-        public async Task CloseAsync()
+        private TClient Client { get; set; }
+
+        virtual protected TClient GetClient()
         {
-            await CurrentSubscriptionClient.CloseAsync();
+            return Client;
         }
 
+        internal ReaderExtender(TClient client)
+        {
+            Client = client;
+            ChunkDictionary = new ConcurrentDictionary<string, List<byte[]>>();
+        }
         /// <summary>
         /// Register client for messages
         /// </summary>
@@ -94,8 +57,9 @@ namespace SBCompressor
             MessageHandlerOptions options = new MessageHandlerOptions(ExceptionReceivedHandler);
             options.AutoComplete = false;
             options.MaxConcurrentCalls = 1;
-            CurrentSubscriptionClient.RegisterMessageHandler(MessageReceivedHandler, options);
+            Client.RegisterMessageHandler(MessageReceivedHandler, options);
         }
+
         /// <summary>
         /// Handler in caso of exceptions reading message
         /// </summary>
@@ -105,21 +69,13 @@ namespace SBCompressor
         {
             return Task.CompletedTask;
         }
-
-        /// <summary>
-        /// Create the right instance of the client
-        /// </summary>
-        /// <returns>Client for the queue or topic</returns>
-        abstract protected TClient CreateSubscriptionClient();
-
-
         /// <summary>
         /// Handle the received message
         /// </summary>
         /// <param name="receivedMessage">message received from service bus</param>
         /// <param name="token">CanellationToken</param>
         /// <returns></returns>
-        public async Task MessageReceivedHandler(Message receivedMessage, CancellationToken token)
+        private async Task MessageReceivedHandler(Message receivedMessage, CancellationToken token)
         {
             try
             {
@@ -140,25 +96,25 @@ namespace SBCompressor
                                 case MessageModes.Simple:
                                     msg = ReaderHandler.GetSimpleMessage(receivedMessage);
                                     MessageReceived(msg, receivedMessage);
-                                    await CurrentSubscriptionClient.CompleteAsync(receivedMessage.SystemProperties.LockToken);
+                                    await Client.CompleteAsync(receivedMessage.SystemProperties.LockToken);
                                     break;
                                 case MessageModes.GZip:
                                     msg = await ReaderHandler.GetZippedMessage(receivedMessage);
                                     MessageReceived(msg, receivedMessage);
-                                    await CurrentSubscriptionClient.CompleteAsync(receivedMessage.SystemProperties.LockToken);
+                                    await Client.CompleteAsync(receivedMessage.SystemProperties.LockToken);
                                     break;
                                 case MessageModes.Chunk:
-                                    msg = await ReaderHandler.GetChunkedMessage(receivedMessage, ChunkDictionary);
-                                    await CurrentSubscriptionClient.CompleteAsync(receivedMessage.SystemProperties.LockToken);
+                                    msg = await ReaderHandler.GetChunkedMessage(receivedMessage,ChunkDictionary);
+                                    await Client.CompleteAsync(receivedMessage.SystemProperties.LockToken);
                                     if (msg != null)
                                     {
                                         MessageReceived(msg, receivedMessage);
                                     }
                                     break;
                                 case MessageModes.Storage:
-                                    msg = await ReaderHandler.GetStoredMessage(receivedMessage, Storage);
+                                    msg = await ReaderHandler.GetStoredMessage(receivedMessage,Storage);
                                     MessageReceived(msg, receivedMessage);
-                                    await CurrentSubscriptionClient.CompleteAsync(receivedMessage.SystemProperties.LockToken);
+                                    await Client.CompleteAsync(receivedMessage.SystemProperties.LockToken);
                                     break;
                                 default:
                                     break;
@@ -169,17 +125,15 @@ namespace SBCompressor
             }
             catch (Exception)
             {
-                await CurrentSubscriptionClient.CompleteAsync(receivedMessage.SystemProperties.LockToken);
+                await Client.CompleteAsync(receivedMessage.SystemProperties.LockToken);
             }
         }
 
-
-        /*
-        /// <summary>
-        /// Event raised when message is ready to be readed 
-        /// </summary>
-        public event EventHandler<MessageReceivedEventArgs> OnMessageReceived;
-        */
+        public void Subscribe(Action<MessageReceivedEventArgs> onMessageReceived)
+        {
+            OnMessageReceived = onMessageReceived;
+            RegisterForMessage();
+        }
 
         private Action<MessageReceivedEventArgs> OnMessageReceived;
 

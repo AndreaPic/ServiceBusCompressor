@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
 using Microsoft.Extensions.Configuration;
+using SBCompressor.Configuration;
 
 namespace SBCompressor
 {

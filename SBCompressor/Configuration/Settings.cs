@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace SBCompressor
+namespace SBCompressor.Configuration
 {
     /// <summary>
     /// Manage configuration from setting file
@@ -15,6 +15,7 @@ namespace SBCompressor
         /// Settings file name
         /// </summary>
         private const string AppSettingFileName = "sbcsettings.json";
+
         /// <summary>
         /// Lazi configuration instance
         /// </summary>
@@ -29,6 +30,7 @@ namespace SBCompressor
                 IConfiguration configuration = builder.Build();
                 return configuration;
             });
+
         /// <summary>
         /// Current configuration instance
         /// </summary>
@@ -45,5 +47,39 @@ namespace SBCompressor
             }
             
         }
+
+        /// <summary>
+        /// path for settings file to look for strategy
+        /// </summary>
+        private const string VeryLargeStrategiyettingConfig = "VeryLargeMessage:Strategy";
+
+        /// <summary>
+        /// Strategy used for very large message
+        /// </summary>
+        private static VeryLargeMessageStrategy? strategy;
+
+        /// <summary>
+        /// Get the strategy to use for very large message
+        /// </summary>
+        /// <returns>Current strategy to use for very large message</returns>
+        internal static VeryLargeMessageStrategy GetVeryLargeMessageStrategy()
+        {
+            if (!strategy.HasValue)
+            {
+                strategy = VeryLargeMessageStrategy.Storage;
+                string strategyConfig = Settings.CurrentConfiguration[VeryLargeStrategiyettingConfig];
+                if (!string.IsNullOrEmpty(strategyConfig))
+                {
+                    VeryLargeMessageStrategy tmp;
+                    bool parsed = Enum.TryParse(strategyConfig, out tmp);
+                    if (parsed)
+                    {
+                        strategy = tmp;
+                    }
+                }
+            }
+            return strategy.Value;
+        }
+
     }
 }

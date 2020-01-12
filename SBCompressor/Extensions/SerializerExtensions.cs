@@ -5,7 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SBCompressor
+namespace SBCompressor.Extensions
 {
     /// <summary>
     /// Extension to serialize and deserialize any serializable objects

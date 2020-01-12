@@ -8,6 +8,7 @@ using System.Threading;
 using Microsoft.Azure.ServiceBus.Core;
 using System.Collections.Generic;
 using System.Net.Http;
+using SBCompressor.Configuration;
 
 namespace SBCompressor
 {
