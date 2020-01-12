@@ -1,0 +1,12 @@
+{
+  "ConnectionStrings": {
+    "sbcBlobStorageConnectionString": "<your_blob_storage_connection_string>",
+    "receiverFromTopicConnectionString": "<your_servicebus_connection_string>"
+  },
+  "Storage": {
+    "StorageContainerName": "<your_blob_storage_container_name>"
+  },
+  "VeryLargeMessage": {
+    "Strategy": "Storage"
+  }
+}

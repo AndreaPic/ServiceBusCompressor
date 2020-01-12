@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,21 +7,21 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.ServiceBus" Version="4.1.1" />
-    <PackageReference Include="SPS.SBCompressor" Version="0.0.2" />
+    <PackageReference Include="SPS.SBCompressor" Version="0.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Update="ResourceMessage.Designer.cs">
-      <DependentUpon>ResourceMessage.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DependentUpon>ResourceMessage.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="ResourceMessage.resx">
-      <LastGenOutput>ResourceMessage.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceMessage.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

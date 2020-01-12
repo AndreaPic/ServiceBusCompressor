@@ -37,7 +37,7 @@ namespace SBCompressorTests
         public void TestReadMessages()
         {
             receivedMessageCounter = 0;
-            queueClient.SubscribeCompressorAsync(QueueClient_OnMessageReceived);
+            queueClient.SubscribeCompressor(QueueClient_OnMessageReceived);
             autoResetEvent.WaitOne(30000);
             Assert.IsTrue(receivedMessageCounter >= minReceivedMessage);
         }

@@ -35,7 +35,7 @@ You can adopt “Premium Tier” so you can exceed the 256Kb, anyway this tier h
 
 # How to use this library
 ## Extension 
-You can use this library as extension of QueueClient, TopicClient or SubscriptionClient in simply way using the extension methods:
+You can use this library as extension of QueueClient, TopicClient or SubscriptionClient in very easy way using the extension methods:
 - SendCompressorAsync (in SBCompressor.Extensions.Sender namespace) instead of SendAsync 
 - SubscribeCompressorAsync (in SBCompressor.Extensions.Reader namespace) instead of RegisterMessageHandler
 ## Library
@@ -57,10 +57,14 @@ In the root directory there is the AzSB.sln file that include library and unit t
 
 In the repository there are:
 - AzSB.sln (solution with the main library and unit tests)
-- Samples\ConsoleSenderAppSBC\ConsoleSenderAppSBC.sln (example that sends messages to Queue)
-- Samples\ConsoleReceiverAppSBC\ConsoleReceiverAppSBC.sln (example that reads messages from Queue)
-- Samples\ConsoleTopicSenderAppSBC\ConsoleTopicSenderAppSBC.sln (example that sends messages for Topic)
-- Samples\ConsoleTopicReceicerAppSBC\ConsoleTopicReceicerAppSBC.sln (example that reads messages from Topic)
+- Samples\Extension\ConsoleSenderAppSBC\ConsoleSenderAppSBC.sln (Microsoft Queue sample modified to use this library as extension)
+- Samples\Extension\ConsoleReceiverAppSBC\ConsoleReceiverAppSBC.sln (Microsoft Queue sample modified to use this library as extension)
+- Samples\Extension\ConsoleTopicSenderAppSBC\ConsoleTopicSenderAppSBC.sln (Microsoft Topic sample modified to use this library as extension)
+- Samples\Extension\ConsoleTopicReceicerAppSBC\ConsoleTopicReceicerAppSBC.sln (Microsoft Topic sample modified to use this library as extension)
+- Samples\FullLibrary\ConsoleSenderAppSBC\ConsoleSenderAppSBC.sln (example that sends messages to Queue)
+- Samples\FullLibrary\ConsoleReceiverAppSBC\ConsoleReceiverAppSBC.sln (example that reads messages from Queue)
+- Samples\FullLibrary\ConsoleTopicSenderAppSBC\ConsoleTopicSenderAppSBC.sln (example that sends messages for Topic)
+- Samples\FullLibrary\ConsoleTopicReceicerAppSBC\ConsoleTopicReceicerAppSBC.sln (example that reads messages from Topic)
 
 # The proposed solution
 The proposed solution is applicable to all tier from “Basic” to “Standard” and “Premium”.

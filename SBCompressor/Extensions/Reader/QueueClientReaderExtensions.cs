@@ -21,7 +21,7 @@ namespace SBCompressor.Extensions.Reader
         /// <param name="serviceBusConnectionStringName">Queue connection string name (must be present in sbcsettings.json file)</param>
         /// <param name="onMessageReceived">Action invoked when message arrive</param>
         /// <returns></returns>
-        public static void SubscribeCompressorAsync(this IQueueClient queueClient, 
+        public static void SubscribeCompressor(this IQueueClient queueClient, 
             Action<MessageReceivedEventArgs> onMessageReceived)
         {
             ReaderExtender<IQueueClient> reader = new ReaderExtender<IQueueClient>(queueClient);

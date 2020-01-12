@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSenderExtensionAppSBC", "ConsoleSenderExtensionAppSBC\ConsoleSenderExtensionAppSBC.csproj", "{B62D3629-EDA2-4E7A-9BC6-B03498EEC2C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B62D3629-EDA2-4E7A-9BC6-B03498EEC2C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B62D3629-EDA2-4E7A-9BC6-B03498EEC2C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B62D3629-EDA2-4E7A-9BC6-B03498EEC2C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B62D3629-EDA2-4E7A-9BC6-B03498EEC2C5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {12AD16A7-D546-453F-BA3F-BE1AA628987B}
+	EndGlobalSection
+EndGlobal

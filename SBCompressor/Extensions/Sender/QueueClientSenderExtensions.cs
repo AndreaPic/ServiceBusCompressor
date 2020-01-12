@@ -21,9 +21,9 @@ namespace SBCompressor.Extensions.Sender
         /// <param name="serviceBusConnectionStringName">Queue connection string name (must be present in sbcsettings.json file)</param>
         /// <param name="message">Message for the queue (can be json)</param>
         /// <returns></returns>
-        public static async Task SendCompressorAsync(this QueueClient queueClient, string message)
+        public static async Task SendCompressorAsync(this IQueueClient queueClient, string message)
         {
-            SenderExtender<QueueClient> queueConnector = new SenderExtender<QueueClient>(queueClient);
+            SenderExtender<IQueueClient> queueConnector = new SenderExtender<IQueueClient>(queueClient);
             await queueConnector.SendAsync(message);
         }
 
