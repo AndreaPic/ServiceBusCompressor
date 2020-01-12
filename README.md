@@ -51,10 +51,10 @@ This project is a based on .Net Core and has dependencies on Microsoft.Azure.Ser
 In Samples directory there is a readme.md file to explain how to use and configure them.
 
 ## Source Code
-In this there are library, unit tests and saples source code.
-In the root directory there is the AzSB.sln file that include all projects.
+In this repository there are library, unit tests and saples source code.
+In the root directory there is the AzSB.sln file that include library and unit tests.
 
-In the sulution there are:
+In the repository there are:
 - AzSB.sln (solution with the main library and unit tests)
 - Samples\ConsoleSenderAppSBC\ConsoleSenderAppSBC.sln (example that sends messages to Queue)
 - Samples\ConsoleReceiverAppSBC\ConsoleReceiverAppSBC.sln (example that reads messages from Queue)
