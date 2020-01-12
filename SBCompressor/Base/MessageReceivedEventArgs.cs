@@ -25,6 +25,7 @@ namespace SBCompressor
         /// Message received
         /// </summary>
         public EventMessage ReceivedEventMessage { get; private set; }
+
         /// <summary>
         /// Original Service Bus message
         /// </summary>

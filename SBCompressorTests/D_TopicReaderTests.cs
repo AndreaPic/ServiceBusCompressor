@@ -13,7 +13,8 @@ namespace SBCompressorTests
     {
         const string ServiceBusConnectionName = "TopicConnectionString";
         const string TopicName = "<your_topic_name>";
-        const string SubscriptionName = "<your_topic_subscription_name>";
+        const string SubscriptionName = "<your_subscription_name>";
+
         static TopicMessageReader subscriptionClient;
 
         [ClassInitialize]

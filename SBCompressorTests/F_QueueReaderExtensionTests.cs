@@ -11,7 +11,7 @@ using SBCompressor.Extensions.Reader;
 namespace SBCompressorTests
 {
     [TestClass]
-    public class B_QueueReaderExtensionTests
+    public class F_QueueReaderExtensionTests
     {
         const string ServiceBusConnectionString = "<your_connection_string>";
         const string QueueName = "<your_queue_name>";

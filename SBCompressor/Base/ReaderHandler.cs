@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace SBCompressor
 {
+    /// <summary>
+    /// Utility for reading messages
+    /// </summary>
     internal class ReaderHandler
     {
         /// <summary>

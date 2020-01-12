@@ -11,8 +11,12 @@ using System.Threading.Tasks;
 
 namespace SBCompressor.Extensions.Reader
 {
+    /// <summary>
+    /// Utility for topic or queue reader extension
+    /// </summary>
+    /// <typeparam name="TClient">ReceiverClient for the messages</typeparam>
     internal class ReaderExtender<TClient>
-       where TClient : IReceiverClient //IQueueClient, ClientEntity, IClientEntity
+       where TClient : IReceiverClient 
     {
         /// <summary>
         /// Storage manager for very large message
@@ -37,13 +41,24 @@ namespace SBCompressor.Extensions.Reader
         /// </summary>
         private ConcurrentDictionary<string, List<byte[]>> ChunkDictionary { get; set; }
 
+        /// <summary>
+        /// Current client of queue or topic
+        /// </summary>
         private TClient Client { get; set; }
 
+        /// <summary>
+        /// Get ghe current client of queue or topic
+        /// </summary>
+        /// <returns></returns>
         virtual protected TClient GetClient()
         {
             return Client;
         }
 
+        /// <summary>
+        /// Initialize new instance for the client argument
+        /// </summary>
+        /// <param name="client">Queue or topic to extend</param>
         internal ReaderExtender(TClient client)
         {
             Client = client;
@@ -129,12 +144,19 @@ namespace SBCompressor.Extensions.Reader
             }
         }
 
+        /// <summary>
+        /// Subscribe an action for reading message from queue or topic
+        /// </summary>
+        /// <param name="onMessageReceived">Action invoked when a message arrive</param>
         public void Subscribe(Action<MessageReceivedEventArgs> onMessageReceived)
         {
             OnMessageReceived = onMessageReceived;
             RegisterForMessage();
         }
 
+        /// <summary>
+        /// Action to invoke when a message arrive
+        /// </summary>
         private Action<MessageReceivedEventArgs> OnMessageReceived;
 
         /// <summary>

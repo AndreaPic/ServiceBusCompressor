@@ -11,7 +11,7 @@ using Microsoft.Azure.ServiceBus;
 namespace SBCompressorTests
 {
     [TestClass]
-    public class D_TopicReaderExtensionTests
+    public class H_TopicReaderExtensionTests
     {
         const string ServiceBusConnectionString = "<your_connection_string>";
         const string TopicName = "<your_topic_name>";

@@ -8,16 +8,31 @@ using System.Threading.Tasks;
 
 namespace SBCompressor.Extensions.Sender
 {
+    /// <summary>
+    /// Utility class for extender a message sender to queue or topic
+    /// </summary>
+    /// <typeparam name="TClient"></typeparam>
     internal class SenderExtender<TClient>
         where TClient : IClientEntity, ISenderClient 
     {
+        /// <summary>
+        /// Current client of queue or topic
+        /// </summary>
         private TClient Client { get; set; }
 
+        /// <summary>
+        /// Get the current client of queue or topic
+        /// </summary>
+        /// <returns>Current client of queue or topic</returns>
         virtual protected TClient GetClient()
         {
             return Client;
         }
 
+        /// <summary>
+        /// Create a new instance for the client
+        /// </summary>
+        /// <param name="client">Client to extend</param>
         internal SenderExtender(TClient client)
         {
             Client = client;

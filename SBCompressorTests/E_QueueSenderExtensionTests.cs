@@ -8,7 +8,7 @@ using SBCompressor.Extensions.Sender;
 namespace SBCompressorTests
 {
     [TestClass]
-    public class A_QueueSenderExtensionTests
+    public class E_QueueSenderExtensionTests
     {
         const string ServiceBusConnectionString = "<your_connection_string>";
         const string QueueName = "<your_queue_name>";
@@ -43,7 +43,7 @@ namespace SBCompressorTests
             {
                 exception = ex;
             }
-            Assert.IsNull(exception, exception.ToString());
+            Assert.IsNull(exception);
         }
         [TestMethod]
         public async Task TestSendLargeMessage()
@@ -57,7 +57,7 @@ namespace SBCompressorTests
             {
                 exception = ex;
             }
-            Assert.IsNull(exception, exception.ToString());
+            Assert.IsNull(exception);
         }
         [TestMethod]
         public async Task TestSendVeryLargeMessage()
@@ -71,7 +71,7 @@ namespace SBCompressorTests
             {
                 exception = ex;
             }
-            Assert.IsNull(exception, exception.ToString());
+            Assert.IsNull(exception);
         }
 
     }

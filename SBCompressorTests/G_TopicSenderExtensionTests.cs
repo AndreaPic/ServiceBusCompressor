@@ -10,7 +10,7 @@ using Microsoft.Azure.ServiceBus;
 namespace SBCompressorTests
 {
     [TestClass]
-    public class C_TopicSenderExtensionTests
+    public class G_TopicSenderExtensionTests
     {
         const string ServiceBusConnectionString = "<your_connection_string>";
         const string TopicName = "<your_topic_name>";
@@ -41,7 +41,7 @@ namespace SBCompressorTests
             {
                 exception = ex;
             }
-            Assert.IsNull(exception, exception.ToString());
+            Assert.IsNull(exception);
         }
         [TestMethod]
         public async Task TestSendLargeMessage()
@@ -55,7 +55,7 @@ namespace SBCompressorTests
             {
                 exception = ex;
             }
-            Assert.IsNull(exception, exception.ToString());
+            Assert.IsNull(exception);
         }
         [TestMethod]
         public async Task TestSendVeryLargeMessage()
@@ -69,7 +69,7 @@ namespace SBCompressorTests
             {
                 exception = ex;
             }
-            Assert.IsNull(exception, exception.ToString());
+            Assert.IsNull(exception);
         }
 
     }

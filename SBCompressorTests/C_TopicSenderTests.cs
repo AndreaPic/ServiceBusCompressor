@@ -41,7 +41,7 @@ namespace SBCompressorTests
             {
                 exception = ex;
             }
-            Assert.IsNull(exception, exception.ToString());
+            Assert.IsNull(exception);
         }
         [TestMethod]
         public async Task TestSendLargeMessage()
@@ -57,7 +57,7 @@ namespace SBCompressorTests
             {
                 exception = ex;
             }
-            Assert.IsNull(exception, exception.ToString());
+            Assert.IsNull(exception);
         }
         [TestMethod]
         public async Task TestSendVeryLargeMessage()
@@ -73,7 +73,7 @@ namespace SBCompressorTests
             {
                 exception = ex;
             }
-            Assert.IsNull(exception, exception.ToString());
+            Assert.IsNull(exception);
         }
 
     }
