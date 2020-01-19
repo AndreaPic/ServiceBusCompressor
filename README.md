@@ -31,9 +31,78 @@ In those scenarios, you cannot be sure that your message will never exceed the s
 ## Expensive solution
 You can adopt “Premium Tier” so you can exceed the 256Kb, anyway this tier has 1 Mb quota limitation.
 
-“Premium Tier” has much performance than “Standard Tier” so is very expensive. I do not think this is the right solution for the message size problem. Anyway, the message’s size limit remain.
+“Premium Tier” has much performance than “Standard Tier” so is very expensive. I don't think this is the right solution for the message size problem and the message’s size limit also remain with the "Premium Tier".
 
 # How to use this library
+
+## The Simple Way
+
+### Queue Extension
+To send a string message
+Create your QueueClient object and use the extension method "SendCompressorAsync" to send the message.
+```C#
+  queueClient = new QueueClient(ServiceBusConnectionString, QueueName);
+  await queueClient.SendCompressorAsync("Hello Azure Service Bus");  
+```
+To Read the string message.
+1. Create your QueueClient object
+2. Subscribe to the queue
+3. Read the message
+```C#
+  static IQueueClient queueClient
+  static async Task MainAsync()
+  {
+     //1. Create your QueueClient object
+     queueClient = new QueueClient(ServiceBusConnectionString, QueueName);
+     //2. Subscribe to the queue
+     queueClient.SubscribeCompressor(ProcessMessages);
+     
+     Console.ReadKey();
+     await queueClient.CloseAsync();   
+  }
+  private static void ProcessMessages(MessageReceivedEventArgs e)
+  {
+    //3. Read the message
+    Console.WriteLine(e.ReceivedEventMessage.Body);
+  }   
+```
+Send and read object instead of string is very similar to the previous example.
+
+
+### Topic Extension
+To send a string message
+Create your QueueClient object and use the extension method "SendCompressorAsync" to send the message.
+```C#
+  topicClient = new TopicClient(ServiceBusConnectionString, TopicName);
+  await topicClient.SendCompressorAsync("Hello Azure Service Bus");  
+```
+To Read the string message.
+1. Create your QueueClient object
+2. Subscribe to the queue
+3. Read the message
+```C#
+  static ISubscriptionClient subscriptionClient;
+  static async Task MainAsync()
+  {
+     //1. Create your QueueClient object
+     //2. Subscribe to the queue
+     subscriptionClient.SubscribeCompressor(ProcessMessages);
+     
+     Console.ReadKey();
+     await subscriptionClient.CloseAsync();   
+  }
+  private static void ProcessMessages(MessageReceivedEventArgs e)
+  {
+    //3. Read the message
+    Console.WriteLine(e.ReceivedEventMessage.Body);
+  }   
+```
+Send and read object instead of string is very similar to the previous example.
+
+
+
+
+
 ## Extension 
 You can use this library as extension of QueueClient, TopicClient or SubscriptionClient in very easy way using the extension methods:
 - SendCompressorAsync (in SBCompressor.Extensions.Sender namespace) instead of SendAsync 
