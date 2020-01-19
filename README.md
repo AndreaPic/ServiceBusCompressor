@@ -38,13 +38,23 @@ You can adopt “Premium Tier” so you can exceed the 256Kb, anyway this tier h
 ## The Simple Way
 
 ### Queue Extension
-To send a string message
+**To send a string message**
 Create your QueueClient object and use the extension method "SendCompressorAsync" to send the message.
 ```C#
   queueClient = new QueueClient(ServiceBusConnectionString, QueueName);
   await queueClient.SendCompressorAsync("Hello Azure Service Bus");  
 ```
-To Read the string message.
+**Send an object in a message is very similar to the previous example.**
+Suppose that you have your own object in a library named "DTOLibrary.MessageDTO".
+You can use the same method above to send it as a message.
+```C#
+  DTOLibrary.MessageDTO messageDTO = new DTOLibrary.MessageDTO();
+  messageDTO.Subject = "Hello";
+  messageDTO.Content = "I'm a object";
+  await queueClient.SendCompressorAsync(messageDTO);
+```
+
+**To Read the string message.**
 1. Create your QueueClient object
 2. Subscribe to the queue
 3. Read the message
@@ -66,17 +76,39 @@ To Read the string message.
     Console.WriteLine(e.ReceivedEventMessage.Body);
   }   
 ```
-Send and read object instead of string is very similar to the previous example.
-
+To read the object sent in the previous example you can use the property ObjectName of the object MessageReceivedEventArgs.ReceivedEventMessage to retrieve the object in the message in this way:
+```C#
+  private static void ProcessMessages(MessageReceivedEventArgs e)
+  {
+    if (e.ReceivedEventMessage.ObjectName == typeof(DTOLibrary.MessageDTO).AssemblyQualifiedName)
+    {
+      DTOLibrary.MessageDTO msgDTO = e.ReceivedEventMessage.BodyObject as DTOLibrary.MessageDTO;
+      if (msgDTO != null)
+      {
+        Console.WriteLine(msgDTO.Subject + " " + msgDTO.Content);
+      }
+    }
+  }
+```
 
 ### Topic Extension
-To send a string message
+**To send a string message**
 Create your QueueClient object and use the extension method "SendCompressorAsync" to send the message.
 ```C#
   topicClient = new TopicClient(ServiceBusConnectionString, TopicName);
   await topicClient.SendCompressorAsync("Hello Azure Service Bus");  
 ```
-To Read the string message.
+**Send an object in a message is very similar to the previous example.**
+Suppose that you have your own object in a library named "DTOLibrary.MessageDTO".
+You can use the same method above to send it as a message.
+```C#
+  DTOLibrary.MessageDTO messageDTO = new DTOLibrary.MessageDTO();
+  messageDTO.Subject = "Hello";
+  messageDTO.Content = "I'm a object";
+  await queueClient.SendCompressorAsync(messageDTO);
+```
+
+**To Read the string message.**
 1. Create your QueueClient object
 2. Subscribe to the queue
 3. Read the message
@@ -97,9 +129,22 @@ To Read the string message.
     Console.WriteLine(e.ReceivedEventMessage.Body);
   }   
 ```
-Send and read object instead of string is very similar to the previous example.
+To read the object sent in the previous example you can use the property ObjectName of the object MessageReceivedEventArgs.ReceivedEventMessage to retrieve the object in the message in this way:
+```C#
+  private static void ProcessMessages(MessageReceivedEventArgs e)
+  {
+    if (e.ReceivedEventMessage.ObjectName == typeof(DTOLibrary.MessageDTO).AssemblyQualifiedName)
+    {
+      DTOLibrary.MessageDTO msgDTO = e.ReceivedEventMessage.BodyObject as DTOLibrary.MessageDTO;
+      if (msgDTO != null)
+      {
+        Console.WriteLine(msgDTO.Subject + " " + msgDTO.Content);
+      }
+    }
+  }
+```
 
-
+**All of above example are in the samples directory of this repository.**
 
 
 
