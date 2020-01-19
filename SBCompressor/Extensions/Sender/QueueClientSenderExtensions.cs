@@ -17,8 +17,6 @@ namespace SBCompressor.Extensions.Sender
         /// Send message to the queue
         /// </summary>
         /// <param name="queueClient">type to extend</param>
-        /// <param name="queueName">Queue's name for the message</param>
-        /// <param name="serviceBusConnectionStringName">Queue connection string name (must be present in sbcsettings.json file)</param>
         /// <param name="message">Message for the queue (can be json)</param>
         /// <returns></returns>
         public static async Task SendCompressorAsync(this IQueueClient queueClient, string message)
@@ -27,5 +25,19 @@ namespace SBCompressor.Extensions.Sender
             await queueConnector.SendAsync(message);
         }
 
+        /// <summary>
+        /// Send message to the queue
+        /// </summary>
+        /// <typeparam name="TMessage">Type of the object to send as a message.</typeparam>
+        /// <param name="queueClient">type to extend</param>
+        /// <param name="message"></param>
+        /// <param name="message">object to send to service bus.</param>
+        /// <returns></returns>
+        public static async Task SendCompressorAsync<TMessage>(this IQueueClient queueClient, TMessage message)
+            where TMessage : class, new()
+        {
+            SenderExtender<IQueueClient> queueConnector = new SenderExtender<IQueueClient>(queueClient);
+            await queueConnector.SendAsync(message);
+        }
     }
 }

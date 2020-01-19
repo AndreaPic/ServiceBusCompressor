@@ -9,6 +9,7 @@ using Microsoft.Azure.ServiceBus.Core;
 using System.Collections.Generic;
 using System.Net.Http;
 using SBCompressor.Configuration;
+using Newtonsoft.Json;
 
 namespace SBCompressor
 {
@@ -248,6 +249,21 @@ namespace SBCompressor
         {
             EventMessage eventMessage = new EventMessage();
             eventMessage.Body = message;
+            await SendAsync(eventMessage);
+        }
+
+        /// <summary>
+        /// Send EventMessage to service bus
+        /// </summary>
+        /// <typeparam name="TMessage">Type of the object to send as a message.</typeparam>
+        /// <param name="message">object to send to service bus.</param>
+        /// <returns></returns>
+        internal async Task SendAsync<TMessage>(TMessage message)
+        {
+            EventMessage eventMessage = new EventMessage();
+            string body = JsonConvert.SerializeObject(message);
+            eventMessage.Body = body;
+            eventMessage.ObjectName = message.GetType().AssemblyQualifiedName;
             await SendAsync(eventMessage);
         }
 

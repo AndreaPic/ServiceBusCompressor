@@ -24,6 +24,7 @@ namespace SBCompressor
         /// </summary>
         [DataMember]
         public Header Header { get; set; }
+
         /// <summary>
         /// Content of the message
         /// </summary>
@@ -31,12 +32,20 @@ namespace SBCompressor
         public string Body { get; set; }
 
         /// <summary>
+        /// Content of the message
+        /// </summary>
+        public object BodyObject { get; set; }
+
+
+        /// <summary>
         /// Name of the object in the content
         /// </summary>
+        [DataMember]
         public string ObjectName { get; set; }
         /// <summary>
         /// Name of the event of the message
         /// </summary>
+        [DataMember]
         public string EventName { get; set; }
 
     }

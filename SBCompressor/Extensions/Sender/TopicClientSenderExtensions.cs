@@ -26,5 +26,21 @@ namespace SBCompressor.Extensions.Sender
             SenderExtender<ITopicClient> topicConnector = new SenderExtender<ITopicClient>(topicClient);
             await topicConnector.SendAsync(message);
         }
+
+        /// <summary>
+        /// Send message to the Topic
+        /// </summary>
+        /// <typeparam name="TMessage">Type of the object to send as a message.</typeparam>
+        /// <param name="queueClient">type to extend</param>
+        /// <param name="message"></param>
+        /// <param name="message">object to send to service bus.</param>
+        /// <returns></returns>
+        public static async Task SendCompressorAsync<TMessage>(this ITopicClient queueClient, TMessage message)
+            where TMessage : class, new()
+        {
+            SenderExtender<ITopicClient> queueConnector = new SenderExtender<ITopicClient>(queueClient);
+            await queueConnector.SendAsync(message);
+        }
+
     }
 }

@@ -25,8 +25,27 @@ namespace SBCompressor
         {
             var jsonMessageString = Encoding.UTF8.GetString(receivedMessage.Body);
             var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
+            GetObjectFromMessage(message);
             return message;
         }
+
+        /// <summary>
+        /// Set BodyObject of the message argument using message informations.
+        /// </summary>
+        /// <param name="message">message to work</param>
+        private static void GetObjectFromMessage(EventMessage message)
+        {
+            if (!string.IsNullOrEmpty(message.ObjectName))
+            {
+                Type bodyObjectType = Type.GetType(message.ObjectName);
+                if (bodyObjectType != null)
+                {
+                    var bodyObject = JsonConvert.DeserializeObject(message.Body, bodyObjectType);
+                    message.BodyObject = bodyObject;
+                }
+            }
+        }
+
         /// <summary>
         /// Get the message from compressed state
         /// </summary>
@@ -37,6 +56,7 @@ namespace SBCompressor
             var bytes = receivedMessage.Body;
             var jsonMessageString = await bytes.Unzip() as string;
             var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
+            GetObjectFromMessage(message);
             return message;
         }
 
@@ -80,6 +100,7 @@ namespace SBCompressor
 
                 var jsonMessageString = await completeMessage.Unzip() as string;
                 var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
+                GetObjectFromMessage(message);
                 ret = message;
             }
             return ret;
@@ -95,6 +116,7 @@ namespace SBCompressor
             var bytes = storage.DownloadMessage(receivedMessage.MessageId);
             var jsonMessageString = await bytes.Unzip() as string;
             var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
+            GetObjectFromMessage(message);
             return message;
         }
 

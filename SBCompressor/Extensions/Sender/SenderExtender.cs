@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Core;
+using Newtonsoft.Json;
 using SBCompressor.Configuration;
 using System;
 using System.Collections.Generic;
@@ -49,6 +50,22 @@ namespace SBCompressor.Extensions.Sender
             eventMessage.Body = message;
             await SendAsync(eventMessage);
         }
+
+        /// <summary>
+        /// Send EventMessage to service bus
+        /// </summary>
+        /// <typeparam name="TMessage">Type of the object to send as a message.</typeparam>
+        /// <param name="message">object to send to service bus.</param>
+        /// <returns></returns>
+        internal async Task SendAsync<TMessage>(TMessage message)
+        {
+            EventMessage eventMessage = new EventMessage();
+            string body = JsonConvert.SerializeObject(message);
+            eventMessage.Body = body;
+            eventMessage.ObjectName = message.GetType().AssemblyQualifiedName;
+            await SendAsync(eventMessage);
+        }
+
         /// <summary>
         /// Send EventMessage to service bus
         /// </summary>
