@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSenderExtensionAppSBC", "ConsoleSenderExtensionAppSBC\ConsoleSenderExtensionAppSBC.csproj", "{B62D3629-EDA2-4E7A-9BC6-B03498EEC2C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleSenderExtensionAppSBC", "ConsoleSenderExtensionAppSBC\ConsoleSenderExtensionAppSBC.csproj", "{B62D3629-EDA2-4E7A-9BC6-B03498EEC2C5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTOLibrary", "..\..\DTO\DTOLibrary\DTOLibrary\DTOLibrary.csproj", "{BDD1EBD9-4986-4AB5-944A-D91AFBDCE57C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B62D3629-EDA2-4E7A-9BC6-B03498EEC2C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B62D3629-EDA2-4E7A-9BC6-B03498EEC2C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B62D3629-EDA2-4E7A-9BC6-B03498EEC2C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDD1EBD9-4986-4AB5-944A-D91AFBDCE57C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDD1EBD9-4986-4AB5-944A-D91AFBDCE57C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDD1EBD9-4986-4AB5-944A-D91AFBDCE57C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDD1EBD9-4986-4AB5-944A-D91AFBDCE57C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

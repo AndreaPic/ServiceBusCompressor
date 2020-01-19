@@ -24,6 +24,9 @@
 
             // Send messages.
             await SendMessagesAsync(numberOfMessages);
+            
+            //Send message with object instead of a string
+            await SendMessageWithOjbet();
 
             Console.ReadKey();
 
@@ -54,6 +57,14 @@
             {
                 Console.WriteLine($"{DateTime.Now} :: Exception: {exception.Message}");
             }
+        }
+        static async Task SendMessageWithOjbet()
+        {
+            //sent object instead of string
+            DTOLibrary.MessageDTO messageDTO = new DTOLibrary.MessageDTO();
+            messageDTO.Subject = "Hello";
+            messageDTO.Content = "I'm a object";
+            await topicClient.SendCompressorAsync(messageDTO);
         }
     }
 }

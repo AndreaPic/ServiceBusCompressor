@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTopicSenderExtensionAppSBC", "ConsoleTopicSenderExtensionAppSBC\ConsoleTopicSenderExtensionAppSBC.csproj", "{483016AF-7A39-4343-939C-EB2003F3829E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTopicSenderExtensionAppSBC", "ConsoleTopicSenderExtensionAppSBC\ConsoleTopicSenderExtensionAppSBC.csproj", "{483016AF-7A39-4343-939C-EB2003F3829E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTOLibrary", "..\..\DTO\DTOLibrary\DTOLibrary\DTOLibrary.csproj", "{CF87EBA1-C561-4199-B38B-CEEFE563117E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{483016AF-7A39-4343-939C-EB2003F3829E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{483016AF-7A39-4343-939C-EB2003F3829E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{483016AF-7A39-4343-939C-EB2003F3829E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF87EBA1-C561-4199-B38B-CEEFE563117E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF87EBA1-C561-4199-B38B-CEEFE563117E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF87EBA1-C561-4199-B38B-CEEFE563117E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF87EBA1-C561-4199-B38B-CEEFE563117E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

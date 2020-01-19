@@ -63,7 +63,22 @@
         //USING SBCOMPRESSOR
         private static void ProcessMessages(MessageReceivedEventArgs e)
         {
-            Console.WriteLine($"Received message: SequenceNumber:{e.ReceivedMessage.SystemProperties.SequenceNumber} Body:{e.ReceivedEventMessage.Body}");
+            // Process the message.
+            if (!string.IsNullOrEmpty(e.ReceivedEventMessage.Body))
+            {
+                Console.WriteLine($"Received message: SequenceNumber:{e.ReceivedMessage.SystemProperties.SequenceNumber} Body:{e.ReceivedEventMessage.Body}");
+            }
+            else
+            {
+                if (typeof(DTOLibrary.MessageDTO).AssemblyQualifiedName == e.ReceivedEventMessage.ObjectName)
+                {
+                    DTOLibrary.MessageDTO msgDTO = e.ReceivedEventMessage.BodyObject as DTOLibrary.MessageDTO;
+                    if (msgDTO != null)
+                    {
+                        Console.WriteLine(msgDTO.Subject + " " + msgDTO.Content);
+                    }
+                }
+            }
         }
 
         /* ORIGINAL SAMPLE

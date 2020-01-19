@@ -55,7 +55,21 @@
         private static void ProcessMessages(MessageReceivedEventArgs e)
         {
             // Process the message.
-            Console.WriteLine($"Received message: SequenceNumber:{e.ReceivedMessage.SystemProperties.SequenceNumber} Body:{e.ReceivedEventMessage.Body}");
+            if (!string.IsNullOrEmpty(e.ReceivedEventMessage.Body))
+            {
+                Console.WriteLine($"Received message: SequenceNumber:{e.ReceivedMessage.SystemProperties.SequenceNumber} Body:{e.ReceivedEventMessage.Body}");
+            }
+            else
+            {
+                if (typeof(DTOLibrary.MessageDTO).AssemblyQualifiedName == e.ReceivedEventMessage.ObjectName)
+                {
+                    DTOLibrary.MessageDTO msgDTO = e.ReceivedEventMessage.BodyObject as DTOLibrary.MessageDTO;
+                    if (msgDTO != null)
+                    {
+                        Console.WriteLine(msgDTO.Subject + " " + msgDTO.Content);
+                    }
+                }
+            }
         }
         /* ORIGINAL SAMPLE
         static async Task ProcessMessagesAsync(Message message, CancellationToken token)
