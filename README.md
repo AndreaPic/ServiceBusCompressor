@@ -63,7 +63,7 @@ You can use the same method above to send it as a message.
   static async Task MainAsync()
   {
      //1. Create your QueueClient object
-     var queueClient = new QueueClient(ServiceBusConnectionString, QueueName);
+     queueClient = new QueueClient(ServiceBusConnectionString, QueueName);
      //2. Subscribe to the queue
      queueClient.SubscribeCompressor(ProcessMessages);
      
@@ -95,7 +95,7 @@ To read the object sent in the previous example you can use the property ObjectN
 **To send a string message**
 Create your QueueClient object and use the extension method "SendCompressorAsync" to send the message.
 ```C#
-  var topicClient = new TopicClient(ServiceBusConnectionString, TopicName);
+  topicClient = new TopicClient(ServiceBusConnectionString, TopicName);
   await topicClient.SendCompressorAsync("Hello Azure Service Bus");  
 ```
 **Send an object in a message is very similar to the previous example.**
