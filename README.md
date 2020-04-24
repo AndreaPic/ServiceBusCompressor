@@ -41,7 +41,7 @@ You can adopt “Premium Tier” so you can exceed the 256Kb, anyway this tier h
 **To send a string message**
 Create your QueueClient object and use the extension method "SendCompressorAsync" to send the message.
 ```C#
-  queueClient = new QueueClient(ServiceBusConnectionString, QueueName);
+  var queueClient = new QueueClient(ServiceBusConnectionString, QueueName);
   await queueClient.SendCompressorAsync("Hello Azure Service Bus");  
 ```
 **Send an object in a message is very similar to the previous example.**
