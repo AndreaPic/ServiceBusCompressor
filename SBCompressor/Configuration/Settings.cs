@@ -34,7 +34,7 @@ namespace SBCompressor.Configuration
         /// <summary>
         /// Current configuration instance
         /// </summary>
-        internal static IConfiguration CurrentConfiguration
+        private static IConfiguration CurrentConfiguration
         {
             get
             {
@@ -67,7 +67,7 @@ namespace SBCompressor.Configuration
             if (!strategy.HasValue)
             {
                 strategy = VeryLargeMessageStrategy.Storage;
-                string strategyConfig = Settings.CurrentConfiguration[VeryLargeStrategiyettingConfig];
+                string strategyConfig = GetSettingValue(VeryLargeStrategiyettingConfig);
                 if (!string.IsNullOrEmpty(strategyConfig))
                 {
                     VeryLargeMessageStrategy tmp;
@@ -79,6 +79,27 @@ namespace SBCompressor.Configuration
                 }
             }
             return strategy.Value;
+        }
+
+        /// <summary>
+        /// Retrieve connection string from sbcsettings.json
+        /// </summary>
+        /// <param name="connectionName">Connection string name to look for in sbcsettings.json</param>
+        /// <returns>Readed connection string</returns>
+        public static string GetConnectionString(string connectionName)
+        {
+            return CurrentConfiguration.GetConnectionString(connectionName);
+        }
+
+
+        /// <summary>
+        /// Retrieve setting value from sbcsettings.json
+        /// </summary>
+        /// <param name="settingName">Setting name to look for in sbcsettings.json</param>
+        /// <returns>Readed setting value</returns>
+        internal static string GetSettingValue(string settingName)
+        {
+            return CurrentConfiguration[settingName];
         }
 
     }

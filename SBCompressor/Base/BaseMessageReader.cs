@@ -3,6 +3,7 @@ using Microsoft.Azure.ServiceBus.Core;
 using Microsoft.Azure.ServiceBus.Management;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using SBCompressor.Configuration;
 using SBCompressor.Extensions;
 using System;
 using System.Collections.Concurrent;
@@ -32,6 +33,14 @@ namespace SBCompressor
         {
             ChunkDictionary = new ConcurrentDictionary<string, List<byte[]>>();
         }
+        public BaseMessageReader(string entityName, string connectionStringName,
+            StorageSettingData settingData) : this(entityName, connectionStringName)
+        {
+            CurrentSettingData = settingData;
+        }
+
+        private StorageSettingData CurrentSettingData { get; set; }
+
 
         /// <summary>
         /// Subscribe to the queue or topic of the service bus
@@ -67,7 +76,14 @@ namespace SBCompressor
             {
                 if (storage==null)
                 {
-                    storage = new MessageStorage();
+                    if (CurrentSettingData != null)
+                    {
+                        storage = new MessageStorage(CurrentSettingData);
+                    }
+                    else
+                    {
+                        storage = new MessageStorage();
+                    }
                 }
                 return storage;
             } 

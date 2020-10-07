@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Core;
+using SBCompressor.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,6 +25,11 @@ namespace SBCompressor.Extensions.Sender
             SenderExtender<IQueueClient> queueConnector = new SenderExtender<IQueueClient>(queueClient);
             await queueConnector.SendAsync(message);
         }
+        public static async Task SendCompressorAsync(this IQueueClient queueClient, string message, StorageSettingData settingData)
+        {
+            SenderExtender<IQueueClient> queueConnector = new SenderExtender<IQueueClient>(queueClient, settingData);
+            await queueConnector.SendAsync(message);
+        }
 
         /// <summary>
         /// Send message to the queue
@@ -39,5 +45,12 @@ namespace SBCompressor.Extensions.Sender
             SenderExtender<IQueueClient> queueConnector = new SenderExtender<IQueueClient>(queueClient);
             await queueConnector.SendAsync(message);
         }
+        public static async Task SendCompressorAsync<TMessage>(this IQueueClient queueClient, TMessage message, StorageSettingData settingData)
+            where TMessage : class, new()
+        {
+            SenderExtender<IQueueClient> queueConnector = new SenderExtender<IQueueClient>(queueClient, settingData);
+            await queueConnector.SendAsync(message);
+        }
+
     }
 }

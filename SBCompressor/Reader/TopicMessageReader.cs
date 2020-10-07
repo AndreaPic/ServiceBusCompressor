@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.ServiceBus;
+using SBCompressor.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,6 +23,11 @@ namespace SBCompressor
         /// <param name="connectionStringName">Connection string in the settings file</param>
         /// <param name="subscriptionName">Subscription name for the topic</param>
         public TopicMessageReader(string entityName, string connectionStringName, string subscriptionName) : base(entityName, connectionStringName)
+        {
+            this.subscriptionName = subscriptionName;
+        }
+        public TopicMessageReader(string entityName, string connectionStringName, string subscriptionName,
+            StorageSettingData settingData) : base(entityName, connectionStringName, settingData)
         {
             this.subscriptionName = subscriptionName;
         }

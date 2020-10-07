@@ -33,6 +33,14 @@ namespace SBCompressor
             ConnectionStringName = connectionStringName;
         }
 
+        //public ConnectorCore(string entityName, string connectionStringName,
+        //    StorageSettingData settingData) : this(entityName, connectionStringName)
+        //{
+        //    CurrentSettingData = settingData;
+        //}
+        //private StorageSettingData CurrentSettingData { get; set; }
+
+
         /// <summary>
         /// Connection string to service bus (readed from the settings file)
         /// </summary>
@@ -40,7 +48,8 @@ namespace SBCompressor
         {
             get
             {
-                var ret = Settings.CurrentConfiguration.GetConnectionString(ConnectionStringName);
+                string ret;
+                ret = Settings.GetConnectionString(ConnectionStringName);
                 if (string.IsNullOrEmpty(ret))
                 {
                     throw new InvalidConfigurationException();

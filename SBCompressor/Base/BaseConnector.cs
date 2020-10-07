@@ -36,6 +36,16 @@ namespace SBCompressor
         {
             Clients = new System.Collections.Concurrent.ConcurrentDictionary<string, TClient>();
         }
+
+        public BaseConnector(string entityName, string connectionStringName, 
+            StorageSettingData settingData) 
+            : this(entityName, connectionStringName)
+        {
+            Clients = new System.Collections.Concurrent.ConcurrentDictionary<string, TClient>();
+            CurrentSettingData = settingData;
+        }
+        private StorageSettingData CurrentSettingData { get; set; }
+
         private static System.Collections.Concurrent.ConcurrentDictionary<string, TClient> Clients { get; set; }
 
 
@@ -225,15 +235,22 @@ namespace SBCompressor
         {
             if (!strategy.HasValue)
             {
-                strategy = VeryLargeMessageStrategy.Storage;
-                string strategyConfig = Settings.CurrentConfiguration[VeryLargeStrategiyettingConfig];
-                if (!string.IsNullOrEmpty(strategyConfig))
+                if (CurrentSettingData != null)
                 {
-                    VeryLargeMessageStrategy tmp;
-                    bool parsed = Enum.TryParse(strategyConfig, out tmp);
-                    if (parsed)
+                    strategy = CurrentSettingData.Strategy;
+                }
+                else
+                {
+                    strategy = VeryLargeMessageStrategy.Storage;
+                    string strategyConfig = Settings.GetSettingValue(VeryLargeStrategiyettingConfig);
+                    if (!string.IsNullOrEmpty(strategyConfig))
                     {
-                        strategy = tmp;
+                        VeryLargeMessageStrategy tmp;
+                        bool parsed = Enum.TryParse(strategyConfig, out tmp);
+                        if (parsed)
+                        {
+                            strategy = tmp;
+                        }
                     }
                 }
             }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Management;
+using SBCompressor.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,7 +19,12 @@ namespace SBCompressor
         /// </summary>
         /// <param name="entityName">Queue name</param>
         /// <param name="connectionStringName">Connection string in the settings file</param>
-        public QueueMessageReader(string entityName, string connectionStringName) : base(entityName, connectionStringName){}
+        public QueueMessageReader(string entityName, string connectionStringName) : base(entityName, connectionStringName) { }
+        public QueueMessageReader(string entityName, string connectionStringName, 
+            StorageSettingData settingData) 
+            : base(entityName, connectionStringName, settingData) 
+        { 
+        }
 
         /// <summary>
         /// Create a new instance of QueueClient

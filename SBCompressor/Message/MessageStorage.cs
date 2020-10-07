@@ -37,6 +37,12 @@ namespace SBCompressor
         {
             CurrentContainer = CreateContainerIfNotExist();
         }
+        public MessageStorage(StorageSettingData settingData) 
+        {
+            CurrentSettingData = settingData;
+            CurrentContainer = CreateContainerIfNotExist();
+        }
+        private StorageSettingData CurrentSettingData { get; set; }
 
         /// <summary>
         /// Get a new storage account using connection string
@@ -44,7 +50,15 @@ namespace SBCompressor
         /// <returns>Storage account using the connection string</returns>
         private CloudStorageAccount GetStorageAccount()
         {
-            var storageConnectionString = Settings.CurrentConfiguration.GetConnectionString(BlobConnectionStringConfig);
+            string storageConnectionString;
+            if (CurrentSettingData != null)
+            {
+                storageConnectionString = CurrentSettingData.BlobStorageConnectionString;
+            }
+            else
+            {
+                storageConnectionString = Settings.GetConnectionString(BlobConnectionStringConfig);
+            }
             if (string.IsNullOrEmpty(storageConnectionString))
             {
                 throw new InvalidConfigurationException();
@@ -70,7 +84,15 @@ namespace SBCompressor
         /// <returns>ContainerName of the blob storage</returns>
         private string GetContainerName()
         {
-            string containerName = Settings.CurrentConfiguration[StorageContainerNameConfig];
+            string containerName;
+            if (CurrentSettingData != null)
+            {
+                containerName = CurrentSettingData.StorageContainerName;
+            }
+            else
+            {
+                containerName = Settings.GetSettingValue(StorageContainerNameConfig);
+            }
             if (string.IsNullOrEmpty(containerName))
             {
                 throw new InvalidConfigurationException();

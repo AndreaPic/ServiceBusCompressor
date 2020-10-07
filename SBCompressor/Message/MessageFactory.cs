@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.ServiceBus;
 using Newtonsoft.Json;
+using SBCompressor.Configuration;
 using SBCompressor.Extensions;
 using System;
 using System.Collections.Generic;
@@ -105,7 +106,14 @@ namespace SBCompressor
             {
                 if (storage==null)
                 {
-                    storage = new MessageStorage();
+                    if (CurrentSettingData != null)
+                    {
+                        storage = new MessageStorage(CurrentSettingData);
+                    }
+                    else
+                    {
+                        storage = new MessageStorage();
+                    }
                 }
                 return storage;
             }
@@ -116,6 +124,11 @@ namespace SBCompressor
         public MessageFactory()
         {
         }
+        public MessageFactory(StorageSettingData settingData)
+        {
+            CurrentSettingData = settingData;
+        }
+        private StorageSettingData CurrentSettingData { get; set; }
 
         /// <summary>
         /// Create a MessageWrapper instance from an EventMessage based on message size and strategy

@@ -39,6 +39,12 @@ namespace SBCompressor.Extensions.Sender
             Client = client;
         }
 
+        internal SenderExtender(TClient client, StorageSettingData settingData) : this(client)
+        {
+            CurrentSettingData = settingData;
+        }
+        private StorageSettingData CurrentSettingData { get; set; }
+
         /// <summary>
         /// Send EventMessage to service bus
         /// </summary>
@@ -75,7 +81,15 @@ namespace SBCompressor.Extensions.Sender
         {
             Message brokeredMessage = null;
             MessageFactory messageFactory = new MessageFactory();
-            var strategy = Settings.GetVeryLargeMessageStrategy();
+            VeryLargeMessageStrategy strategy;
+            if (CurrentSettingData != null)
+            {
+                strategy = CurrentSettingData.Strategy;
+            }
+            else
+            {
+                strategy = Settings.GetVeryLargeMessageStrategy();
+            }
             var messageWrapper = messageFactory.CreateMessageFromEvent(eventMessage, strategy);
             switch (messageWrapper.MessageMode)
             {

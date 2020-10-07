@@ -1,6 +1,7 @@
 ﻿using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Core;
 using Newtonsoft.Json;
+using SBCompressor.Configuration;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -31,7 +32,14 @@ namespace SBCompressor.Extensions.Reader
             {
                 if (storage == null)
                 {
-                    storage = new MessageStorage();
+                    if (CurrentSettingData != null)
+                    {
+                        storage = new MessageStorage(CurrentSettingData);
+                    }
+                    else
+                    {
+                        storage = new MessageStorage();
+                    }
                 }
                 return storage;
             }
@@ -64,6 +72,13 @@ namespace SBCompressor.Extensions.Reader
             Client = client;
             ChunkDictionary = new ConcurrentDictionary<string, List<byte[]>>();
         }
+        internal ReaderExtender(TClient client, StorageSettingData settingData) : this (client)
+        {
+            CurrentSettingData = settingData;
+        }
+
+        private StorageSettingData CurrentSettingData { get; set; }
+
         /// <summary>
         /// Register client for messages
         /// </summary>

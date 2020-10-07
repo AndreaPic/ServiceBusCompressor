@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Core;
+using SBCompressor.Configuration;
 using SBCompressor.Extensions;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,12 @@ namespace SBCompressor.Extensions.Reader
             Action<MessageReceivedEventArgs> onMessageReceived)
         {
             ReaderExtender<IQueueClient> reader = new ReaderExtender<IQueueClient>(queueClient);
+            reader.Subscribe(onMessageReceived);
+        }
+        public static void SubscribeCompressor(this IQueueClient queueClient,
+            Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
+        {
+            ReaderExtender<IQueueClient> reader = new ReaderExtender<IQueueClient>(queueClient, settingData);
             reader.Subscribe(onMessageReceived);
         }
 
