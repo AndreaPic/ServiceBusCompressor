@@ -91,7 +91,7 @@ namespace SBCompressor
         /// <summary>
         /// Max message size for service bus
         /// </summary>
-        private const int MaxMessageSize = 192;
+        private const int MaxMessageSize = 192000;
 
         /// <summary>
         /// Manager fo Blob storage of the message
@@ -143,7 +143,7 @@ namespace SBCompressor
             MessageWrapper ret = new MessageWrapper();
             string jsonMessageString = JsonConvert.SerializeObject(eventMessage);
 
-            if (jsonMessageString.Length < MaxMessageSize)
+            if ((jsonMessageString.Length * sizeof(char)) < MaxMessageSize)
             {
                 ConfigureWrapperForSimpleMessage(ret, jsonMessageString);
             }
