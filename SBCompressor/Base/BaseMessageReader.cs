@@ -183,9 +183,10 @@ namespace SBCompressor
                     }
                 }
             }
-            catch (Exception)
+            catch
             {
-                await CurrentSubscriptionClient.CompleteAsync(receivedMessage.SystemProperties.LockToken);
+                await CurrentSubscriptionClient.AbandonAsync(receivedMessage.SystemProperties.LockToken);
+                throw;
             }
         }
 

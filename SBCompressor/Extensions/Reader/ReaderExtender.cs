@@ -153,9 +153,10 @@ namespace SBCompressor.Extensions.Reader
                     }
                 }
             }
-            catch (Exception)
+            catch
             {
-                await Client.CompleteAsync(receivedMessage.SystemProperties.LockToken);
+                await Client.AbandonAsync(receivedMessage.SystemProperties.LockToken);
+                throw;
             }
         }
 
