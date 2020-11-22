@@ -50,7 +50,7 @@ namespace SBCompressorTests
             try
             {
                 EventMessage message = new EventMessage();
-                message.Body = ResourceMessage.MessageToZip;
+                message.Body = ResourceMessage.large;
                 await topicClient.SendAsync(message);
             }
             catch (Exception ex)
@@ -66,7 +66,7 @@ namespace SBCompressorTests
             try
             {
                 EventMessage message = new EventMessage();
-                message.Body = ResourceMessage.VeryLargeMessage;
+                message.Body = ResourceMessage.verylarge;
                 await topicClient.SendAsync(message);
             }
             catch (Exception ex)

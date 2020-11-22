@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Microsoft.Azure.Storage;
-using Microsoft.Azure.Storage.Blob;
+using Azure.Storage;
+using Azure.Storage.Blobs;
 using Microsoft.Extensions.Configuration;
 using SBCompressor.Configuration;
 
@@ -29,7 +29,7 @@ namespace SBCompressor
         /// <summary>
         /// Container instance
         /// </summary>
-        private CloudBlobContainer CurrentContainer { get; set; }
+        private BlobContainerClient CurrentContainer { get; set; }
         /// <summary>
         /// Initialize new instance
         /// </summary>
@@ -48,7 +48,7 @@ namespace SBCompressor
         /// Get a new storage account using connection string
         /// </summary>
         /// <returns>Storage account using the connection string</returns>
-        private CloudStorageAccount GetStorageAccount()
+        private BlobContainerClient GetBlobContainerClient()
         {
             string storageConnectionString;
             if (CurrentSettingData != null)
@@ -63,19 +63,8 @@ namespace SBCompressor
             {
                 throw new InvalidConfigurationException();
             }
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(storageConnectionString);
+            BlobContainerClient storageAccount = new BlobContainerClient(storageConnectionString,GetContainerName());
             return storageAccount;
-        }
-
-        /// <summary>
-        /// Get a new CloudBlobClient using storage account
-        /// </summary>
-        /// <returns></returns>
-        private CloudBlobClient GetCloudBlobClient()
-        {
-            var storageAccount = GetStorageAccount();
-            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            return blobClient;
         }
 
         /// <summary>
@@ -104,13 +93,11 @@ namespace SBCompressor
         /// Create container if not exists using connection string and container name
         /// </summary>
         /// <returns>CloudBlobContainer</returns>
-        private CloudBlobContainer CreateContainerIfNotExist()
+        private BlobContainerClient CreateContainerIfNotExist()
         {
-            var client = GetCloudBlobClient();
-            string containerName = GetContainerName();
-            var container = client.GetContainerReference(containerName);
-            container.CreateIfNotExists();
-            return container;
+            var client = GetBlobContainerClient();
+            client.CreateIfNotExists();
+            return client;
         }
 
         /// <summary>
@@ -124,9 +111,12 @@ namespace SBCompressor
                 case MessageModes.Storage:
                     var container = CurrentContainer;
                     messageWrapper.Message.MessageId = Guid.NewGuid().ToString();
-                    var blob = container.GetBlockBlobReference(messageWrapper.Message.MessageId + ZipExtension);
+                    var blob = container.GetBlobClient(messageWrapper.Message.MessageId + ZipExtension);
                     byte[] bodyMessage = messageWrapper.Message.Body;
-                    blob.UploadFromByteArray(bodyMessage, 0, bodyMessage.Length);
+                    using (MemoryStream stream = new MemoryStream(bodyMessage))
+                    {
+                        blob.Upload(stream);
+                    }
                     break;
             }
         }
@@ -140,10 +130,11 @@ namespace SBCompressor
         {
             byte[] bodyMessage = null;
             var container = CurrentContainer;
+            var blob = container.GetBlobClient(messageId + ZipExtension);
+
             using (MemoryStream ms = new MemoryStream())
             {
-                var bRef = container.GetBlobReference(messageId + ZipExtension);
-                bRef.DownloadToStream(ms);
+                blob.DownloadTo(ms);
                 ms.Seek(0, SeekOrigin.Begin);
                 bodyMessage = ms.ToArray();
             }

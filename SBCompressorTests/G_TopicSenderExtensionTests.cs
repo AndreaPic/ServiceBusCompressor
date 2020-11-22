@@ -49,7 +49,7 @@ namespace SBCompressorTests
             Exception exception = null;
             try
             {
-                await topicClient.SendCompressorAsync(ResourceMessage.MessageToZip);
+                await topicClient.SendCompressorAsync(ResourceMessage.large);
             }
             catch (Exception ex)
             {
@@ -63,7 +63,7 @@ namespace SBCompressorTests
             Exception exception = null;
             try
             {
-                await topicClient.SendCompressorAsync(ResourceMessage.VeryLargeMessage);
+                await topicClient.SendCompressorAsync(ResourceMessage.verylarge);
             }
             catch (Exception ex)
             {
