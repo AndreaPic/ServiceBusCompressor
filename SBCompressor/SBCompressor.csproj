@@ -6,10 +6,10 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Andrea Piccioni</Authors>
     <Company>Studio Progettazione Software</Company>
-    <AssemblyVersion>0.5.0.0</AssemblyVersion>
-    <FileVersion>0.5.0.0</FileVersion>
+    <AssemblyVersion>0.6.0.0</AssemblyVersion>
+    <FileVersion>0.6.0.0</FileVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
     <PackageTags>Azure Service Bus, .Net Core, CSharp</PackageTags>
     <PackageProjectUrl />
     <RepositoryUrl>https://github.com/AndreaPic/ServiceBusCompressor</RepositoryUrl>

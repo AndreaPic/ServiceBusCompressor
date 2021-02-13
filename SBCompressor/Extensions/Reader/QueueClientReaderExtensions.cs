@@ -28,6 +28,12 @@ namespace SBCompressor.Extensions.Reader
             ReaderExtender<IQueueClient> reader = new ReaderExtender<IQueueClient>(queueClient);
             reader.Subscribe(onMessageReceived);
         }
+        /// <summary>
+        /// Subscribe action to read queue messages
+        /// </summary>
+        /// <param name="queueClient">Type to extend</param>
+        /// <param name="onMessageReceived">Action invoked when message arrive</param>
+        /// <param name="settingData">Setting infomrations</param>
         public static void SubscribeCompressor(this IQueueClient queueClient,
             Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
         {
