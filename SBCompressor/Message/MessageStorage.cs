@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+#if NET5_0
 using Azure.Storage;
 using Azure.Storage.Blobs;
+#endif
+#if NETCOREAPP3_1
+using Microsoft.Azure.Storage;
+using Microsoft.Azure.Storage.Blob;
+#endif
 using Microsoft.Extensions.Configuration;
 using SBCompressor.Configuration;
 
@@ -29,7 +35,12 @@ namespace SBCompressor
         /// <summary>
         /// Container instance
         /// </summary>
+#if NET5_0
         private BlobContainerClient CurrentContainer { get; set; }
+#endif
+#if NETCOREAPP3_1
+        private CloudBlobContainer CurrentContainer { get; set; }
+#endif
         /// <summary>
         /// Initialize new instance
         /// </summary>
@@ -37,18 +48,32 @@ namespace SBCompressor
         {
             CurrentContainer = CreateContainerIfNotExist();
         }
+
+        /// <summary>
+        /// With this constructor you can use explicit settings to handle message hosted in blob storage
+        /// </summary>
+        /// <param name="settingData">settings for messages hosted in blog storage</param>
         public MessageStorage(StorageSettingData settingData) 
         {
             CurrentSettingData = settingData;
             CurrentContainer = CreateContainerIfNotExist();
         }
+
+        /// <summary>
+        /// Current setting for messages hosted in blob storage
+        /// </summary>
         private StorageSettingData CurrentSettingData { get; set; }
 
         /// <summary>
         /// Get a new storage account using connection string
         /// </summary>
         /// <returns>Storage account using the connection string</returns>
+#if NET5_0
         private BlobContainerClient GetBlobContainerClient()
+#endif
+#if NETCOREAPP3_1
+        private CloudStorageAccount GetBlobContainerClient()
+#endif
         {
             string storageConnectionString;
             if (CurrentSettingData != null)
@@ -63,7 +88,12 @@ namespace SBCompressor
             {
                 throw new InvalidConfigurationException();
             }
+#if NET5_0
             BlobContainerClient storageAccount = new BlobContainerClient(storageConnectionString,GetContainerName());
+#endif
+#if NETCOREAPP3_1
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(storageConnectionString);
+#endif
             return storageAccount;
         }
 
@@ -93,12 +123,38 @@ namespace SBCompressor
         /// Create container if not exists using connection string and container name
         /// </summary>
         /// <returns>CloudBlobContainer</returns>
+#if NET5_0
         private BlobContainerClient CreateContainerIfNotExist()
         {
             var client = GetBlobContainerClient();
             client.CreateIfNotExists();
             return client;
         }
+#endif
+#if NETCOREAPP3_1
+        /// <summary>
+        /// Get a new CloudBlobClient using storage account
+        /// </summary>
+        /// <returns></returns>
+        private CloudBlobClient GetCloudBlobClient()
+        {
+            var storageAccount = GetBlobContainerClient();//GetStorageAccount();
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            return blobClient;
+        }
+        /// <summary>
+        /// Create container if not exists using connection string and container name
+        /// </summary>
+        /// <returns>CloudBlobContainer</returns>
+        private CloudBlobContainer CreateContainerIfNotExist()
+        {
+            var client = GetCloudBlobClient();
+            string containerName = GetContainerName();
+            var container = client.GetContainerReference(containerName);
+            container.CreateIfNotExists();
+            return container;
+        }
+#endif
 
         /// <summary>
         /// Upload body o messagewrapper to the container
@@ -111,12 +167,20 @@ namespace SBCompressor
                 case MessageModes.Storage:
                     var container = CurrentContainer;
                     messageWrapper.Message.MessageId = Guid.NewGuid().ToString();
+#if NETCOREAPP3_1
+                    var blob = container.GetBlockBlobReference(messageWrapper.Message.MessageId + ZipExtension);
+                    byte[] bodyMessage = messageWrapper.Message.Body;
+                    blob.UploadFromByteArray(bodyMessage, 0, bodyMessage.Length);
+#endif
+#if NET5_0
+
                     var blob = container.GetBlobClient(messageWrapper.Message.MessageId + ZipExtension);
                     byte[] bodyMessage = messageWrapper.Message.Body;
                     using (MemoryStream stream = new MemoryStream(bodyMessage))
                     {
                         blob.Upload(stream);
                     }
+#endif
                     break;
             }
         }
@@ -130,14 +194,24 @@ namespace SBCompressor
         {
             byte[] bodyMessage = null;
             var container = CurrentContainer;
+#if NETCOREAPP3_1
+            var bRef = container.GetBlobReference(messageId + ZipExtension);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bRef.DownloadToStream(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+                bodyMessage = ms.ToArray();
+            }
+#endif
+#if NET5_0
             var blob = container.GetBlobClient(messageId + ZipExtension);
-
             using (MemoryStream ms = new MemoryStream())
             {
                 blob.DownloadTo(ms);
                 ms.Seek(0, SeekOrigin.Begin);
                 bodyMessage = ms.ToArray();
             }
+#endif
             return bodyMessage;
         }
     }

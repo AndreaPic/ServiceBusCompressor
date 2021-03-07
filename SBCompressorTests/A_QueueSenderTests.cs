@@ -64,7 +64,7 @@ namespace SBCompressorTests
             try
             {
                 EventMessage message = new EventMessage();
-                message.Body = ResourceMessage.verylarge;
+                message.Body = ResourceMessage.VeryLargeMsg;
                 await queueClient.SendAsync(message);
             }
             catch (Exception ex)

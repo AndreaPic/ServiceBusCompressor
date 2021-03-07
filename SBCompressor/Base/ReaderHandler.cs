@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using SBCompressor.Extensions.Reader;
+using System.IO;
 
 namespace SBCompressor
 {
@@ -28,6 +30,14 @@ namespace SBCompressor
             GetObjectFromMessage(message);
             return message;
         }
+        internal static EventMessage GetSimpleMessage(byte[] messageBody)
+        {
+            var jsonMessageString = System.Text.Encoding.UTF8.GetString(messageBody);
+            var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
+            GetObjectFromMessage(message);
+            return message;
+        }
+
 
         /// <summary>
         /// Set BodyObject of the message argument using message informations.
@@ -60,10 +70,27 @@ namespace SBCompressor
             return message;
         }
 
+#if NET5_0
+        /// <summary>
+        /// Get the message from compressed state
+        /// </summary>
+        /// <param name="functionInputData">Function inputbinding data</param>
+        /// <returns>Uncompressed message</returns>
+        internal static async Task<EventMessage> GetZippedMessage(FunctionInputData functionInputData)
+        {
+            var bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(functionInputData.ByteArrayMessage));
+            //var bytes = Convert.FromBase64String(messageBody);
+            var jsonMessageString = await bytes.Unzip() as string;
+            var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
+            GetObjectFromMessage(message);
+            return message;
+        }
+#endif
         /// <summary>
         /// Get the message by chunks
         /// </summary>
         /// <param name="receivedMessage">Message from queue or topic</param>
+        /// <param name="chunkDictionary">chunk data</param>
         /// <returns>If chunks are completed return the recomposed completed message</returns>
         internal static async Task<EventMessage> GetChunkedMessage(Message receivedMessage, ConcurrentDictionary<string, List<byte[]>> chunkDictionary)
         {
@@ -106,10 +133,60 @@ namespace SBCompressor
             return ret;
         }
 
+#if NET5_0
+        /// <summary>
+        /// Get the message by chunks
+        /// </summary>
+        /// <param name="functionInputData">Function inputbinding data</param>
+        /// <param name="chunkDictionary">chunk data</param>
+        /// <returns>If chunks are completed return the recomposed completed message</returns>
+        internal static async Task<EventMessage> GetChunkedMessage(FunctionInputData functionInputData, ConcurrentDictionary<string, List<byte[]>> chunkDictionary)
+        {
+            object chunkGroupIdObject = functionInputData.UserProperties[MessageFactory.MessageChunkGroupIdPropertyName];
+            int? chunkIndex = functionInputData.UserProperties[MessageFactory.MessageChunkIndex] as int?;
+            string chunkGroupIdString = Convert.ToString(chunkGroupIdObject);
+
+            byte[] bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(functionInputData.ByteArrayMessage));
+            List<byte[]> newBytes = new List<byte[]>();
+            newBytes.Add(bytes);
+
+            chunkDictionary.AddOrUpdate(chunkGroupIdString, newBytes, (key, currentList) =>
+            {
+                currentList.Insert(chunkIndex.Value, bytes);
+                return currentList;
+            }
+            );
+
+            var chunkState = functionInputData.UserProperties[MessageFactory.MessageChunkStatePropertyName];
+            string chunkStateString = Convert.ToString(chunkState);
+            ChunkStates currentChunkState;
+            bool parsedState = Enum.TryParse(chunkStateString, out currentChunkState);
+
+            EventMessage ret = null;
+            if (parsedState && currentChunkState == ChunkStates.End)
+            {
+                byte[] completeMessage = new byte[0];
+                List<byte[]> chunks = chunkDictionary[chunkGroupIdString];
+                foreach (var chunk in chunks)
+                {
+                    var tmp = completeMessage.Concat(chunk);
+                    completeMessage = tmp.ToArray();
+                }
+
+                var jsonMessageString = await completeMessage.Unzip() as string;
+                var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
+                GetObjectFromMessage(message);
+                ret = message;
+            }
+            return ret;
+        }
+#endif
+
         /// <summary>
         /// Get message from the storage
         /// </summary>
         /// <param name="receivedMessage"></param>
+        /// <param name="storage">Object to handle stored data</param>
         /// <returns>Event message</returns>
         internal static async Task<EventMessage> GetStoredMessage(Message receivedMessage, MessageStorage storage)
         {
@@ -120,6 +197,22 @@ namespace SBCompressor
             return message;
         }
 
+#if NET5_0
+        /// <summary>
+        /// Get message from the storage
+        /// </summary>
+        /// <param name="functionInputData">Function inputbinding data</param>
+        /// <param name="storage">Object to handle stored data</param>
+        /// <returns>Event message</returns>
+        internal static async Task<EventMessage> GetStoredMessage(FunctionInputData functionInputData, MessageStorage storage)
+        {
+            var bytes = storage.DownloadMessage(functionInputData.MessageId);
+            var jsonMessageString = await bytes.Unzip() as string;
+            var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
+            GetObjectFromMessage(message);
+            return message;
+        }
+#endif
 
     }
 }

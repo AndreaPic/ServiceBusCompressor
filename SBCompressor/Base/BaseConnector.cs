@@ -37,6 +37,12 @@ namespace SBCompressor
             Clients = new System.Collections.Concurrent.ConcurrentDictionary<string, TClient>();
         }
 
+        /// <summary>
+        /// Create a message sender to service bus
+        /// </summary>
+        /// <param name="entityName">Queue Name</param>
+        /// <param name="connectionStringName">Connection string name to use to look for the connection string in the settings file</param>
+        /// <param name="settingData">Configuration data of blob storage hosting messge</param>
         public BaseConnector(string entityName, string connectionStringName, 
             StorageSettingData settingData) 
             : this(entityName, connectionStringName)
@@ -44,8 +50,14 @@ namespace SBCompressor
             Clients = new System.Collections.Concurrent.ConcurrentDictionary<string, TClient>();
             CurrentSettingData = settingData;
         }
+        /// <summary>
+        /// Current data for blob storage hosting large messages
+        /// </summary>
         private StorageSettingData CurrentSettingData { get; set; }
 
+        /// <summary>
+        /// Client cache
+        /// </summary>
         private static System.Collections.Concurrent.ConcurrentDictionary<string, TClient> Clients { get; set; }
 
 
@@ -308,7 +320,7 @@ namespace SBCompressor
                 case MessageModes.Chunk:
                     await ToSendBatchAsync(messageWrapper.Messages);
                     break;
-                case MessageModes.Storage:
+                case MessageModes.Storage:                    
                     brokeredMessage = messageWrapper.Message;
                     await ToSendAsync(brokeredMessage);
                     break;
