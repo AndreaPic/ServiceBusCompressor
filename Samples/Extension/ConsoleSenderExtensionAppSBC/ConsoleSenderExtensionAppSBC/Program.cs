@@ -11,8 +11,8 @@
     {
         // Connection String for the namespace can be obtained from the Azure portal under the 
         // 'Shared Access policies' section.
-        const string ServiceBusConnectionString = "<your_connection_string>";
-        const string QueueName = "<your_queue_name>";
+        const string ServiceBusConnectionString = "Endpoint=sb://crashtestsb.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=***REMOVED***";
+        const string QueueName = "messagequeue";
         static IQueueClient queueClient;
 
         public static async Task Main(string[] args)

@@ -124,10 +124,18 @@ namespace SBCompressor
         public MessageFactory()
         {
         }
+        /// <summary>
+        /// With this constructor you can use explicit settings to handle message hosted in blob storage
+        /// </summary>
+        /// <param name="settingData">settings for messages hosted in blog storage</param>
         public MessageFactory(StorageSettingData settingData)
         {
             CurrentSettingData = settingData;
         }
+
+        /// <summary>
+        /// Current setting for messages hosted in blob storage
+        /// </summary>
         private StorageSettingData CurrentSettingData { get; set; }
 
         /// <summary>
@@ -191,7 +199,15 @@ namespace SBCompressor
         private void ConfigureWrapperForZippedMessage(MessageWrapper messageWrapper, byte[] bytes)
         {
             messageWrapper.MessageMode = MessageModes.GZip;
+#if NET5_0
+            var s = Convert.ToBase64String(bytes);
+            Message brokeredMessage = new Message(Encoding.UTF8.GetBytes(s));
+            //Message brokeredMessage = new Message(bytes);
+#endif
+#if NETCOREAPP3_1
             Message brokeredMessage = new Message(bytes);
+#endif
+
             brokeredMessage.UserProperties.Add(MessageModePropertyName, messageWrapper.MessageMode.ToString());
             messageWrapper.Message = brokeredMessage;
         }
@@ -207,6 +223,7 @@ namespace SBCompressor
             brokeredMessage.UserProperties.Add(MessageModePropertyName, messageWrapper.MessageMode.ToString());
             messageWrapper.Message = brokeredMessage;
             Storage.UploadMessage(messageWrapper);
+            messageWrapper.Message.Body = null; //TODO: review
         }
         /// <summary>
         /// Configure message wrapper for chunks

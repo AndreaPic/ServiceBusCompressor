@@ -133,10 +133,69 @@ namespace SBCompressor.Extensions.Reader
             }
         }
 
+#if NET5_0
+        /// <summary>
+        /// Handle the received message
+        /// </summary>
+        /// <param name="functionInputData">Data from the message by inpudbinding arguments</param>
+        /// <param name="token">CanellationToken</param>
+        /// <returns></returns>
+        virtual protected async Task MessageReceivedHandler(FunctionInputData functionInputData, CancellationToken token)
+        {
+            try
+            {
+                // Process message from subscription.
+                if (functionInputData.UserProperties.ContainsKey(MessageFactory.MessageModePropertyName))
+                {
+                    var prop = functionInputData.UserProperties[MessageFactory.MessageModePropertyName];
+                    string propName = Convert.ToString(prop);
+                    if (!string.IsNullOrEmpty(propName))
+                    {
+                        MessageModes messageMode;
+                        bool parsed = Enum.TryParse(propName, out messageMode);
+                        if (parsed)
+                        {
+                            EventMessage msg = null;
+                            switch (messageMode)
+                            {
+                                case MessageModes.Simple:
+                                    msg = ReaderHandler.GetSimpleMessage(functionInputData.ByteArrayMessage);
+                                    MessageReceived(msg, functionInputData);
+                                    break;
+                                case MessageModes.GZip:
+                                    msg = await ReaderHandler.GetZippedMessage(functionInputData);
+                                    MessageReceived(msg, functionInputData);
+                                    break;
+                                case MessageModes.Chunk:
+                                    msg = await ReaderHandler.GetChunkedMessage(functionInputData, ChunkDictionary);
+                                    if (msg != null)
+                                    {
+                                        MessageReceived(msg, functionInputData);
+                                    }
+                                    break;
+                                case MessageModes.Storage:
+                                    msg = await ReaderHandler.GetStoredMessage(functionInputData, Storage);
+                                    MessageReceived(msg, functionInputData);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+#endif
+
         /// <summary>
         /// Action to invoke when a message arrive
         /// </summary>
         protected Action<MessageReceivedEventArgs> OnMessageReceived;
+
 
         /// <summary>
         /// Raise OnMessageReceived event
@@ -147,6 +206,18 @@ namespace SBCompressor.Extensions.Reader
         {
             OnMessageReceived?.Invoke(new MessageReceivedEventArgs(message, receivedMessage));
         }
+
+#if NET5_0
+        /// <summary>
+        /// Raise OnMessageReceived event
+        /// </summary>
+        /// <param name="message">Message managed by this library</param>
+        /// <param name="functionInputData">Data from the message by inpudbinding arguments</param>
+        private void MessageReceived(EventMessage message, FunctionInputData functionInputData)
+        {
+            OnMessageReceived?.Invoke(new MessageReceivedEventArgs(message, functionInputData));
+        }
+#endif
 
     }
 }
