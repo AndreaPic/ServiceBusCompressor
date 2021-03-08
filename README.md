@@ -5,7 +5,7 @@ Azure service bus has many reasons to limit message size and the size limit is 2
 
 You can read more details about quota limitations at this [link](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quotas)
 
-With this library you can send and read messages bigger then 1Mb without upgrade service bus's tier.
+With this library you can send and read messages bigger than 1Mb without upgrade service bus's tier.
 
 # Issues with those limitation
 ## Chatty messages
