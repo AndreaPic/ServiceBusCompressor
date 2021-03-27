@@ -14,27 +14,20 @@ namespace SampleApp
     {
         static async Task Main(string[] args)
         {
-  #if DEBUG
+#if DEBUG
               Debugger.Launch();
-  #endif
+#endif
             var host = new HostBuilder()
-                .ConfigureAppConfiguration(c =>
-                {
-                    c.AddCommandLine(args);
-                })
-                .ConfigureFunctionsWorker((c, b) =>
-                {
-                    b.UseFunctionExecutionMiddleware();
-                })
-                .ConfigureServices(s =>
-                {
-                    
-                //    s.AddSingleton<IHttpResponderService, DefaultHttpResponderService>();
-                })                
-                .Build();
-            
-
+                           //<docsnippet_configure_defaults>
+                           .ConfigureFunctionsWorkerDefaults()
+                           //</docsnippet_configure_defaults>
+                           //<docsnippet_dependency_injection>
+                           //</docsnippet_dependency_injection>
+                           .Build();
+            //</docsnippet_startup>
+            //<docsnippet_host_run>
             await host.RunAsync();
+            //</docsnippet_host_run>
         }
     }
 }
