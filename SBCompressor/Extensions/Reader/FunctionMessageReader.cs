@@ -1,4 +1,9 @@
-﻿using Microsoft.Azure.ServiceBus;
+﻿#if NET6_0
+using Azure.Messaging.ServiceBus;
+#endif
+#if NETCOREAPP3_1 || NET5_0
+using Microsoft.Azure.ServiceBus;
+#endif
 using SBCompressor.Configuration;
 using System;
 using System.Collections.Generic;
@@ -33,7 +38,12 @@ namespace SBCompressor.Extensions.Reader
         /// <param name="receivedMessage">Original message triggered by Azure Function</param>
         /// <param name="onMessageReceived">Action invoked when a message arrive</param>
         /// <returns></returns>
+#if NET5_0 || NETCOREAPP3_1
         public async Task SubScribe(Message receivedMessage, Action<MessageReceivedEventArgs> onMessageReceived)
+#endif
+#if NET6_0
+        public async Task SubScribe(ServiceBusReceivedMessage receivedMessage, Action<MessageReceivedEventArgs> onMessageReceived)
+#endif
         {
             OnMessageReceived = onMessageReceived;
             CancellationToken token = new CancellationToken();
@@ -46,20 +56,25 @@ namespace SBCompressor.Extensions.Reader
         /// <param name="onMessageReceived">Action invoked when a message arrive</param>
         /// <param name="token">CanellationToken</param>
         /// <returns></returns>
+#if NET5_0 || NETCOREAPP3_1
         public async Task SubScribe(Message receivedMessage, Action<MessageReceivedEventArgs> onMessageReceived, CancellationToken token)
+#endif
+#if NET6_0
+        public async Task SubScribe(ServiceBusReceivedMessage receivedMessage, Action<MessageReceivedEventArgs> onMessageReceived, CancellationToken token)
+#endif
         {
-            try
-            {
+            //try
+            //{
                 OnMessageReceived = onMessageReceived;
                 await MessageReceivedHandler(receivedMessage, token);
-            }
-            catch
-            {
+            //}
+            //catch
+            //{
 
-            }
+            //}
         }
 
-#if NET5_0
+#if NET5_0 || NET6_0
         /// <summary>
         /// Subscribe an action for reading message from queue or topic with Azure Function
         /// </summary>
@@ -81,20 +96,20 @@ namespace SBCompressor.Extensions.Reader
         /// <returns></returns>
         public async Task SubScribe(FunctionInputData functionData, Action<MessageReceivedEventArgs> onMessageReceived, CancellationToken token)
         {
-            try
-            {
+            //try
+            //{
                 OnMessageReceived = onMessageReceived;
                 await MessageReceivedHandler(functionData, token);
-            }
-            catch
-            {
+            //}
+            //catch
+            //{
 
-            }
+            //}
         }
 #endif
     }
 
-#if NET5_0
+#if NET5_0 || NET6_0
 
     /// <summary>
     /// This DTO contains data from inputbinding of the function

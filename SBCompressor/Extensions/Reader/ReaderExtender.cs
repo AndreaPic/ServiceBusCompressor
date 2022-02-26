@@ -1,5 +1,10 @@
-﻿using Microsoft.Azure.ServiceBus;
+﻿#if NET6_0
+using Azure.Messaging.ServiceBus;
+#endif
+#if NETCOREAPP3_1 || NET5_0
+using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Core;
+#endif
 using Newtonsoft.Json;
 using SBCompressor.Configuration;
 using System;
@@ -17,7 +22,12 @@ namespace SBCompressor.Extensions.Reader
     /// </summary>
     /// <typeparam name="TClient">ReceiverClient for the messages</typeparam>
     internal class ReaderExtender<TClient> : MessageReader
+#if NETCOREAPP3_1 || NET5_0
        where TClient : IReceiverClient 
+#endif
+#if NET6_0
+       where TClient : ServiceBusReceiver
+#endif
     {
 
         /// <summary>
@@ -53,6 +63,8 @@ namespace SBCompressor.Extensions.Reader
         }
 
 
+
+#if NETCOREAPP3_1 || NET5_0
         /// <summary>
         /// Register client for messages
         /// </summary>
@@ -63,7 +75,7 @@ namespace SBCompressor.Extensions.Reader
             options.MaxConcurrentCalls = 1;
             Client.RegisterMessageHandler(MessageReceivedHandler, options);
         }
-
+#endif
 
         /// <summary>
         /// Subscribe an action for reading message from queue or topic
@@ -72,7 +84,9 @@ namespace SBCompressor.Extensions.Reader
         public void Subscribe(Action<MessageReceivedEventArgs> onMessageReceived)
         {
             OnMessageReceived = onMessageReceived;
+#if NETCOREAPP3_1 || NET5_0
             RegisterForMessage();
+#endif
         }
 
         /// <summary>
@@ -81,6 +95,7 @@ namespace SBCompressor.Extensions.Reader
         /// <param name="receivedMessage">message received from service bus</param>
         /// <param name="token">CanellationToken</param>
         /// <returns></returns>
+#if NETCOREAPP3_1 || NET5_0
         protected override async Task MessageReceivedHandler(Message receivedMessage, CancellationToken token)
         {
             try
@@ -94,6 +109,21 @@ namespace SBCompressor.Extensions.Reader
                 throw;
             }
         }
-
+#endif
+#if NET6_0
+        protected override async Task MessageReceivedHandler(ServiceBusReceivedMessage receivedMessage, CancellationToken token)
+        {
+            try
+            {
+                await base.MessageReceivedHandler(receivedMessage, token);
+                await Client.CompleteMessageAsync(receivedMessage);
+            }
+            catch
+            {
+                await Client.AbandonMessageAsync(receivedMessage);
+                throw;
+            }
+        }
+#endif
     }
 }
