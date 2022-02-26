@@ -1,5 +1,10 @@
-﻿using Microsoft.Azure.ServiceBus;
+﻿#if NET6_0
+using Azure.Messaging.ServiceBus;
+#endif
+#if NETCOREAPP3_1 || NET5_0
+using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Core;
+#endif
 using Newtonsoft.Json;
 using SBCompressor.Configuration;
 using System;
@@ -14,7 +19,13 @@ namespace SBCompressor.Extensions.Sender
     /// </summary>
     /// <typeparam name="TClient"></typeparam>
     internal class SenderExtender<TClient>
+#if NETCOREAPP3_1 || NET5_0
         where TClient : IClientEntity, ISenderClient 
+#endif
+#if NET6_0
+       where TClient : ServiceBusSender
+#endif
+
     {
         /// <summary>
         /// Current client of queue or topic
@@ -79,7 +90,12 @@ namespace SBCompressor.Extensions.Sender
         /// <returns></returns>
         internal async Task SendAsync(EventMessage eventMessage)
         {
+#if NETCOREAPP3_1 || NET5_0
             Message brokeredMessage = null;
+#endif
+#if NET6_0
+            ServiceBusMessage brokeredMessage = null;
+#endif
             MessageFactory messageFactory = new MessageFactory();
             VeryLargeMessageStrategy strategy;
             if (CurrentSettingData != null)
@@ -116,22 +132,40 @@ namespace SBCompressor.Extensions.Sender
         /// </summary>
         /// <param name="message">message for queue or topic</param>
         /// <returns></returns>
+#if NETCOREAPP3_1 || NET5_0
         protected async Task ToSendAsync(Message message)
         {
             TClient client = GetClient();
             await client.SendAsync(message);
         }
+#endif
+#if NET6_0
+        protected async Task ToSendAsync(ServiceBusMessage message)
+        {
+            TClient client = GetClient();
+            await client.SendMessageAsync(message);
+        }
+#endif
 
         /// <summary>
         /// Send messagea to service bus using standard client
         /// </summary>
         /// <param name="messages">list of messages for queue or topic</param>
         /// <returns></returns>
+#if NETCOREAPP3_1 || NET5_0
         protected async Task ToSendBatchAsync(List<Message> messages)
         {
             TClient client = GetClient();
             await client.SendAsync(messages);
         }
+#endif
+#if NET6_0
+        protected async Task ToSendBatchAsync(List<ServiceBusMessage> messages)
+        {
+            TClient client = GetClient();
+            await client.SendMessagesAsync(messages);
+        }
+#endif
 
     }
 }

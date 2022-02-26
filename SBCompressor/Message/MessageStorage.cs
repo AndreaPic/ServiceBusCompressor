@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-#if NET5_0
+#if NET5_0 || NET6_0
 using Azure.Storage;
 using Azure.Storage.Blobs;
 #endif
@@ -35,7 +35,7 @@ namespace SBCompressor
         /// <summary>
         /// Container instance
         /// </summary>
-#if NET5_0
+#if NET5_0 || NET6_0
         private BlobContainerClient CurrentContainer { get; set; }
 #endif
 #if NETCOREAPP3_1
@@ -68,7 +68,7 @@ namespace SBCompressor
         /// Get a new storage account using connection string
         /// </summary>
         /// <returns>Storage account using the connection string</returns>
-#if NET5_0
+#if NET5_0 || NET6_0
         private BlobContainerClient GetBlobContainerClient()
 #endif
 #if NETCOREAPP3_1
@@ -88,7 +88,7 @@ namespace SBCompressor
             {
                 throw new InvalidConfigurationException();
             }
-#if NET5_0
+#if NET5_0 || NET6_0
             BlobContainerClient storageAccount = new BlobContainerClient(storageConnectionString,GetContainerName());
 #endif
 #if NETCOREAPP3_1
@@ -123,7 +123,7 @@ namespace SBCompressor
         /// Create container if not exists using connection string and container name
         /// </summary>
         /// <returns>CloudBlobContainer</returns>
-#if NET5_0
+#if NET5_0 || NET6_0
         private BlobContainerClient CreateContainerIfNotExist()
         {
             var client = GetBlobContainerClient();
@@ -172,10 +172,19 @@ namespace SBCompressor
                     byte[] bodyMessage = messageWrapper.Message.Body;
                     blob.UploadFromByteArray(bodyMessage, 0, bodyMessage.Length);
 #endif
-#if NET5_0
+#if NET5_0 
 
                     var blob = container.GetBlobClient(messageWrapper.Message.MessageId + ZipExtension);
                     byte[] bodyMessage = messageWrapper.Message.Body;
+                    using (MemoryStream stream = new MemoryStream(bodyMessage))
+                    {
+                        blob.Upload(stream);
+                    }
+#endif
+#if NET6_0
+
+                    var blob = container.GetBlobClient(messageWrapper.Message.MessageId + ZipExtension);
+                    byte[] bodyMessage = messageWrapper.Message.Body.ToArray();
                     using (MemoryStream stream = new MemoryStream(bodyMessage))
                     {
                         blob.Upload(stream);
@@ -203,7 +212,7 @@ namespace SBCompressor
                 bodyMessage = ms.ToArray();
             }
 #endif
-#if NET5_0
+#if NET5_0 || NET6_0
             var blob = container.GetBlobClient(messageId + ZipExtension);
             using (MemoryStream ms = new MemoryStream())
             {

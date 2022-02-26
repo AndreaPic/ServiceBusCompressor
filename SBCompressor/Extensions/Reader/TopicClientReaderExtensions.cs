@@ -1,5 +1,10 @@
-﻿using Microsoft.Azure.ServiceBus;
+﻿#if NET6_0
+using Azure.Messaging.ServiceBus;
+#endif
+#if NETCOREAPP3_1 || NET5_0
+using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Core;
+#endif
 using SBCompressor.Configuration;
 using SBCompressor.Extensions;
 using System;
