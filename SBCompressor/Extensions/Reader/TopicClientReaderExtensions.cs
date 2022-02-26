@@ -27,12 +27,22 @@ namespace SBCompressor.Extensions.Reader
         /// <param name="serviceBusConnectionStringName">Topic connection string name (must be present in sbcsettings.json file)</param>
         /// <param name="onMessageReceived">Action invoked when message arrive</param>
         /// <returns></returns>
+#if NETCOREAPP3_1 || NET5_0
         public static void SubscribeCompressor(this ISubscriptionClient topicClient, 
             Action<MessageReceivedEventArgs> onMessageReceived)
         {
             ReaderExtender<ISubscriptionClient> topicMessageReader = new ReaderExtender<ISubscriptionClient>(topicClient);
             topicMessageReader.Subscribe(onMessageReceived);
         }
+#endif
+#if NET6_0
+        public static void SubscribeCompressor(this ServiceBusReceiver topicClient, 
+            Action<MessageReceivedEventArgs> onMessageReceived)
+        {
+            ReaderExtender<ServiceBusReceiver> topicMessageReader = new ReaderExtender<ServiceBusReceiver>(topicClient);
+            topicMessageReader.Subscribe(onMessageReceived);
+        }
+#endif
 
         /// <summary>
         /// Subscribe action to read queue messages
@@ -40,12 +50,22 @@ namespace SBCompressor.Extensions.Reader
         /// <param name="topicClient">type to extend</param>
         /// <param name="onMessageReceived">Action invoked when message arrive</param>
         /// <param name="settingData">Setting infomrations</param>
+#if NETCOREAPP3_1 || NET5_0
         public static void SubscribeCompressor(this ISubscriptionClient topicClient,
             Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
         {
             ReaderExtender<ISubscriptionClient> topicMessageReader = new ReaderExtender<ISubscriptionClient>(topicClient, settingData);
             topicMessageReader.Subscribe(onMessageReceived);
         }
+#endif
+#if NET6_0
+        public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
+            Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
+        {
+            ReaderExtender<ServiceBusReceiver> topicMessageReader = new ReaderExtender<ServiceBusReceiver>(topicClient, settingData);
+            topicMessageReader.Subscribe(onMessageReceived);
+        }
+#endif
 
     }
 }
