@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace SBCompressorTests
 {
+#if NETCOREAPP3_1 || NET5_0
     [TestClass]
     public class A_QueueSenderTests
     {
@@ -75,4 +76,5 @@ namespace SBCompressorTests
         }
 
     }
+#endif
 }

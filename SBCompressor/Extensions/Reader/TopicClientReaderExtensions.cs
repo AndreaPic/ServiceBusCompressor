@@ -11,8 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using SBCompressor.Extensions.Reader;
 
-namespace SBCompressor.Extensions.Reader
+namespace SBCompressor.Extensions.TopicReader
 {
     /// <summary>
     /// Extensions for use this library functionality directly form Microsoft.Azure.ServiceBus.TopicClient
@@ -36,10 +37,14 @@ namespace SBCompressor.Extensions.Reader
         }
 #endif
 #if NET6_0
-        public static void SubscribeCompressor(this ServiceBusReceiver topicClient, 
+        //public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
+        //public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
+        //    Action<MessageReceivedEventArgs> onMessageReceived)
+        public static void SubscribeCompressor(this ServiceBusProcessor topicClient,
             Action<MessageReceivedEventArgs> onMessageReceived)
         {
-            ReaderExtender<ServiceBusReceiver> topicMessageReader = new ReaderExtender<ServiceBusReceiver>(topicClient);
+            ReaderExtender<ServiceBusProcessor> topicMessageReader = new ReaderExtender<ServiceBusProcessor>(topicClient);
+            //ReaderExtender<ServiceBusReceiver> topicMessageReader = new ReaderExtender<ServiceBusReceiver>(topicClient);
             topicMessageReader.Subscribe(onMessageReceived);
         }
 #endif
@@ -59,10 +64,13 @@ namespace SBCompressor.Extensions.Reader
         }
 #endif
 #if NET6_0
-        public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
+        //public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
+        //    Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
+        public static void SubscribeCompressor(this ServiceBusProcessor topicClient,
             Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
         {
-            ReaderExtender<ServiceBusReceiver> topicMessageReader = new ReaderExtender<ServiceBusReceiver>(topicClient, settingData);
+            ReaderExtender<ServiceBusProcessor> topicMessageReader = new ReaderExtender<ServiceBusProcessor>(topicClient, settingData);
+            //ReaderExtender<ServiceBusReceiver> topicMessageReader = new ReaderExtender<ServiceBusReceiver>(topicClient, settingData);
             topicMessageReader.Subscribe(onMessageReceived);
         }
 #endif

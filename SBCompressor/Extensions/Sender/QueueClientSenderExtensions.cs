@@ -16,7 +16,12 @@ namespace SBCompressor.Extensions.Sender
     /// <summary>
     /// Extensions for use this library functionality directly form Microsoft.Azure.ServiceBus.QueueClient
     /// </summary>
+#if NETCOREAPP3_1 || NET5_0
     public static class QueueClientSenderExtensions
+#endif
+#if NET6_0
+    static class QueueClientSenderExtensions
+#endif
     {
 
         /// <summary>

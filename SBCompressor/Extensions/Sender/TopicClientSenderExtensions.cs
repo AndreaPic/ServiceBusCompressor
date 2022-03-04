@@ -16,7 +16,12 @@ namespace SBCompressor.Extensions.Sender
     /// <summary>
     /// Extensions for use this library functionality directly form Microsoft.Azure.ServiceBus.TopicClient
     /// </summary>
+#if NETCOREAPP3_1 || NET5_0
     public static class TopicClientSenderExtensions
+#endif
+#if NET6_0
+    public static class ClientSenderExtensions
+#endif
     {
         /// <summary>
         /// Send message to the topic

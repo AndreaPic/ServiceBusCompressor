@@ -46,8 +46,13 @@ namespace SBCompressor.Extensions.Reader
 #endif
         {
             OnMessageReceived = onMessageReceived;
+#if NET5_0 || NETCOREAPP3_1
             CancellationToken token = new CancellationToken();
             await MessageReceivedHandler(receivedMessage, token);
+#endif
+#if NET6_0
+            await MessageReceivedHandler(receivedMessage);
+#endif
         }
         /// <summary>
         /// Subscribe an action for reading message from queue or topic with Azure Function
@@ -66,7 +71,12 @@ namespace SBCompressor.Extensions.Reader
             //try
             //{
                 OnMessageReceived = onMessageReceived;
+#if NET5_0 || NETCOREAPP3_1
                 await MessageReceivedHandler(receivedMessage, token);
+#endif
+#if NET6_0
+            await MessageReceivedHandler(receivedMessage);
+#endif
             //}
             //catch
             //{

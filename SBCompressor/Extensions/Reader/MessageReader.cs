@@ -100,7 +100,7 @@ namespace SBCompressor.Extensions.Reader
                     var prop = receivedMessage.UserProperties[MessageFactory.MessageModePropertyName];
 #endif
 #if NET6_0
-        virtual protected async Task MessageReceivedHandler(ServiceBusReceivedMessage receivedMessage, CancellationToken token)
+        virtual protected async Task MessageReceivedHandler(ServiceBusReceivedMessage receivedMessage)//, CancellationToken token)
         {
             try
             {
@@ -151,7 +151,14 @@ namespace SBCompressor.Extensions.Reader
             }
         }
 
+#if NET6_0
+        virtual protected async Task MessageReceivedHandler(ProcessMessageEventArgs processMessage)//, CancellationToken token)
+        {
+            await MessageReceivedHandler(processMessage?.Message);
+        }
+#endif
 #if NET5_0 || NET6_0
+
         /// <summary>
         /// Handle the received message
         /// </summary>
