@@ -1,4 +1,9 @@
+#if NET6_0
+using Azure.Messaging.ServiceBus;
+#endif
+#if NETCOREAPP3_1 || NET5_0
 using Microsoft.Azure.ServiceBus;
+#endif
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SBCompressor;
 using System;
@@ -11,14 +16,25 @@ namespace SBCompressorTests
     public class E_QueueSenderExtensionTests
     {
         const string ServiceBusConnectionString = "<your_connection_string>";
-        const string QueueName = "<your_queue_name>";
+        const string QueueName = "sbq-testunitmessage";
+#if NET6_0
+        static ServiceBusSender queueClient;
+#endif
+#if NETCOREAPP3_1 || NET5_0
         static QueueClient queueClient;
+#endif
         const int numberOfMessages = 10;
 
         [ClassInitialize]
         public static void Initialize(TestContext context)
         {
+#if NET6_0
+            var sbClient = new ServiceBusClient(ServiceBusConnectionString);
+            queueClient = sbClient.CreateSender(QueueName);            
+#endif
+#if NETCOREAPP3_1 || NET5_0
             queueClient = new QueueClient(ServiceBusConnectionString, QueueName);
+#endif
         }
 
         [ClassCleanup]
@@ -65,7 +81,7 @@ namespace SBCompressorTests
             Exception exception = null;
             try
             {
-                await queueClient.SendCompressorAsync(ResourceMessage.verylarge);
+                await queueClient.SendCompressorAsync(ResourceMessage.VeryLargeMsg);
             }
             catch (Exception ex)
             {

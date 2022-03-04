@@ -11,13 +11,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using SBCompressor.Extensions.Reader;
 
-namespace SBCompressor.Extensions.Reader
+namespace SBCompressor.Extensions.QueueReader
 {
     /// <summary>
     /// Extensions for use this library functionality directly form Microsoft.Azure.ServiceBus.QueueClient
     /// </summary>
+#if NETCOREAPP3_1 || NET5_0
     public static class QueueClientReaderExtensions
+#endif
+#if NET6_0
+    public static class QueueClientReaderExtensions
+#endif
     {
         /// <summary>
         /// Subscribe action to read queue messages
@@ -36,10 +42,13 @@ namespace SBCompressor.Extensions.Reader
         }
 #endif
 #if NET6_0
-        public static void SubscribeCompressor(this ServiceBusReceiver queueClient,
+        //public static void SubscribeCompressor(this ServiceBusReceiver queueClient,
+        //    Action<MessageReceivedEventArgs> onMessageReceived)
+        public static void SubscribeCompressor(this ServiceBusProcessor queueClient,
             Action<MessageReceivedEventArgs> onMessageReceived)
         {
-            ReaderExtender<ServiceBusReceiver> reader = new ReaderExtender<ServiceBusReceiver>(queueClient);
+            ReaderExtender<ServiceBusProcessor> reader = new ReaderExtender<ServiceBusProcessor>(queueClient);
+            //ReaderExtender<ServiceBusReceiver> reader = new ReaderExtender<ServiceBusReceiver>(queueClient);
             reader.Subscribe(onMessageReceived);
         }
 #endif
@@ -58,10 +67,13 @@ namespace SBCompressor.Extensions.Reader
         }
 #endif
 #if NET6_0
-        public static void SubscribeCompressor(this ServiceBusReceiver queueClient,
+        //public static void SubscribeCompressor(this ServiceBusReceiver queueClient,
+        //    Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
+        public static void SubscribeCompressor(this ServiceBusProcessor queueClient,
             Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
         {
-            ReaderExtender<ServiceBusReceiver> reader = new ReaderExtender<ServiceBusReceiver>(queueClient, settingData);
+            //ReaderExtender<ServiceBusReceiver> reader = new ReaderExtender<ServiceBusReceiver>(queueClient, settingData);
+            ReaderExtender<ServiceBusProcessor> reader = new ReaderExtender<ServiceBusProcessor>(queueClient, settingData);
             reader.Subscribe(onMessageReceived);
         }
 #endif

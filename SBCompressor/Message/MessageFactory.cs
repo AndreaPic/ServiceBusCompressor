@@ -211,8 +211,9 @@ namespace SBCompressor
         {
             messageWrapper.MessageMode = MessageModes.GZip;
 #if NET6_0
-            var s = Convert.ToBase64String(bytes);
-            ServiceBusMessage brokeredMessage = new ServiceBusMessage(Encoding.UTF8.GetBytes(s));
+            //var s = Convert.ToBase64String(bytes);
+            //ServiceBusMessage brokeredMessage = new ServiceBusMessage(Encoding.UTF8.GetBytes(s));
+            ServiceBusMessage brokeredMessage = new ServiceBusMessage(bytes);
             //Message brokeredMessage = new Message(bytes);
             brokeredMessage.ApplicationProperties.Add(MessageModePropertyName, messageWrapper.MessageMode.ToString());
 #endif

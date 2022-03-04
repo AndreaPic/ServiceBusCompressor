@@ -1,11 +1,16 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿#if NET6_0
+using Azure.Messaging.ServiceBus;
+#endif
+#if NETCOREAPP3_1 || NET5_0
+using Microsoft.Azure.ServiceBus;
+#endif
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SBCompressor;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using SBCompressor.Extensions.Sender;
-using Microsoft.Azure.ServiceBus;
 
 namespace SBCompressorTests
 {
@@ -13,13 +18,23 @@ namespace SBCompressorTests
     public class G_TopicSenderExtensionTests
     {
         const string ServiceBusConnectionString = "<your_connection_string>";
-        const string TopicName = "<your_topic_name>";
+        const string TopicName = "sbt-testunitmessage";
+#if NETCOREAPP3_1 || NET5_0
         static ITopicClient topicClient;
-
+#endif
+#if NET6_0
+        static ServiceBusSender topicClient;
+#endif
         [ClassInitialize]
         static public void Initialize(TestContext context)
         {
+#if NET6_0
+            var sbClient = new ServiceBusClient(ServiceBusConnectionString);
+            topicClient = sbClient.CreateSender(TopicName);
+#endif
+#if NETCOREAPP3_1 || NET5_0
             topicClient = new TopicClient(ServiceBusConnectionString, TopicName);
+#endif
         }
 
         [ClassCleanup]
@@ -63,7 +78,7 @@ namespace SBCompressorTests
             Exception exception = null;
             try
             {
-                await topicClient.SendCompressorAsync(ResourceMessage.verylarge);
+                await topicClient.SendCompressorAsync(ResourceMessage.VeryLargeMsg);
             }
             catch (Exception ex)
             {
