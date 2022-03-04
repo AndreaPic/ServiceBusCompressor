@@ -22,4 +22,3 @@ Samples are:
 - FullLibrary\ConsoleReceiverAppSBC\ConsoleReceiverAppSBC.sln (example that reads messages from Queue)
 - FullLibrary\ConsoleTopicSenderAppSBC\ConsoleTopicSenderAppSBC.sln (example that sends messages for Topic)
 - FullLibrary\ConsoleTopicReceicerAppSBC\ConsoleTopicReceicerAppSBC.sln (example that reads messages from Topic)
-
