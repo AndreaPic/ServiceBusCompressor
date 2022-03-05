@@ -13,8 +13,8 @@ namespace SBCompressorTests
     public class D_TopicReaderTests
     {
         const string ServiceBusConnectionName = "TopicConnectionString";
-        const string TopicName = "<your_topic_name>";
-        const string SubscriptionName = "<your_subscription_name>";
+        const string TopicName = "sbt-testunitmessage";
+        const string SubscriptionName = "testunitmessage-testclient";
 
         static TopicMessageReader subscriptionClient;
 
@@ -47,6 +47,7 @@ namespace SBCompressorTests
             receivedMessageCounter++;
             if (receivedMessageCounter >= minReceivedMessage)
             {
+                Task.Run(() => subscriptionClient.CloseAsync()).Wait();
                 autoResetEvent.Set();
             }
         }

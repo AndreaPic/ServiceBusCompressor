@@ -10,7 +10,7 @@ namespace SBCompressorTests
     public class A_QueueSenderTests
     {
         const string ServiceBusConnectionStringName = "QueueConnectionString";
-        const string QueueName = "<your_queue_name>";
+        const string QueueName = "sbq-testunitmessage";
         private static QueueConnector queueClient;
 
         [ClassInitialize]

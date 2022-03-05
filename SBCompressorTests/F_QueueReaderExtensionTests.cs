@@ -12,14 +12,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SBCompressor.Extensions.QueueReader;
-
+using SBCompressor.Configuration;
 
 namespace SBCompressorTests
 {
     [TestClass]
     public class F_QueueReaderExtensionTests
     {
-        const string ServiceBusConnectionString = "<your_connection_string>";
+        static string ServiceBusConnectionString = SBCSettings.ServiceBusConnectionString;
         const string QueueName = "sbq-testunitmessage";
 #if NETCOREAPP3_1 || NET5_0
         static IQueueClient queueClient;
@@ -38,7 +38,7 @@ namespace SBCompressorTests
 #if NET6_0
             var sbClient = new ServiceBusClient(ServiceBusConnectionString);
             //queueClient = sbClient.CreateReceiver(QueueName);
-            queueClient = sbClient.CreateProcessor(QueueName);
+            queueClient = sbClient.CreateProcessor(QueueName,new ServiceBusProcessorOptions() {  MaxConcurrentCalls = 1});
 #endif
         }
 

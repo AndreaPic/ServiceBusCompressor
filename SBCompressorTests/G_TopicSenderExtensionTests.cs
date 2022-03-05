@@ -11,13 +11,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using SBCompressor.Extensions.Sender;
+using SBCompressor.Configuration;
 
 namespace SBCompressorTests
 {
     [TestClass]
     public class G_TopicSenderExtensionTests
     {
-        const string ServiceBusConnectionString = "<your_connection_string>";
+        static string ServiceBusConnectionString = SBCSettings.ServiceBusConnectionString;
         const string TopicName = "sbt-testunitmessage";
 #if NETCOREAPP3_1 || NET5_0
         static ITopicClient topicClient;

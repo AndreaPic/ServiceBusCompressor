@@ -71,10 +71,16 @@ namespace SBCompressor
         /// </summary>
         /// <param name="receivedMessage">Message from queue or topic</param>
         /// <returns>Uncompressed message</returns>
-#if NETCOREAPP3_1 || NET5_0
+#if NETCOREAPP3_1
         internal static async Task<EventMessage> GetZippedMessage(Message receivedMessage)
         {
             var bytes = receivedMessage.Body;
+#endif
+#if NET5_0
+        internal static async Task<EventMessage> GetZippedMessage(Message receivedMessage)
+        {
+            //var bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(receivedMessage.Body));
+            var bytes = receivedMessage.Body.ToArray();
 #endif
 #if NET6_0
         internal static async Task<EventMessage> GetZippedMessage(ServiceBusReceivedMessage receivedMessage)

@@ -9,13 +9,14 @@ using SBCompressor;
 using System;
 using System.Threading.Tasks;
 using SBCompressor.Extensions.Sender;
+using SBCompressor.Configuration;
 
 namespace SBCompressorTests
 {
     [TestClass]
     public class E_QueueSenderExtensionTests
     {
-        const string ServiceBusConnectionString = "<your_connection_string>";
+        static string ServiceBusConnectionString = SBCSettings.ServiceBusConnectionString;
         const string QueueName = "sbq-testunitmessage";
 #if NET6_0
         static ServiceBusSender queueClient;
