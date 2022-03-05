@@ -13,7 +13,7 @@ namespace SBCompressorTests
     public class B_QueueReaderTests
     {
         const string ServiceBusConnectionStringName = "QueueConnectionString";
-        const string QueueName = "<your_queue_name>";
+        const string QueueName = "sbq-testunitmessage";
         static QueueMessageReader queueClient;
 
         [ClassInitialize]
@@ -45,6 +45,7 @@ namespace SBCompressorTests
            receivedMessageCounter++;
             if (receivedMessageCounter >= minReceivedMessage)
             {
+                Task.Run(() => queueClient.CloseAsync()).Wait();
                 autoResetEvent.Set();
             }
         }

@@ -20,7 +20,7 @@ namespace SBCompressor.Extensions.Sender
     public static class TopicClientSenderExtensions
 #endif
 #if NET6_0
-    public static class ClientSenderExtensions
+    public static class TopicClientSenderExtensions
 #endif
     {
         /// <summary>

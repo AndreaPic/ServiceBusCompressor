@@ -12,7 +12,7 @@ namespace SBCompressorTests
     public class C_TopicSenderTests
     {
         const string ServiceBusConnectionStringName = "TopicConnectionString";
-        const string TopicName = "<your_topic_name>";
+        const string TopicName = "sbt-testunitmessage";
         static TopicConnector topicClient;
 
         [ClassInitialize]

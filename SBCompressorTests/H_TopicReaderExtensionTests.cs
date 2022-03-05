@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SBCompressor.Extensions.TopicReader;
+using SBCompressor.Configuration;
 #if NET6_0
 using Azure.Messaging.ServiceBus;
 #endif
@@ -18,7 +19,7 @@ namespace SBCompressorTests
     [TestClass]
     public class H_TopicReaderExtensionTests
     {
-        const string ServiceBusConnectionString = "<your_connection_string>";
+        static string ServiceBusConnectionString = SBCSettings.ServiceBusConnectionString;
         const string TopicName = "sbt-testunitmessage";
         const string SubscriptionName = "testunitmessage-testclient";
 
@@ -39,7 +40,7 @@ namespace SBCompressorTests
 #if NET6_0
             var sbClient = new ServiceBusClient(ServiceBusConnectionString);
             //subscriptionClient = sbClient.CreateReceiver(TopicName, SubscriptionName);
-            subscriptionClient = sbClient.CreateProcessor(TopicName, SubscriptionName);            
+            subscriptionClient = sbClient.CreateProcessor(TopicName, SubscriptionName, new ServiceBusProcessorOptions() { MaxConcurrentCalls = 1 });            
 #endif
         }
 
@@ -62,7 +63,7 @@ namespace SBCompressorTests
             subscriptionClient.StartProcessingAsync();
 #endif
 
-            autoResetEvent.WaitOne(60000);
+            autoResetEvent.WaitOne(30000);
             Assert.IsTrue(receivedMessageCounter >= minReceivedMessage);
         }
         private void QueueClient_OnMessageReceived(MessageReceivedEventArgs e)

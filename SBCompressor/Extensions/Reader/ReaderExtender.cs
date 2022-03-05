@@ -106,7 +106,9 @@ namespace SBCompressor.Extensions.Reader
             try
             {
                 await base.MessageReceivedHandler(receivedMessage, token);
+#if NETCOREAPP3_1
                 await Client.CompleteAsync(receivedMessage.SystemProperties.LockToken);
+#endif
             }
             catch
             {
