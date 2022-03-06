@@ -224,7 +224,9 @@ namespace SBCompressor
             brokeredMessage.UserProperties.Add(MessageModePropertyName, messageWrapper.MessageMode.ToString());
 #endif
 #if NETCOREAPP3_1
-            Message brokeredMessage = new Message(bytes);
+            var s = Convert.ToBase64String(bytes);
+            Message brokeredMessage = new Message(Encoding.UTF8.GetBytes(s));
+            //Message brokeredMessage = new Message(bytes);
             brokeredMessage.UserProperties.Add(MessageModePropertyName, messageWrapper.MessageMode.ToString());
 #endif
 

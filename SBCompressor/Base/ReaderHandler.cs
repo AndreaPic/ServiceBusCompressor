@@ -74,7 +74,8 @@ namespace SBCompressor
 #if NETCOREAPP3_1
         internal static async Task<EventMessage> GetZippedMessage(Message receivedMessage)
         {
-            var bytes = receivedMessage.Body;
+            var bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(receivedMessage.Body));
+            //var bytes = receivedMessage.Body;
 #endif
 #if NET5_0
         internal static async Task<EventMessage> GetZippedMessage(Message receivedMessage)
