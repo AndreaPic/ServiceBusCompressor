@@ -6,21 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="SPS.SBCompressor" Version="0.6.0" />
+    <PackageReference Include="SPS.SBCompressor" Version="0.5.2" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Update="ResourceMessage.Designer.cs">
+      <DependentUpon>ResourceMessage.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ResourceMessage.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="ResourceMessage.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ResourceMessage.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
   </ItemGroup>
 

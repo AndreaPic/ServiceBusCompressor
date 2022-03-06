@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace SBCompressorTests
 {
+#if NETCOREAPP3_1 || NET5_0
     [TestClass]
     public class B_QueueReaderTests
     {
         const string ServiceBusConnectionStringName = "QueueConnectionString";
-        const string QueueName = "<your_queue_name>";
+        const string QueueName = "sbq-testunitmessage";
         static QueueMessageReader queueClient;
 
         [ClassInitialize]
@@ -44,10 +45,10 @@ namespace SBCompressorTests
            receivedMessageCounter++;
             if (receivedMessageCounter >= minReceivedMessage)
             {
+                Task.Run(() => queueClient.CloseAsync()).Wait();
                 autoResetEvent.Set();
             }
         }
-
-
     }
+#endif
 }

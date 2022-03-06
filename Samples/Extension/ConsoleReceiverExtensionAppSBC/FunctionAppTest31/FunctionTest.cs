@@ -24,7 +24,7 @@ namespace FunctionAppTest31
             var settings = 
                 new StorageSettingData(
                     "<your_blob_storage_container_name>",
-                    "<your_blob_storage_connection_string>", 
+                    "<your_blob_storage_connection_string>",
                     VeryLargeMessageStrategy.Storage);
             FunctionMessageReader reader = new FunctionMessageReader(settings);
 
@@ -32,7 +32,7 @@ namespace FunctionAppTest31
                 (arg) => 
                 {
                     //PUT HERE YOUR MESSAGE HANDLING LOGIC
-                    log.LogInformation($"function processed object: {arg.ReceivedEventMessage?.ObjectName?? arg.ReceivedEventMessage.Body}");                    
+                    log.LogInformation($"function processed object: {arg.ReceivedEventMessage?.ObjectName?? arg.ReceivedEventMessage.Body.Substring(0,10) }");                    
                 }
                 );
         }

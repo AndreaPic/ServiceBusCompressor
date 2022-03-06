@@ -1,4 +1,9 @@
-﻿using Microsoft.Azure.ServiceBus;
+﻿#if NET6_0
+using Azure.Messaging.ServiceBus;
+#endif
+#if NETCOREAPP3_1 || NET5_0
+using Microsoft.Azure.ServiceBus;
+#endif
 using SBCompressor.Configuration;
 using System;
 using System.Collections.Concurrent;
@@ -67,6 +72,7 @@ namespace SBCompressor.Extensions.Reader
         /// </summary>
         private StorageSettingData CurrentSettingData { get; set; }
 
+#if NET5_0 || NETCOREAPP3_1
         /// <summary>
         /// Handler in caso of exceptions reading message
         /// </summary>
@@ -76,13 +82,14 @@ namespace SBCompressor.Extensions.Reader
         {
             return Task.CompletedTask;
         }
-
+#endif
         /// <summary>
         /// Handle the received message
         /// </summary>
         /// <param name="receivedMessage">message received from service bus</param>
         /// <param name="token">CanellationToken</param>
         /// <returns></returns>
+#if NET5_0 || NETCOREAPP3_1
         virtual protected async Task MessageReceivedHandler(Message receivedMessage, CancellationToken token)
         {
             try
@@ -91,6 +98,17 @@ namespace SBCompressor.Extensions.Reader
                 if (receivedMessage.UserProperties.ContainsKey(MessageFactory.MessageModePropertyName))
                 {
                     var prop = receivedMessage.UserProperties[MessageFactory.MessageModePropertyName];
+#endif
+#if NET6_0
+        virtual protected async Task MessageReceivedHandler(ServiceBusReceivedMessage receivedMessage)//, CancellationToken token)
+        {
+            try
+            {
+                // Process message from subscription.
+                if (receivedMessage.ApplicationProperties.ContainsKey(MessageFactory.MessageModePropertyName))
+                {
+                    var prop = receivedMessage.ApplicationProperties[MessageFactory.MessageModePropertyName];
+#endif
                     string propName = Convert.ToString(prop);
                     if (!string.IsNullOrEmpty(propName))
                     {
@@ -133,7 +151,14 @@ namespace SBCompressor.Extensions.Reader
             }
         }
 
-#if NET5_0
+#if NET6_0
+        virtual protected async Task MessageReceivedHandler(ProcessMessageEventArgs processMessage)//, CancellationToken token)
+        {
+            await MessageReceivedHandler(processMessage?.Message);
+        }
+#endif
+#if NET5_0 || NET6_0
+
         /// <summary>
         /// Handle the received message
         /// </summary>
@@ -202,12 +227,17 @@ namespace SBCompressor.Extensions.Reader
         /// </summary>
         /// <param name="message">Message managed by this library</param>
         /// <param name="receivedMessage">Original message from queue or topic</param>
+#if NET5_0 || NETCOREAPP3_1
         private void MessageReceived(EventMessage message, Message receivedMessage)
+#endif
+#if NET6_0
+        private void MessageReceived(EventMessage message, ServiceBusReceivedMessage receivedMessage)
+#endif
         {
             OnMessageReceived?.Invoke(new MessageReceivedEventArgs(message, receivedMessage));
         }
 
-#if NET5_0
+#if NET5_0 || NET6_0
         /// <summary>
         /// Raise OnMessageReceived event
         /// </summary>

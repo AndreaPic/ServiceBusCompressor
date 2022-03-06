@@ -5,23 +5,43 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SBCompressor.Extensions.Reader;
+using SBCompressor.Extensions.TopicReader;
+using SBCompressor.Configuration;
+#if NET6_0
+using Azure.Messaging.ServiceBus;
+#endif
+#if NETCOREAPP3_1 || NET5_0
 using Microsoft.Azure.ServiceBus;
+#endif
 
 namespace SBCompressorTests
 {
     [TestClass]
     public class H_TopicReaderExtensionTests
     {
-        const string ServiceBusConnectionString = "<your_connection_string>";
-        const string TopicName = "<your_topic_name>";
-        const string SubscriptionName = "<your_subscription_name>";
+        static string ServiceBusConnectionString = SBCSettings.ServiceBusConnectionString;
+        const string TopicName = "sbt-testunitmessage";
+        const string SubscriptionName = "testunitmessage-testclient";
+
+#if NETCOREAPP3_1 || NET5_0
         static ISubscriptionClient subscriptionClient;
+#endif
+#if NET6_0
+        //static ServiceBusReceiver subscriptionClient;
+        static ServiceBusProcessor subscriptionClient;
+#endif
 
         [ClassInitialize]
         static public void Initialize(TestContext context)
         {
+#if NETCOREAPP3_1 || NET5_0
             subscriptionClient = new SubscriptionClient(ServiceBusConnectionString, TopicName, SubscriptionName);
+#endif
+#if NET6_0
+            var sbClient = new ServiceBusClient(ServiceBusConnectionString);
+            //subscriptionClient = sbClient.CreateReceiver(TopicName, SubscriptionName);
+            subscriptionClient = sbClient.CreateProcessor(TopicName, SubscriptionName, new ServiceBusProcessorOptions() { MaxConcurrentCalls = 1 });            
+#endif
         }
 
         [ClassCleanup]
@@ -39,6 +59,10 @@ namespace SBCompressorTests
         {
             receivedMessageCounter = 0;
             subscriptionClient.SubscribeCompressor(QueueClient_OnMessageReceived);
+#if NET6_0
+            subscriptionClient.StartProcessingAsync();
+#endif
+
             autoResetEvent.WaitOne(30000);
             Assert.IsTrue(receivedMessageCounter >= minReceivedMessage);
         }

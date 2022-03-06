@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 
 namespace SBCompressorTests
 {
+#if NETCOREAPP3_1 || NET5_0
     [TestClass]
     public class A_QueueSenderTests
     {
         const string ServiceBusConnectionStringName = "QueueConnectionString";
-        const string QueueName = "<your_queue_name>";
+        const string QueueName = "sbq-testunitmessage";
         private static QueueConnector queueClient;
 
         [ClassInitialize]
@@ -75,4 +76,5 @@ namespace SBCompressorTests
         }
 
     }
+#endif
 }

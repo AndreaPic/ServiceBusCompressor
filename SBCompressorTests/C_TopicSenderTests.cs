@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace SBCompressorTests
 {
+#if NETCOREAPP3_1 || NET5_0
     [TestClass]
     public class C_TopicSenderTests
     {
         const string ServiceBusConnectionStringName = "TopicConnectionString";
-        const string TopicName = "<your_topic_name>";
+        const string TopicName = "sbt-testunitmessage";
         static TopicConnector topicClient;
 
         [ClassInitialize]
@@ -66,7 +67,7 @@ namespace SBCompressorTests
             try
             {
                 EventMessage message = new EventMessage();
-                message.Body = ResourceMessage.verylarge;
+                message.Body = ResourceMessage.VeryLargeMsg;
                 await topicClient.SendAsync(message);
             }
             catch (Exception ex)
@@ -75,6 +76,6 @@ namespace SBCompressorTests
             }
             Assert.IsNull(exception);
         }
-
     }
+#endif
 }
