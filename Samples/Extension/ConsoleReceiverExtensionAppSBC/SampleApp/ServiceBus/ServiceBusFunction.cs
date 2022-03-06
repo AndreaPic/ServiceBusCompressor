@@ -16,6 +16,9 @@ using SBCompressor.Extensions.Reader;
 
 namespace SampleApp
 {
+
+    //LAUNCH WITH "func host start" command in the bin directory
+
     public static class ServiceBusFunction
     {
         [Function("ServiceBusFunction")]
@@ -45,7 +48,7 @@ namespace SampleApp
                 (arg) =>
                 {
                     //PUT HERE YOUR MESSAGE HANDLING LOGIC
-                    logger.LogInformation($"function processed object: {arg.ReceivedEventMessage?.ObjectName??arg.ReceivedEventMessage.Body}");
+                    logger.LogInformation($"function processed object: {arg.ReceivedEventMessage?.ObjectName??arg.ReceivedEventMessage.Body.Substring(0,10)}");
                 });
             return;
         }

@@ -6,11 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="SPS.SBCompressor" Version="0.6.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\DTO\DTOLibrary\DTOLibrary\DTOLibrary.csproj" />
+    <PackageReference Include="SPS.SBCompressor" Version="0.5.2" />
   </ItemGroup>
 
   <ItemGroup>
