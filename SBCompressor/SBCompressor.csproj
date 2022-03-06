@@ -18,11 +18,10 @@
     <Copyright />
     <Title>Azure Service Bus Compressor</Title>
     <PackageReleaseNotes>
-		- 
-		- 
-		- Now you can upgrade from 0.9 version (.net core 3.1) to this release (If you use .net core 3.1 please skip 0.5.0 version).
+		- Added support for .net 6
+		- You can trigger service bus message and use this library to read message with Azure Funcitons
 		- Integration with Azure functions (.net core 3.1 and .NET 5 and .NET 6)
-		- You can trigger service bus message and use this library to read message with Azure Funcitons.
+		- Please look at samples and documentation on github
 	</PackageReleaseNotes>
   </PropertyGroup>
 

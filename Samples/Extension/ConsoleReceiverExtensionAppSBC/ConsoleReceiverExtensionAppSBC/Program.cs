@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
     using Microsoft.Azure.ServiceBus;
     using SBCompressor;
-    using SBCompressor.Extensions.Reader;
+    using SBCompressor.Extensions.QueueReader;
 
 
     class Program
