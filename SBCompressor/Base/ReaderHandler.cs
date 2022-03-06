@@ -79,13 +79,14 @@ namespace SBCompressor
 #if NET5_0
         internal static async Task<EventMessage> GetZippedMessage(Message receivedMessage)
         {
-            //var bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(receivedMessage.Body));
-            var bytes = receivedMessage.Body.ToArray();
+            var bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(receivedMessage.Body));
+            //var bytes = receivedMessage.Body.ToArray();
 #endif
 #if NET6_0
         internal static async Task<EventMessage> GetZippedMessage(ServiceBusReceivedMessage receivedMessage)
         {
-            var bytes = receivedMessage.Body.ToArray();
+            var bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(receivedMessage.Body));
+            //var bytes = receivedMessage.Body.ToArray();
 #endif
             var jsonMessageString = await bytes.Unzip() as string;
             var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
@@ -103,6 +104,7 @@ namespace SBCompressor
         {
             var bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(functionInputData.ByteArrayMessage));
             //var bytes = Convert.FromBase64String(messageBody);
+            //var bytes = functionInputData.ByteArrayMessage;
             var jsonMessageString = await bytes.Unzip() as string;
             var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
             GetObjectFromMessage(message);
