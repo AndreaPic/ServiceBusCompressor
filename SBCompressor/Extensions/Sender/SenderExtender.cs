@@ -96,15 +96,17 @@ namespace SBCompressor.Extensions.Sender
 #if NET6_0
             ServiceBusMessage brokeredMessage = null;
 #endif
-            MessageFactory messageFactory = new MessageFactory();
+            MessageFactory messageFactory;
             VeryLargeMessageStrategy strategy;
             if (CurrentSettingData != null)
             {
                 strategy = CurrentSettingData.Strategy;
+                messageFactory = new MessageFactory(CurrentSettingData);
             }
             else
             {
                 strategy = Settings.GetVeryLargeMessageStrategy();
+                messageFactory = new MessageFactory();
             }
             var messageWrapper = messageFactory.CreateMessageFromEvent(eventMessage, strategy);
             switch (messageWrapper.MessageMode)
