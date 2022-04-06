@@ -166,7 +166,7 @@ namespace SBCompressor
             {
                 case MessageModes.Storage:
                     var container = CurrentContainer;
-                    messageWrapper.Message.MessageId = Guid.NewGuid().ToString();
+                    messageWrapper.Message.MessageId = Guid.NewGuid().ToString("N");
 #if NETCOREAPP3_1
                     var blob = container.GetBlockBlobReference(messageWrapper.Message.MessageId + ZipExtension);
                     byte[] bodyMessage = messageWrapper.Message.Body;
