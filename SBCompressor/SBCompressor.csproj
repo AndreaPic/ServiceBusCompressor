@@ -3,8 +3,8 @@
   <PropertyGroup>   
     <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <AssemblyVersion>0.6.0.0</AssemblyVersion>
-    <FileVersion>0.6.0.0</FileVersion>
-    <Version>0.6.0</Version>   
+    <FileVersion>0.6.0.1</FileVersion>
+    <Version>0.6.1</Version>   
     <PackageId>SPS.SBCompressor</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Andrea Piccioni</Authors>
@@ -18,10 +18,8 @@
     <Copyright />
     <Title>Azure Service Bus Compressor</Title>
     <PackageReleaseNotes>
-		- Added support for .net 6
-		- You can trigger service bus message and use this library to read message with Azure Funcitons
-		- Integration with Azure functions (.net core 3.1 and .NET 5 and .NET 6)
-		- Please look at samples and documentation on github
+		- Fix sending message without sbcsettings.json file
+        - File in the storage and MessageId fixed to guid in "N" format
 	</PackageReleaseNotes>
   </PropertyGroup>
 
