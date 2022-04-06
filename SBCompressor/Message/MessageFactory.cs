@@ -4,6 +4,7 @@ using SBCompressor.Configuration;
 using SBCompressor.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -143,6 +144,8 @@ namespace SBCompressor
             MessageWrapper ret = new MessageWrapper();
             string jsonMessageString = JsonConvert.SerializeObject(eventMessage);
 
+            Debug.WriteLine($"MessageSize: {jsonMessageString.Length * sizeof(char)}");
+            Debug.WriteLine($"MaxMessageSize: {MaxMessageSize}");
             if ((jsonMessageString.Length * sizeof(char)) < MaxMessageSize)
             {
                 ConfigureWrapperForSimpleMessage(ret, jsonMessageString);
@@ -150,8 +153,10 @@ namespace SBCompressor
             else
             {
                 byte[] bytes = jsonMessageString.Zip();
-                if ((jsonMessageString.Length * sizeof(char)) < MaxMessageSize)
+                Debug.WriteLine($"ZipSize: {bytes.LongLength}");
+                if (bytes.LongLength <= MaxMessageSize)
                 {
+                    Debug.WriteLine($"Send Zip");
                     ConfigureWrapperForZippedMessage(ret, bytes);
                 }
                 else
@@ -162,6 +167,7 @@ namespace SBCompressor
                             ConfigureWrapperForChunks(ret, bytes);
                             break;
                         case VeryLargeMessageStrategy.Storage:
+                            Debug.WriteLine($"Send Storage");
                             ConfigureWrapperForStorage(ret, bytes);
                             break;
                         default:
@@ -207,6 +213,7 @@ namespace SBCompressor
             brokeredMessage.UserProperties.Add(MessageModePropertyName, messageWrapper.MessageMode.ToString());
             messageWrapper.Message = brokeredMessage;
             Storage.UploadMessage(messageWrapper);
+            messageWrapper.Message.Body = null; 
         }
         /// <summary>
         /// Configure message wrapper for chunks
