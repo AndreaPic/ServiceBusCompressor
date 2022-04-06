@@ -80,15 +80,17 @@ namespace SBCompressor.Extensions.Sender
         internal async Task SendAsync(EventMessage eventMessage)
         {
             Message brokeredMessage = null;
-            MessageFactory messageFactory = new MessageFactory();
+            MessageFactory messageFactory;
             VeryLargeMessageStrategy strategy;
             if (CurrentSettingData != null)
             {
                 strategy = CurrentSettingData.Strategy;
+                messageFactory = new MessageFactory(CurrentSettingData);
             }
             else
             {
                 strategy = Settings.GetVeryLargeMessageStrategy();
+                messageFactory = new MessageFactory(CurrentSettingData);
             }
             var messageWrapper = messageFactory.CreateMessageFromEvent(eventMessage, strategy);
             switch (messageWrapper.MessageMode)

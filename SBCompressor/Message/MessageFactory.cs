@@ -150,7 +150,7 @@ namespace SBCompressor
             else
             {
                 byte[] bytes = jsonMessageString.Zip();
-                if (bytes.LongLength <= MaxMessageSize)
+                if ((jsonMessageString.Length * sizeof(char)) < MaxMessageSize)
                 {
                     ConfigureWrapperForZippedMessage(ret, bytes);
                 }
