@@ -6,17 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="SPS.SBCompressor" Version="0.6.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\DTO\DTOLibrary\DTOLibrary\DTOLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="sbcsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Reference Include="SBCompressor">
+      <HintPath>..\..\..\..\SBCompressor\bin\Debug\net5.0\SBCompressor.dll</HintPath>
+    </Reference>
   </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
+		<PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.1.2" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+	</ItemGroup>
 
 </Project>

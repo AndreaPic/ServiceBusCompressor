@@ -11,8 +11,8 @@
     {
         // Connection String for the namespace can be obtained from the Azure portal under the 
         // 'Shared Access policies' section.
-        const string ServiceBusConnectionString = "Endpoint=sb://crashtestsb.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=***REMOVED***";
-        const string QueueName = "messagequeue";
+        const string ServiceBusConnectionString = "<your service bus connection string>";
+        const string QueueName = "<your queue name>";
         static IQueueClient queueClient;
 
         public static async Task Main(string[] args)
@@ -53,7 +53,10 @@
                     await queueClient.SendAsync(message);
                     */
                     // USING SBCOMPRESSOR
-                    await queueClient.SendCompressorAsync(messageBody);
+                    var settings = new SBCompressor.Configuration.StorageSettingData(
+                        "DefaultEndpointsProtocol=https;AccountName=stsbcompressordevweu001;AccountKey=***REMOVED***;EndpointSuffix=core.windows.net",
+                        "sbcompressorcontainer", SBCompressor.VeryLargeMessageStrategy.Storage);
+                    await queueClient.SendCompressorAsync(messageBody, settings);
                 }
             }
             catch (Exception exception)
@@ -64,11 +67,15 @@
     
         static async Task SendMessageWithOjbet()
         {
+            var settings = new SBCompressor.Configuration.StorageSettingData(
+                "DefaultEndpointsProtocol=https;AccountName=stsbcompressordevweu001;AccountKey=***REMOVED***;EndpointSuffix=core.windows.net",
+                "sbcompressorcontainer", SBCompressor.VeryLargeMessageStrategy.Storage);
+
             //sent object instead of string
             DTOLibrary.MessageDTO messageDTO = new DTOLibrary.MessageDTO();
             messageDTO.Subject = "Hello";
             messageDTO.Content = "I'm a object";
-            await queueClient.SendCompressorAsync(messageDTO);
+            await queueClient.SendCompressorAsync(messageDTO,settings);
         }
     }
 }
