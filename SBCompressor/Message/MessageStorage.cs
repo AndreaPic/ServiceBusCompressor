@@ -46,7 +46,7 @@ namespace SBCompressor
         /// </summary>
         public MessageStorage()
         {
-            CurrentContainer = CreateContainerIfNotExist();
+            CurrentContainer = TryCreateContainerIfNotExist();
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace SBCompressor
         public MessageStorage(StorageSettingData settingData) 
         {
             CurrentSettingData = settingData;
-            CurrentContainer = CreateContainerIfNotExist();
+            CurrentContainer = TryCreateContainerIfNotExist();
         }
 
         /// <summary>
@@ -124,10 +124,14 @@ namespace SBCompressor
         /// </summary>
         /// <returns>CloudBlobContainer</returns>
 #if NET5_0 || NET6_0
-        private BlobContainerClient CreateContainerIfNotExist()
+        private BlobContainerClient TryCreateContainerIfNotExist()
         {
             var client = GetBlobContainerClient();
-            client.CreateIfNotExists();
+            try
+            {
+                client.CreateIfNotExists();
+            }
+            catch { } //TODO: manage write permission required
             return client;
         }
 #endif
@@ -146,12 +150,16 @@ namespace SBCompressor
         /// Create container if not exists using connection string and container name
         /// </summary>
         /// <returns>CloudBlobContainer</returns>
-        private CloudBlobContainer CreateContainerIfNotExist()
+        private CloudBlobContainer TryCreateContainerIfNotExist()
         {
             var client = GetCloudBlobClient();
             string containerName = GetContainerName();
             var container = client.GetContainerReference(containerName);
-            container.CreateIfNotExists();
+            try
+            {
+                container.CreateIfNotExists();
+            }
+            catch { } //TODO: manage write permission required
             return container;
         }
 #endif

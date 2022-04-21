@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionAppTest31", "Functi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp", "SampleApp\SampleApp.csproj", "{B32619E3-504D-4BF1-ABA6-5902A5BCB9B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionAppTest6", "FunctionAppTest6\FunctionAppTest6.csproj", "{FCF2A076-3384-4CD3-97B1-0A7A7B739E1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionAppTest6", "FunctionAppTest6\FunctionAppTest6.csproj", "{FCF2A076-3384-4CD3-97B1-0A7A7B739E1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionAppTest6Isolated", "FunctionAppTest6Isolated\FunctionAppTest6Isolated.csproj", "{C3722F99-2FCC-4846-8DDB-605FC0280DBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{FCF2A076-3384-4CD3-97B1-0A7A7B739E1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCF2A076-3384-4CD3-97B1-0A7A7B739E1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCF2A076-3384-4CD3-97B1-0A7A7B739E1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3722F99-2FCC-4846-8DDB-605FC0280DBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3722F99-2FCC-4846-8DDB-605FC0280DBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3722F99-2FCC-4846-8DDB-605FC0280DBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3722F99-2FCC-4846-8DDB-605FC0280DBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
