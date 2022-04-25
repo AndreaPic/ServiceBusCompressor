@@ -26,11 +26,44 @@ namespace SBCompressor
         {
             this.subscriptionName = subscriptionName;
         }
+        /// <summary>
+        /// Initialize new instance
+        /// </summary>
+        /// <param name="entityName">Queue name</param>
+        /// <param name="connectionStringName">Connection string in the settings file</param>
+        /// <param name="subscriptionName">Subscription name for the topic</param>
+        /// <param name="settingData">Explicit Settings</param>
         public TopicMessageReader(string entityName, string connectionStringName, string subscriptionName,
             StorageSettingData settingData) : base(entityName, connectionStringName, settingData)
         {
             this.subscriptionName = subscriptionName;
         }
+
+        /// <summary>
+        /// Initialize new instance
+        /// </summary>
+        /// <param name="entityName">Queue name</param>
+        /// <param name="connectionStringName">Connection string in the settings file</param>
+        /// <param name="subscriptionName">Subscription name for the topic</param>
+        /// <param name="typeToDeserialize">Type used to deserialize message</param>
+        public TopicMessageReader(string entityName, string connectionStringName, string subscriptionName, Type typeToDeserialize) : base(entityName, connectionStringName, typeToDeserialize)
+        {
+            this.subscriptionName = subscriptionName;
+        }
+        /// <summary>
+        /// Initialize new instance
+        /// </summary>
+        /// <param name="entityName">Queue name</param>
+        /// <param name="connectionStringName">Connection string in the settings file</param>
+        /// <param name="subscriptionName">Subscription name for the topic</param>
+        /// <param name="settingData">Explicit Settings</param>
+        /// <param name="typeToDeserialize">Type used to deserialize message</param>
+        public TopicMessageReader(string entityName, string connectionStringName, string subscriptionName,
+            StorageSettingData settingData, Type typeToDeserialize) : base(entityName, connectionStringName, settingData, typeToDeserialize)
+        {
+            this.subscriptionName = subscriptionName;
+        }
+
 
         /// <summary>
         /// Create a new instance of SubscriptionClient

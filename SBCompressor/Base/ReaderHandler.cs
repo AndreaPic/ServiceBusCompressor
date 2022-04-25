@@ -29,23 +29,42 @@ namespace SBCompressor
         /// <param name="receivedMessage">Message from service bus</param>
         /// <returns>Message from service bus</returns>
 #if NETCOREAPP3_1 || NET5_0
-        internal static EventMessage GetSimpleMessage(Message receivedMessage)
+        internal static EventMessage GetSimpleMessage(Message receivedMessage, Type typeToDeserialize)
 #endif
 #if NET6_0
-        internal static EventMessage GetSimpleMessage(ServiceBusReceivedMessage receivedMessage)
+        internal static EventMessage GetSimpleMessage(ServiceBusReceivedMessage receivedMessage, Type typeToDeserialize)
 #endif
         {
             var jsonMessageString = Encoding.UTF8.GetString(receivedMessage.Body);
             var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
-            GetObjectFromMessage(message);
+            GetObjectFromMessage(message, typeToDeserialize);
             return message;
         }
-        internal static EventMessage GetSimpleMessage(byte[] messageBody)
+        internal static EventMessage GetSimpleMessage(byte[] messageBody, Type typeToDeserialize)
         {
             var jsonMessageString = System.Text.Encoding.UTF8.GetString(messageBody);
             var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
-            GetObjectFromMessage(message);
+            GetObjectFromMessage(message, typeToDeserialize);
             return message;
+        }
+
+
+        /// <summary>
+        /// Set BodyObject of the message argument using message informations.
+        /// </summary>
+        /// <param name="message">message to work</param>
+        /// <param name="typeToDeserialize">Explicit type where deserialize message</param>
+        private static void GetObjectFromMessage(EventMessage message, Type typeToDeserialize)
+        {
+            if (typeToDeserialize!=null)
+            {
+                var bodyObject = JsonConvert.DeserializeObject(message.Body, typeToDeserialize);
+                message.BodyObject = bodyObject;
+            }
+            else
+            {
+                GetObjectFromMessage(message);
+            }
         }
 
 
@@ -72,26 +91,26 @@ namespace SBCompressor
         /// <param name="receivedMessage">Message from queue or topic</param>
         /// <returns>Uncompressed message</returns>
 #if NETCOREAPP3_1
-        internal static async Task<EventMessage> GetZippedMessage(Message receivedMessage)
+        internal static async Task<EventMessage> GetZippedMessage(Message receivedMessage, Type typeToDeserialize)
         {
             var bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(receivedMessage.Body));
             //var bytes = receivedMessage.Body;
 #endif
 #if NET5_0
-        internal static async Task<EventMessage> GetZippedMessage(Message receivedMessage)
+        internal static async Task<EventMessage> GetZippedMessage(Message receivedMessage, Type typeToDeserialize)
         {
             var bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(receivedMessage.Body));
             //var bytes = receivedMessage.Body.ToArray();
 #endif
 #if NET6_0
-        internal static async Task<EventMessage> GetZippedMessage(ServiceBusReceivedMessage receivedMessage)
+        internal static async Task<EventMessage> GetZippedMessage(ServiceBusReceivedMessage receivedMessage, Type typeToDeserialize)
         {
             var bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(receivedMessage.Body));
             //var bytes = receivedMessage.Body.ToArray();
 #endif
             var jsonMessageString = await bytes.Unzip() as string;
             var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
-            GetObjectFromMessage(message);
+            GetObjectFromMessage(message, typeToDeserialize);
             return message;
         }
 
@@ -101,14 +120,14 @@ namespace SBCompressor
         /// </summary>
         /// <param name="functionInputData">Function inputbinding data</param>
         /// <returns>Uncompressed message</returns>
-        internal static async Task<EventMessage> GetZippedMessage(FunctionInputData functionInputData)
+        internal static async Task<EventMessage> GetZippedMessage(FunctionInputData functionInputData, Type typeToDeserialize)
         {
             var bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(functionInputData.ByteArrayMessage));
             //var bytes = Convert.FromBase64String(messageBody);
             //var bytes = functionInputData.ByteArrayMessage;
             var jsonMessageString = await bytes.Unzip() as string;
             var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
-            GetObjectFromMessage(message);
+            GetObjectFromMessage(message, typeToDeserialize);
             return message;
         }
 #endif
@@ -119,7 +138,7 @@ namespace SBCompressor
         /// <param name="chunkDictionary">chunk data</param>
         /// <returns>If chunks are completed return the recomposed completed message</returns>
 #if NETCOREAPP3_1 || NET5_0
-        internal static async Task<EventMessage> GetChunkedMessage(Message receivedMessage, ConcurrentDictionary<string, List<byte[]>> chunkDictionary)
+        internal static async Task<EventMessage> GetChunkedMessage(Message receivedMessage, ConcurrentDictionary<string, List<byte[]>> chunkDictionary, Type typeToDeserialize)
         {
             object chunkGroupIdObject = receivedMessage.UserProperties[MessageFactory.MessageChunkGroupIdPropertyName];
             int? chunkIndex = receivedMessage.UserProperties[MessageFactory.MessageChunkIndex] as int?;
@@ -128,7 +147,7 @@ namespace SBCompressor
             byte[] bytes = receivedMessage.Body;
 #endif
 #if NET6_0
-        internal static async Task<EventMessage> GetChunkedMessage(ServiceBusReceivedMessage receivedMessage, ConcurrentDictionary<string, List<byte[]>> chunkDictionary)
+        internal static async Task<EventMessage> GetChunkedMessage(ServiceBusReceivedMessage receivedMessage, ConcurrentDictionary<string, List<byte[]>> chunkDictionary, Type typeToDeserialize)
         {
             object chunkGroupIdObject = receivedMessage.ApplicationProperties[MessageFactory.MessageChunkGroupIdPropertyName];
             int? chunkIndex = receivedMessage.ApplicationProperties[MessageFactory.MessageChunkIndex] as int?;
@@ -170,7 +189,7 @@ namespace SBCompressor
 
                 var jsonMessageString = await completeMessage.Unzip() as string;
                 var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
-                GetObjectFromMessage(message);
+                GetObjectFromMessage(message, typeToDeserialize);
                 ret = message;
             }
             return ret;
@@ -183,7 +202,7 @@ namespace SBCompressor
         /// <param name="functionInputData">Function inputbinding data</param>
         /// <param name="chunkDictionary">chunk data</param>
         /// <returns>If chunks are completed return the recomposed completed message</returns>
-        internal static async Task<EventMessage> GetChunkedMessage(FunctionInputData functionInputData, ConcurrentDictionary<string, List<byte[]>> chunkDictionary)
+        internal static async Task<EventMessage> GetChunkedMessage(FunctionInputData functionInputData, ConcurrentDictionary<string, List<byte[]>> chunkDictionary, Type typeToDeserialize)
         {
             object chunkGroupIdObject = functionInputData.UserProperties[MessageFactory.MessageChunkGroupIdPropertyName];
             int? chunkIndex = functionInputData.UserProperties[MessageFactory.MessageChunkIndex] as int?;
@@ -218,7 +237,7 @@ namespace SBCompressor
 
                 var jsonMessageString = await completeMessage.Unzip() as string;
                 var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
-                GetObjectFromMessage(message);
+                GetObjectFromMessage(message, typeToDeserialize);
                 ret = message;
             }
             return ret;
@@ -232,16 +251,16 @@ namespace SBCompressor
         /// <param name="storage">Object to handle stored data</param>
         /// <returns>Event message</returns>
 #if NET5_0 || NETCOREAPP3_1
-        internal static async Task<EventMessage> GetStoredMessage(Message receivedMessage, MessageStorage storage)
+        internal static async Task<EventMessage> GetStoredMessage(Message receivedMessage, MessageStorage storage, Type typeToDeserialize)
 #endif
 #if NET6_0
-        internal static async Task<EventMessage> GetStoredMessage(ServiceBusReceivedMessage receivedMessage, MessageStorage storage)
+        internal static async Task<EventMessage> GetStoredMessage(ServiceBusReceivedMessage receivedMessage, MessageStorage storage, Type typeToDeserialize)
 #endif
         {
             var bytes = storage.DownloadMessage(receivedMessage.MessageId);
             var jsonMessageString = await bytes.Unzip() as string;
             var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
-            GetObjectFromMessage(message);
+            GetObjectFromMessage(message, typeToDeserialize);
             return message;
         }
 
@@ -252,12 +271,12 @@ namespace SBCompressor
         /// <param name="functionInputData">Function inputbinding data</param>
         /// <param name="storage">Object to handle stored data</param>
         /// <returns>Event message</returns>
-        internal static async Task<EventMessage> GetStoredMessage(FunctionInputData functionInputData, MessageStorage storage)
+        internal static async Task<EventMessage> GetStoredMessage(FunctionInputData functionInputData, MessageStorage storage, Type typeToDeserialize)
         {
             var bytes = storage.DownloadMessage(functionInputData.MessageId);
             var jsonMessageString = await bytes.Unzip() as string;
             var message = JsonConvert.DeserializeObject<EventMessage>(jsonMessageString);
-            GetObjectFromMessage(message);
+            GetObjectFromMessage(message, typeToDeserialize);
             return message;
         }
 #endif

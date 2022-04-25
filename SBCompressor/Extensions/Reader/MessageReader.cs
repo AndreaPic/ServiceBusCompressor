@@ -38,6 +38,30 @@ namespace SBCompressor.Extensions.Reader
         }
 
         /// <summary>
+        /// Constroctor with setting informations
+        /// </summary>
+        /// <param name="settingData"></param>
+        /// <param name="typeToDeserialize">Type used to deserialize message</param>
+        public MessageReader(StorageSettingData settingData, Type typeToDeserialize)
+        {
+            ChunkDictionary = new ConcurrentDictionary<string, List<byte[]>>();
+            CurrentSettingData = settingData;
+            TypeToDeserialize = typeToDeserialize;
+        }
+
+        /// <summary>
+        /// Constroctor with setting informations
+        /// </summary>
+        /// <param name="typeToDeserialize">Type used to deserialize message</param>
+        public MessageReader(Type typeToDeserialize)
+        {
+            ChunkDictionary = new ConcurrentDictionary<string, List<byte[]>>();
+            TypeToDeserialize = typeToDeserialize;
+        }
+
+        private Type TypeToDeserialize { get; set; }
+
+        /// <summary>
         /// Storage manager for very large message
         /// </summary>
         private MessageStorage storage;
@@ -120,22 +144,22 @@ namespace SBCompressor.Extensions.Reader
                             switch (messageMode)
                             {
                                 case MessageModes.Simple:
-                                    msg = ReaderHandler.GetSimpleMessage(receivedMessage);
+                                    msg = ReaderHandler.GetSimpleMessage(receivedMessage, TypeToDeserialize);
                                     MessageReceived(msg, receivedMessage);
                                     break;
                                 case MessageModes.GZip:
-                                    msg = await ReaderHandler.GetZippedMessage(receivedMessage);
+                                    msg = await ReaderHandler.GetZippedMessage(receivedMessage, TypeToDeserialize);
                                     MessageReceived(msg, receivedMessage);
                                     break;
                                 case MessageModes.Chunk:
-                                    msg = await ReaderHandler.GetChunkedMessage(receivedMessage, ChunkDictionary);
+                                    msg = await ReaderHandler.GetChunkedMessage(receivedMessage, ChunkDictionary, TypeToDeserialize);
                                     if (msg != null)
                                     {
                                         MessageReceived(msg, receivedMessage);
                                     }
                                     break;
                                 case MessageModes.Storage:
-                                    msg = await ReaderHandler.GetStoredMessage(receivedMessage, Storage);
+                                    msg = await ReaderHandler.GetStoredMessage(receivedMessage, Storage, TypeToDeserialize);
                                     MessageReceived(msg, receivedMessage);
                                     break;
                                 default:
@@ -184,22 +208,22 @@ namespace SBCompressor.Extensions.Reader
                             switch (messageMode)
                             {
                                 case MessageModes.Simple:
-                                    msg = ReaderHandler.GetSimpleMessage(functionInputData.ByteArrayMessage);
+                                    msg = ReaderHandler.GetSimpleMessage(functionInputData.ByteArrayMessage, TypeToDeserialize);
                                     MessageReceived(msg, functionInputData);
                                     break;
                                 case MessageModes.GZip:
-                                    msg = await ReaderHandler.GetZippedMessage(functionInputData);
+                                    msg = await ReaderHandler.GetZippedMessage(functionInputData, TypeToDeserialize);
                                     MessageReceived(msg, functionInputData);
                                     break;
                                 case MessageModes.Chunk:
-                                    msg = await ReaderHandler.GetChunkedMessage(functionInputData, ChunkDictionary);
+                                    msg = await ReaderHandler.GetChunkedMessage(functionInputData, ChunkDictionary, TypeToDeserialize);
                                     if (msg != null)
                                     {
                                         MessageReceived(msg, functionInputData);
                                     }
                                     break;
                                 case MessageModes.Storage:
-                                    msg = await ReaderHandler.GetStoredMessage(functionInputData, Storage);
+                                    msg = await ReaderHandler.GetStoredMessage(functionInputData, Storage, TypeToDeserialize);
                                     MessageReceived(msg, functionInputData);
                                     break;
                                 default:
