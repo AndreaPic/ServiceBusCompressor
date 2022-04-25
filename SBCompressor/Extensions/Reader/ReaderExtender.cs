@@ -62,7 +62,26 @@ namespace SBCompressor.Extensions.Reader
             Client = client;
         }
 
+        /// <summary>
+        /// Initialize new instance for the client with explicit storage settings for large messages
+        /// </summary>
+        /// <param name="client">Queue or topic to extend</param>
+        /// <param name="settingData">Storage settings for large messages</param>
+        /// <param name="typeToDeserialize">Type used to deserialize message</param>
+        internal ReaderExtender(TClient client, StorageSettingData settingData, Type typeToDeserialize) : base(settingData, typeToDeserialize)
+        {
+            Client = client;
+        }
 
+        /// <summary>
+        /// Initialize new instance for the client with explicit storage settings for large messages
+        /// </summary>
+        /// <param name="client">Queue or topic to extend</param>
+        /// <param name="typeToDeserialize">Type used to deserialize message</param>
+        internal ReaderExtender(TClient client, Type typeToDeserialize) : base(typeToDeserialize)
+        {
+            Client = client;
+        }
 
         /// <summary>
         /// Register client for messages

@@ -55,6 +55,34 @@ namespace SBCompressor.Extensions.QueueReader
         /// <summary>
         /// Subscribe action to read queue messages
         /// </summary>
+        /// <param name="queueClient">type to extend</param>
+        /// <param name="queueName">Queue's name for the message</param>
+        /// <param name="serviceBusConnectionStringName">Queue connection string name (must be present in sbcsettings.json file)</param>
+        /// <param name="onMessageReceived">Action invoked when message arrive</param>
+        /// <param name="typeToDeserialize">Type used to deserialize message</param>
+        /// <returns></returns>
+#if NETCOREAPP3_1 || NET5_0
+        public static void SubscribeCompressor(this IQueueClient queueClient,
+            Action<MessageReceivedEventArgs> onMessageReceived, Type typeToDeserialize)
+        {
+            ReaderExtender<IQueueClient> reader = new ReaderExtender<IQueueClient>(queueClient, typeToDeserialize);
+            reader.Subscribe(onMessageReceived);
+        }
+#endif
+#if NET6_0
+        //public static void SubscribeCompressor(this ServiceBusReceiver queueClient,
+        //    Action<MessageReceivedEventArgs> onMessageReceived)
+        public static void SubscribeCompressor(this ServiceBusProcessor queueClient,
+            Action<MessageReceivedEventArgs> onMessageReceived, Type typeToDeserialize)
+        {
+            ReaderExtender<ServiceBusProcessor> reader = new ReaderExtender<ServiceBusProcessor>(queueClient, typeToDeserialize);
+            //ReaderExtender<ServiceBusReceiver> reader = new ReaderExtender<ServiceBusReceiver>(queueClient);
+            reader.Subscribe(onMessageReceived);
+        }
+#endif
+        /// <summary>
+        /// Subscribe action to read queue messages
+        /// </summary>
         /// <param name="queueClient">Type to extend</param>
         /// <param name="onMessageReceived">Action invoked when message arrive</param>
         /// <param name="settingData">Setting infomrations</param>
@@ -77,6 +105,31 @@ namespace SBCompressor.Extensions.QueueReader
             reader.Subscribe(onMessageReceived);
         }
 #endif
-
+        /// <summary>
+        /// Subscribe action to read queue messages
+        /// </summary>
+        /// <param name="queueClient">Type to extend</param>
+        /// <param name="onMessageReceived">Action invoked when message arrive</param>
+        /// <param name="settingData">Setting infomrations</param>
+        /// <param name="typeToDeserialize">Type used to deserialize message</param>
+#if NETCOREAPP3_1 || NET5_0
+        public static void SubscribeCompressor(this IQueueClient queueClient,
+            Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData, Type typeToDeserialize)
+        {
+            ReaderExtender<IQueueClient> reader = new ReaderExtender<IQueueClient>(queueClient, settingData, typeToDeserialize);
+            reader.Subscribe(onMessageReceived);
+        }
+#endif
+#if NET6_0
+        //public static void SubscribeCompressor(this ServiceBusReceiver queueClient,
+        //    Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
+        public static void SubscribeCompressor(this ServiceBusProcessor queueClient,
+            Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData, Type typeToDeserialize)
+        {
+            //ReaderExtender<ServiceBusReceiver> reader = new ReaderExtender<ServiceBusReceiver>(queueClient, settingData);
+            ReaderExtender<ServiceBusProcessor> reader = new ReaderExtender<ServiceBusProcessor>(queueClient, settingData, typeToDeserialize);
+            reader.Subscribe(onMessageReceived);
+        }
+#endif
     }
 }
