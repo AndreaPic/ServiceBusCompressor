@@ -43,8 +43,23 @@ namespace SBCompressor.Extensions.Reader
         /// <summary>
         /// Initialize new instance with explicit setting informations for very large message
         /// </summary>
+        /// <param name="settingData">Setting informations for very large message</param>
+        /// <param name="messageDeserializer">Object used to deserialize message</param>
+        public FunctionMessageReader(StorageSettingData settingData, IMessageDeserializer messageDeserializer) : base(settingData, messageDeserializer)
+        {
+        }
+        /// <summary>
+        /// Initialize new instance with explicit setting informations for very large message
+        /// </summary>
         /// <param name="typeToDeserialize">Type used to deserialize message</param>        
         public FunctionMessageReader(Type typeToDeserialize) : base(typeToDeserialize)
+        {
+        }
+        /// <summary>
+        /// Initialize new instance with explicit setting informations for very large message
+        /// </summary>
+        /// <param name="messageDeserializer">Object used to deserialize message</param>
+        public FunctionMessageReader(IMessageDeserializer messageDeserializer) : base(messageDeserializer)
         {
         }
 
