@@ -88,6 +88,30 @@ namespace SBCompressor.Extensions.Sender
             await queueConnector.SendAsync(message);
         }
 #endif
+        /// <summary>
+        /// Send message to the Topic
+        /// </summary>
+        /// <typeparam name="TMessage">Type of the object to send as a message.</typeparam>
+        /// <param name="queueClient">type to extend</param>
+        /// <param name="message">object to send to service bus.</param>
+        /// <param name="serializer">Object used to serialize message</param>
+        /// <returns></returns>
+#if NETCOREAPP3_1 || NET5_0
+        public static async Task SendCompressorAsync<TMessage>(this ITopicClient queueClient, TMessage message, IMessageSerializer serializer)
+            where TMessage : class, new()
+        {
+            SenderExtender<ITopicClient> queueConnector = new SenderExtender<ITopicClient>(queueClient, serializer);
+            await queueConnector.SendAsync(message);
+        }
+#endif
+#if NET6_0
+        public static async Task SendCompressorAsync<TMessage>(this ServiceBusSender queueClient, TMessage message, IMessageSerializer serializer)
+            where TMessage : class, new()
+        {
+            SenderExtender<ServiceBusSender> queueConnector = new SenderExtender<ServiceBusSender>(queueClient, serializer);
+            await queueConnector.SendAsync(message);
+        }
+#endif
 #if NETCOREAPP3_1 || NET5_0
         public static async Task SendCompressorAsync<TMessage>(this ITopicClient queueClient, TMessage message, StorageSettingData settingData)
             where TMessage : class, new()
@@ -101,6 +125,22 @@ namespace SBCompressor.Extensions.Sender
             where TMessage : class, new()
         {
             SenderExtender<ServiceBusSender> queueConnector = new SenderExtender<ServiceBusSender>(queueClient, settingData);
+            await queueConnector.SendAsync(message);
+        }
+#endif
+#if NETCOREAPP3_1 || NET5_0
+        public static async Task SendCompressorAsync<TMessage>(this ITopicClient queueClient, TMessage message, StorageSettingData settingData, IMessageSerializer serializer)
+            where TMessage : class, new()
+        {
+            SenderExtender<ITopicClient> queueConnector = new SenderExtender<ITopicClient>(queueClient, settingData, serializer);
+            await queueConnector.SendAsync(message);
+        }
+#endif
+#if NET6_0
+        public static async Task SendCompressorAsync<TMessage>(this ServiceBusSender queueClient, TMessage message, StorageSettingData settingData, IMessageSerializer serializer)
+            where TMessage : class, new()
+        {
+            SenderExtender<ServiceBusSender> queueConnector = new SenderExtender<ServiceBusSender>(queueClient, settingData, serializer);
             await queueConnector.SendAsync(message);
         }
 #endif

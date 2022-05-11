@@ -20,6 +20,9 @@ namespace SBCompressor
     public abstract class BaseConnector<TClient> : ConnectorCore
         where TClient : ClientEntity, ISenderClient
     {
+
+        private IMessageSerializer MessageSerializer { get; set; }
+
         /// <summary>
         /// Initialize this type
         /// </summary>
@@ -42,13 +45,28 @@ namespace SBCompressor
         /// </summary>
         /// <param name="entityName">Queue Name</param>
         /// <param name="connectionStringName">Connection string name to use to look for the connection string in the settings file</param>
+        /// <param name="serializer">Object used to serialize message</param>
+        public BaseConnector(string entityName, string connectionStringName, IMessageSerializer serializer) : base(entityName, connectionStringName)
+        {
+            Clients = new System.Collections.Concurrent.ConcurrentDictionary<string, TClient>();
+            MessageSerializer = serializer;
+        }
+
+        /// <summary>
+        /// Create a message sender to service bus
+        /// </summary>
+        /// <param name="entityName">Queue Name</param>
+        /// <param name="connectionStringName">Connection string name to use to look for the connection string in the settings file</param>
         /// <param name="settingData">Configuration data of blob storage hosting messge</param>
+        /// <param name="serializer">Object used to serialize message</param>
         public BaseConnector(string entityName, string connectionStringName, 
-            StorageSettingData settingData) 
+            StorageSettingData settingData,
+            IMessageSerializer serializer) 
             : this(entityName, connectionStringName)
         {
             Clients = new System.Collections.Concurrent.ConcurrentDictionary<string, TClient>();
             CurrentSettingData = settingData;
+            MessageSerializer = serializer;
         }
         /// <summary>
         /// Current data for blob storage hosting large messages
@@ -290,7 +308,15 @@ namespace SBCompressor
         internal async Task SendAsync<TMessage>(TMessage message)
         {
             EventMessage eventMessage = new EventMessage();
-            string body = JsonConvert.SerializeObject(message);
+            string body = null;
+            if (MessageSerializer != null)
+            {
+                body = MessageSerializer.SerializeObjectToJson(message);
+            }
+            else
+            {
+                body = JsonConvert.SerializeObject(message);
+            }
             eventMessage.Body = body;
             eventMessage.ObjectName = message.GetType().AssemblyQualifiedName;
             await SendAsync(eventMessage);

@@ -20,6 +20,14 @@ namespace SBCompressor
         public QueueConnector(string entityName, string connectionStringName) : base(entityName, connectionStringName){}
 
         /// <summary>
+        /// Create a message sender to service bus
+        /// </summary>
+        /// <param name="entityName">Queue Name</param>
+        /// <param name="connectionStringName">Connection string name to use to look for the connection string in the settings file</param>
+        /// <param name="serializer">Object used to serialize message</param>
+        public QueueConnector(string entityName, string connectionStringName, IMessageSerializer serializer) : base(entityName, connectionStringName, serializer) { }
+
+        /// <summary>
         /// Create queue inside service bus
         /// </summary>
         /// <param name="namespaceInfo">NamespaceInfo of the service bus</param>

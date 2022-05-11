@@ -44,6 +44,7 @@ namespace SBCompressor
         {
             CurrentSettingData = settingData;
         }
+        
         /// <summary>
         /// Initialize for queue of the connection string
         /// </summary>
@@ -68,9 +69,37 @@ namespace SBCompressor
             TypeToDeserialize = typeToDeserialize;
         }
 
+        /// <summary>
+        /// Initialize for queue of the connection string
+        /// </summary>
+        /// <param name="entityName">Queue name</param>
+        /// <param name="connectionStringName">name of the connection string in the setting file</param>
+        /// <param name="settingData">Explicit Settings</param>
+        /// <param name="serializer">Object used to deserialize message</param>
+        public BaseMessageReader(string entityName, string connectionStringName,
+            StorageSettingData settingData, IMessageDeserializer deserializer) : this(entityName, connectionStringName, settingData)
+        {
+            if (deserializer is null) throw new ArgumentNullException(nameof(deserializer));
+            MessageDeserializer = deserializer;
+        }
+        /// <summary>
+        /// Initialize for queue of the connection string
+        /// </summary>
+        /// <param name="entityName">Queue name</param>
+        /// <param name="connectionStringName">name of the connection string in the setting file</param>
+        /// <param name="deserializer">Object used to deserialize message</param>
+        public BaseMessageReader(string entityName, string connectionStringName,
+            IMessageDeserializer deserializer) : this(entityName, connectionStringName)
+        {
+            if (deserializer is null) throw new ArgumentNullException(nameof(deserializer));
+            MessageDeserializer = deserializer;
+        }
+
         private Type TypeToDeserialize { get; set; }
 
         private StorageSettingData CurrentSettingData { get; set; }
+
+        private IMessageDeserializer MessageDeserializer { get; set; }
 
 
         /// <summary>
@@ -185,17 +214,17 @@ namespace SBCompressor
                             switch (messageMode)
                             {
                                 case MessageModes.Simple:
-                                    msg = ReaderHandler.GetSimpleMessage(receivedMessage, TypeToDeserialize);
+                                    msg = ReaderHandler.GetSimpleMessage(receivedMessage, TypeToDeserialize, MessageDeserializer);
                                     MessageReceived(msg, receivedMessage);
                                     await CurrentSubscriptionClient.CompleteAsync(receivedMessage.SystemProperties.LockToken);
                                     break;
                                 case MessageModes.GZip:
-                                    msg = await ReaderHandler.GetZippedMessage(receivedMessage, TypeToDeserialize);
+                                    msg = await ReaderHandler.GetZippedMessage(receivedMessage, TypeToDeserialize, MessageDeserializer);
                                     MessageReceived(msg, receivedMessage);
                                     await CurrentSubscriptionClient.CompleteAsync(receivedMessage.SystemProperties.LockToken);
                                     break;
                                 case MessageModes.Chunk:
-                                    msg = await ReaderHandler.GetChunkedMessage(receivedMessage, ChunkDictionary, TypeToDeserialize);
+                                    msg = await ReaderHandler.GetChunkedMessage(receivedMessage, ChunkDictionary, TypeToDeserialize, MessageDeserializer);
                                     await CurrentSubscriptionClient.CompleteAsync(receivedMessage.SystemProperties.LockToken);
                                     if (msg != null)
                                     {
@@ -203,7 +232,7 @@ namespace SBCompressor
                                     }
                                     break;
                                 case MessageModes.Storage:
-                                    msg = await ReaderHandler.GetStoredMessage(receivedMessage, Storage, TypeToDeserialize);
+                                    msg = await ReaderHandler.GetStoredMessage(receivedMessage, Storage, TypeToDeserialize, MessageDeserializer);
                                     MessageReceived(msg, receivedMessage);
                                     await CurrentSubscriptionClient.CompleteAsync(receivedMessage.SystemProperties.LockToken);
                                     break;
