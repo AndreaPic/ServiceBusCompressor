@@ -39,6 +39,15 @@ namespace SBCompressor
         /// <param name="connectionStringName">Connection string in the settings file</param>
         /// <param name="typeToDeserialize">Type used to deserialize message</param>
         public QueueMessageReader(string entityName, string connectionStringName, Type typeToDeserialize) : base(entityName, connectionStringName, typeToDeserialize) { }
+
+        /// <summary>
+        /// Initialize new instance
+        /// </summary>
+        /// <param name="entityName">Queue name</param>
+        /// <param name="connectionStringName">Connection string in the settings file</param>
+        /// <param name="deserializer">Object used to deserialize message</param>
+        public QueueMessageReader(string entityName, string connectionStringName, IMessageDeserializer deserializer) : base(entityName, connectionStringName, deserializer) { }
+
         /// <summary>
         /// Initialize new instance
         /// </summary>
@@ -49,6 +58,19 @@ namespace SBCompressor
         public QueueMessageReader(string entityName, string connectionStringName,
             StorageSettingData settingData, Type typeToDeserialize)
             : base(entityName, connectionStringName, settingData, typeToDeserialize)
+        {
+        }
+
+        /// <summary>
+        /// Initialize new instance
+        /// </summary>
+        /// <param name="entityName">Queue name</param>
+        /// <param name="connectionStringName">Connection string in the settings file</param>
+        /// <param name="settingData">Explicit Settings</param>
+        /// <param name="deserializer">Object used to deserialize message</param>
+        public QueueMessageReader(string entityName, string connectionStringName,
+            StorageSettingData settingData, IMessageDeserializer deserializer)
+            : base(entityName, connectionStringName, settingData, deserializer)
         {
         }
 

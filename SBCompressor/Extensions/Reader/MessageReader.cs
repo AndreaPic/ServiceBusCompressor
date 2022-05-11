@@ -52,6 +52,18 @@ namespace SBCompressor.Extensions.Reader
         /// <summary>
         /// Constroctor with setting informations
         /// </summary>
+        /// <param name="settingData"></param>
+        /// <param name="messageDeserializer">Object used to deserialize message</param>
+        public MessageReader(StorageSettingData settingData, IMessageDeserializer messageDeserializer)
+        {
+            ChunkDictionary = new ConcurrentDictionary<string, List<byte[]>>();
+            CurrentSettingData = settingData;
+            MessageDeserializer = messageDeserializer;
+        }
+
+        /// <summary>
+        /// Constroctor with setting informations
+        /// </summary>
         /// <param name="typeToDeserialize">Type used to deserialize message</param>
         public MessageReader(Type typeToDeserialize)
         {
@@ -59,7 +71,19 @@ namespace SBCompressor.Extensions.Reader
             TypeToDeserialize = typeToDeserialize;
         }
 
+        /// <summary>
+        /// Constroctor with setting informations
+        /// </summary>
+        /// <param name="messageDeserializer">Object used to deserialize message from json</param>
+        public MessageReader(IMessageDeserializer messageDeserializer)
+        {
+            ChunkDictionary = new ConcurrentDictionary<string, List<byte[]>>();
+            MessageDeserializer = messageDeserializer;
+        }
+
         private Type TypeToDeserialize { get; set; }
+
+        private IMessageDeserializer MessageDeserializer { get; set; }
 
         /// <summary>
         /// Storage manager for very large message
@@ -144,22 +168,22 @@ namespace SBCompressor.Extensions.Reader
                             switch (messageMode)
                             {
                                 case MessageModes.Simple:
-                                    msg = ReaderHandler.GetSimpleMessage(receivedMessage, TypeToDeserialize);
+                                    msg = ReaderHandler.GetSimpleMessage(receivedMessage, TypeToDeserialize, MessageDeserializer);
                                     MessageReceived(msg, receivedMessage);
                                     break;
                                 case MessageModes.GZip:
-                                    msg = await ReaderHandler.GetZippedMessage(receivedMessage, TypeToDeserialize);
+                                    msg = await ReaderHandler.GetZippedMessage(receivedMessage, TypeToDeserialize, MessageDeserializer);
                                     MessageReceived(msg, receivedMessage);
                                     break;
                                 case MessageModes.Chunk:
-                                    msg = await ReaderHandler.GetChunkedMessage(receivedMessage, ChunkDictionary, TypeToDeserialize);
+                                    msg = await ReaderHandler.GetChunkedMessage(receivedMessage, ChunkDictionary, TypeToDeserialize, MessageDeserializer);
                                     if (msg != null)
                                     {
                                         MessageReceived(msg, receivedMessage);
                                     }
                                     break;
                                 case MessageModes.Storage:
-                                    msg = await ReaderHandler.GetStoredMessage(receivedMessage, Storage, TypeToDeserialize);
+                                    msg = await ReaderHandler.GetStoredMessage(receivedMessage, Storage, TypeToDeserialize, MessageDeserializer);
                                     MessageReceived(msg, receivedMessage);
                                     break;
                                 default:
@@ -208,22 +232,22 @@ namespace SBCompressor.Extensions.Reader
                             switch (messageMode)
                             {
                                 case MessageModes.Simple:
-                                    msg = ReaderHandler.GetSimpleMessage(functionInputData.ByteArrayMessage, TypeToDeserialize);
+                                    msg = ReaderHandler.GetSimpleMessage(functionInputData.ByteArrayMessage, TypeToDeserialize, MessageDeserializer);
                                     MessageReceived(msg, functionInputData);
                                     break;
                                 case MessageModes.GZip:
-                                    msg = await ReaderHandler.GetZippedMessage(functionInputData, TypeToDeserialize);
+                                    msg = await ReaderHandler.GetZippedMessage(functionInputData, TypeToDeserialize, MessageDeserializer);
                                     MessageReceived(msg, functionInputData);
                                     break;
                                 case MessageModes.Chunk:
-                                    msg = await ReaderHandler.GetChunkedMessage(functionInputData, ChunkDictionary, TypeToDeserialize);
+                                    msg = await ReaderHandler.GetChunkedMessage(functionInputData, ChunkDictionary, TypeToDeserialize, MessageDeserializer);
                                     if (msg != null)
                                     {
                                         MessageReceived(msg, functionInputData);
                                     }
                                     break;
                                 case MessageModes.Storage:
-                                    msg = await ReaderHandler.GetStoredMessage(functionInputData, Storage, TypeToDeserialize);
+                                    msg = await ReaderHandler.GetStoredMessage(functionInputData, Storage, TypeToDeserialize, MessageDeserializer);
                                     MessageReceived(msg, functionInputData);
                                     break;
                                 default:

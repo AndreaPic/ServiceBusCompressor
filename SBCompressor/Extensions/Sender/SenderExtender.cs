@@ -32,6 +32,8 @@ namespace SBCompressor.Extensions.Sender
         /// </summary>
         private TClient Client { get; set; }
 
+        private IMessageSerializer MessageSerializer { get; set; }
+
         /// <summary>
         /// Get the current client of queue or topic
         /// </summary>
@@ -54,6 +56,23 @@ namespace SBCompressor.Extensions.Sender
         {
             CurrentSettingData = settingData;
         }
+
+        /// <summary>
+        /// Create a new instance for the client
+        /// </summary>
+        /// <param name="client">Client to extend</param>
+        internal SenderExtender(TClient client, IMessageSerializer messageSerializer)
+        {
+            Client = client;
+            MessageSerializer = messageSerializer;
+        }
+
+        internal SenderExtender(TClient client, StorageSettingData settingData, IMessageSerializer messageSerializer) : this(client)
+        {
+            MessageSerializer = messageSerializer;
+            CurrentSettingData = settingData;
+        }
+
         private StorageSettingData CurrentSettingData { get; set; }
 
         /// <summary>
@@ -77,7 +96,15 @@ namespace SBCompressor.Extensions.Sender
         internal async Task SendAsync<TMessage>(TMessage message)
         {
             EventMessage eventMessage = new EventMessage();
-            string body = JsonConvert.SerializeObject(message);
+            string body = null;
+            if (MessageSerializer != null)
+            {
+                body = MessageSerializer.SerializeObjectToJson(message);
+            }
+            else
+            {
+                body = JsonConvert.SerializeObject(message);
+            }
             eventMessage.Body = body;
             eventMessage.ObjectName = message.GetType().AssemblyQualifiedName;
             await SendAsync(eventMessage);
