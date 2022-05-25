@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp", "SampleApp\Samp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionAppTest6", "FunctionAppTest6\FunctionAppTest6.csproj", "{FCF2A076-3384-4CD3-97B1-0A7A7B739E1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionAppTest6Isolated", "FunctionAppTest6Isolated\FunctionAppTest6Isolated.csproj", "{C3722F99-2FCC-4846-8DDB-605FC0280DBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionAppTest6Isolated", "FunctionAppTest6Isolated\FunctionAppTest6Isolated.csproj", "{C3722F99-2FCC-4846-8DDB-605FC0280DBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
