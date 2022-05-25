@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="SPS.SBCompressor" Version="0.6.4" />
+	  <PackageReference Include="SPS.SBCompressor" Version="0.6.5" />
   </ItemGroup>
 
   <ItemGroup>
