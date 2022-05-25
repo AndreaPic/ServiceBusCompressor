@@ -6,7 +6,7 @@
     <FileVersion>0.6.0.4</FileVersion>
     <Version>$(VersionPrefix)$(VersionSuffix)</Version>
 	<VersionPrefix>0.6.4</VersionPrefix>
-	<VersionSuffix>beta</VersionSuffix>
+	<VersionSuffix></VersionSuffix>
     <PackageId>SPS.SBCompressor</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Andrea Piccioni</Authors>
