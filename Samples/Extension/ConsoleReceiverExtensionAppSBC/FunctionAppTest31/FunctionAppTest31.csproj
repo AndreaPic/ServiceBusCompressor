@@ -6,7 +6,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="4.2.1" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
-    <PackageReference Include="SPS.SBCompressor" Version="0.6.4" />
+    <PackageReference Include="SPS.SBCompressor" Version="0.6.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\DTO\DTOLibrary\DTOLibrary\DTOLibrary.csproj" />
