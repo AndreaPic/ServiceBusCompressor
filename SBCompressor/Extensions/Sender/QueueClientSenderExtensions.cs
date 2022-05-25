@@ -110,6 +110,24 @@ namespace SBCompressor.Extensions.Sender
 #endif
 
 #if NETCOREAPP3_1 || NET5_0
+        public static async Task SendCompressorAsync<TMessage>(this IQueueClient queueClient, TMessage message, StorageSettingData settingData)
+            where TMessage : class, new()
+        {
+            SenderExtender<IQueueClient> queueConnector = new SenderExtender<IQueueClient>(queueClient, settingData);
+            await queueConnector.SendAsync(message);
+        }
+#endif
+#if NET6_0
+        public static async Task SendCompressorAsync<TMessage>(this ServiceBusSender queueClient, TMessage message, StorageSettingData settingData)
+            where TMessage : class, new()
+        {
+            SenderExtender<ServiceBusSender> queueConnector = new SenderExtender<ServiceBusSender>(queueClient, settingData);
+            await queueConnector.SendAsync(message);
+        }
+#endif
+
+
+#if NETCOREAPP3_1 || NET5_0
         public static async Task SendCompressorAsync<TMessage>(this IQueueClient queueClient, TMessage message, StorageSettingData settingData, IMessageSerializer serializer)
             where TMessage : class, new()
         {
