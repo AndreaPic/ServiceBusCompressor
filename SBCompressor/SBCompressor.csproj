@@ -50,7 +50,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.13.0" />
         <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.6.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
@@ -58,7 +58,7 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
-        <PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
+        <PackageReference Include="Azure.Storage.Blobs" Version="12.13.0" />
         <PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.1.2" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
