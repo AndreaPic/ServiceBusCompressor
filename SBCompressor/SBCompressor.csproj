@@ -60,31 +60,31 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
-        <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.6.0" />
+	  <PackageReference Include="Azure.Storage.Blobs" Version="12.15.1" />
+		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.13.1" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
-		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.6.0" />
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.15.1" />
+		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.13.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
-        <PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
+	  <PackageReference Include="Azure.Storage.Blobs" Version="12.15.1" />
         <PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.1.2" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-	  <PackageReference Include="Microsoft.Azure.ServiceBus" Version="4.1.3" />
-	  <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.2.2" />
+	  <PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.2.0" />
+	  <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.2.3" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.7" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.1.7" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.7" />
@@ -115,10 +115,7 @@
       <PackagePath>contentFiles;content</PackagePath>
     </Content>
   </ItemGroup>
-  
-  
-  
-
+ 
   <ItemGroup>
     <Compile Update="Resources\ResourceMessage.Designer.cs">
       <DesignTime>True</DesignTime>
