@@ -1,4 +1,4 @@
-﻿#if NET6_0
+﻿#if NET6_0|| NET7_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -73,7 +73,7 @@ namespace SBCompressor.Extensions.Reader
 #if NET5_0 || NETCOREAPP3_1
         public async Task SubScribe(Message receivedMessage, Action<MessageReceivedEventArgs> onMessageReceived)
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         public async Task SubScribe(ServiceBusReceivedMessage receivedMessage, Action<MessageReceivedEventArgs> onMessageReceived)
 #endif
         {
@@ -82,7 +82,7 @@ namespace SBCompressor.Extensions.Reader
             CancellationToken token = new CancellationToken();
             await MessageReceivedHandler(receivedMessage, token);
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
             await MessageReceivedHandler(receivedMessage);
 #endif
         }
@@ -96,17 +96,17 @@ namespace SBCompressor.Extensions.Reader
 #if NET5_0 || NETCOREAPP3_1
         public async Task SubScribe(Message receivedMessage, Action<MessageReceivedEventArgs> onMessageReceived, CancellationToken token)
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         public async Task SubScribe(ServiceBusReceivedMessage receivedMessage, Action<MessageReceivedEventArgs> onMessageReceived, CancellationToken token)
 #endif
         {
             //try
             //{
-                OnMessageReceived = onMessageReceived;
+            OnMessageReceived = onMessageReceived;
 #if NET5_0 || NETCOREAPP3_1
                 await MessageReceivedHandler(receivedMessage, token);
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
             await MessageReceivedHandler(receivedMessage);
 #endif
             //}
@@ -116,7 +116,7 @@ namespace SBCompressor.Extensions.Reader
             //}
         }
 
-#if NET5_0 || NET6_0
+#if NET5_0 || NET6_0 || NET7_0
         /// <summary>
         /// Subscribe an action for reading message from queue or topic with Azure Function
         /// </summary>
@@ -151,7 +151,7 @@ namespace SBCompressor.Extensions.Reader
 #endif
     }
 
-#if NET5_0 || NET6_0
+#if NET5_0 || NET6_0 || NET7_0
 
     /// <summary>
     /// This DTO contains data from inputbinding of the function

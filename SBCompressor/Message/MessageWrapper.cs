@@ -1,4 +1,4 @@
-﻿#if NET6_0
+﻿#if NET6_0 || NET7_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -23,7 +23,7 @@ namespace SBCompressor
 #if NETCOREAPP3_1 || NET5_0
             Messages = new List<Message>();
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
             Messages = new List<ServiceBusMessage>();
 #endif
         }
@@ -33,7 +33,7 @@ namespace SBCompressor
 #if NETCOREAPP3_1 || NET5_0
         public List<Message> Messages { get; set; }
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         public List<ServiceBusMessage> Messages { get; set; }
 #endif
         /// <summary>
@@ -42,7 +42,7 @@ namespace SBCompressor
 #if NETCOREAPP3_1 || NET5_0
         public Message Message { get; set; }
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         public ServiceBusMessage Message { get; set; }
 #endif
 

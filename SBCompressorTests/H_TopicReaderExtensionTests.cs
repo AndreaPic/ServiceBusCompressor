@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SBCompressor.Extensions.TopicReader;
 using SBCompressor.Configuration;
-#if NET6_0
+#if NET6_0 || NET7_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -26,7 +26,7 @@ namespace SBCompressorTests
 #if NETCOREAPP3_1 || NET5_0
         static ISubscriptionClient subscriptionClient;
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         //static ServiceBusReceiver subscriptionClient;
         static ServiceBusProcessor subscriptionClient;
 #endif
@@ -37,7 +37,7 @@ namespace SBCompressorTests
 #if NETCOREAPP3_1 || NET5_0
             subscriptionClient = new SubscriptionClient(ServiceBusConnectionString, TopicName, SubscriptionName);
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
             var sbClient = new ServiceBusClient(ServiceBusConnectionString);
             //subscriptionClient = sbClient.CreateReceiver(TopicName, SubscriptionName);
             subscriptionClient = sbClient.CreateProcessor(TopicName, SubscriptionName, new ServiceBusProcessorOptions() { MaxConcurrentCalls = 1 });            
@@ -59,7 +59,7 @@ namespace SBCompressorTests
         {
             receivedMessageCounter = 0;
             subscriptionClient.SubscribeCompressor(QueueClient_OnMessageReceived);
-#if NET6_0
+#if NET6_0 || NET7_0
             subscriptionClient.StartProcessingAsync();
 #endif
 

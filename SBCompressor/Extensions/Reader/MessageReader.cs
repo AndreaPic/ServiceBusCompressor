@@ -1,4 +1,4 @@
-﻿#if NET6_0
+﻿#if NET6_0 || NET7_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -147,7 +147,7 @@ namespace SBCompressor.Extensions.Reader
                 {
                     var prop = receivedMessage.UserProperties[MessageFactory.MessageModePropertyName];
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         virtual protected async Task MessageReceivedHandler(ServiceBusReceivedMessage receivedMessage)//, CancellationToken token)
         {
             try
@@ -199,13 +199,13 @@ namespace SBCompressor.Extensions.Reader
             }
         }
 
-#if NET6_0
+#if NET6_0 || NET7_0
         virtual protected async Task MessageReceivedHandler(ProcessMessageEventArgs processMessage)//, CancellationToken token)
         {
             await MessageReceivedHandler(processMessage?.Message);
         }
 #endif
-#if NET5_0 || NET6_0
+#if NET5_0 || NET6_0 || NET7_0
 
         /// <summary>
         /// Handle the received message
@@ -278,14 +278,14 @@ namespace SBCompressor.Extensions.Reader
 #if NET5_0 || NETCOREAPP3_1
         private void MessageReceived(EventMessage message, Message receivedMessage)
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         private void MessageReceived(EventMessage message, ServiceBusReceivedMessage receivedMessage)
 #endif
         {
             OnMessageReceived?.Invoke(new MessageReceivedEventArgs(message, receivedMessage));
         }
 
-#if NET5_0 || NET6_0
+#if NET5_0 || NET6_0 || NET7_0
         /// <summary>
         /// Raise OnMessageReceived event
         /// </summary>
