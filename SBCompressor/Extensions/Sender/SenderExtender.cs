@@ -1,4 +1,4 @@
-﻿#if NET6_0
+﻿#if NET6_0 || NET7_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -20,9 +20,9 @@ namespace SBCompressor.Extensions.Sender
     /// <typeparam name="TClient"></typeparam>
     internal class SenderExtender<TClient>
 #if NETCOREAPP3_1 || NET5_0
-        where TClient : IClientEntity, ISenderClient 
+        where TClient : IClientEntity, ISenderClient
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
        where TClient : ServiceBusSender
 #endif
 
@@ -120,7 +120,7 @@ namespace SBCompressor.Extensions.Sender
 #if NETCOREAPP3_1 || NET5_0
             Message brokeredMessage = null;
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
             ServiceBusMessage brokeredMessage = null;
 #endif
             MessageFactory messageFactory;
@@ -168,7 +168,7 @@ namespace SBCompressor.Extensions.Sender
             await client.SendAsync(message);
         }
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         protected async Task ToSendAsync(ServiceBusMessage message)
         {
             TClient client = GetClient();
@@ -188,7 +188,7 @@ namespace SBCompressor.Extensions.Sender
             await client.SendAsync(messages);
         }
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         protected async Task ToSendBatchAsync(List<ServiceBusMessage> messages)
         {
             TClient client = GetClient();

@@ -1,4 +1,4 @@
-﻿#if NET6_0
+﻿#if NET6_0 || NET7_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -23,13 +23,13 @@ namespace SBCompressorTests
 #if NETCOREAPP3_1 || NET5_0
         static ITopicClient topicClient;
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         static ServiceBusSender topicClient;
 #endif
         [ClassInitialize]
         static public void Initialize(TestContext context)
         {
-#if NET6_0
+#if NET6_0 || NET7_0
             var sbClient = new ServiceBusClient(ServiceBusConnectionString);
             topicClient = sbClient.CreateSender(TopicName);
 #endif

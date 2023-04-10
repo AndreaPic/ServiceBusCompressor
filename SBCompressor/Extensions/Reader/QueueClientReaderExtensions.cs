@@ -1,4 +1,4 @@
-﻿#if NET6_0
+﻿#if NET6_0 || NET7_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -21,7 +21,7 @@ namespace SBCompressor.Extensions.QueueReader
 #if NETCOREAPP3_1 || NET5_0
     public static class QueueClientReaderExtensions
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
     public static class QueueClientReaderExtensions
 #endif
     {
@@ -41,7 +41,7 @@ namespace SBCompressor.Extensions.QueueReader
             reader.Subscribe(onMessageReceived);
         }
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         //public static void SubscribeCompressor(this ServiceBusReceiver queueClient,
         //    Action<MessageReceivedEventArgs> onMessageReceived)
         public static void SubscribeCompressor(this ServiceBusProcessor queueClient,
@@ -69,7 +69,7 @@ namespace SBCompressor.Extensions.QueueReader
             reader.Subscribe(onMessageReceived);
         }
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         //public static void SubscribeCompressor(this ServiceBusReceiver queueClient,
         //    Action<MessageReceivedEventArgs> onMessageReceived)
         public static void SubscribeCompressor(this ServiceBusProcessor queueClient,
@@ -97,7 +97,7 @@ namespace SBCompressor.Extensions.QueueReader
         }
 #endif
 
-#if NET6_0
+#if NET6_0 || NET7_0
         //public static void SubscribeCompressor(this ServiceBusReceiver queueClient,
         //    Action<MessageReceivedEventArgs> onMessageReceived)
         public static void SubscribeCompressor(this ServiceBusProcessor queueClient,
@@ -123,7 +123,7 @@ namespace SBCompressor.Extensions.QueueReader
             reader.Subscribe(onMessageReceived);
         }
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         //public static void SubscribeCompressor(this ServiceBusReceiver queueClient,
         //    Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
         public static void SubscribeCompressor(this ServiceBusProcessor queueClient,
@@ -149,7 +149,7 @@ namespace SBCompressor.Extensions.QueueReader
             reader.Subscribe(onMessageReceived);
         }
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         //public static void SubscribeCompressor(this ServiceBusReceiver queueClient,
         //    Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
         public static void SubscribeCompressor(this ServiceBusProcessor queueClient,
@@ -175,7 +175,7 @@ namespace SBCompressor.Extensions.QueueReader
             reader.Subscribe(onMessageReceived);
         }
 #endif
-#if NET6_0
+#if NET6_0 || NET7_0
         //public static void SubscribeCompressor(this ServiceBusReceiver queueClient,
         //    Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
         public static void SubscribeCompressor(this ServiceBusProcessor queueClient,
