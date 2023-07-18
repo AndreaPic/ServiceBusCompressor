@@ -169,22 +169,22 @@ namespace SBCompressor.Extensions.Reader
                             {
                                 case MessageModes.Simple:
                                     msg = ReaderHandler.GetSimpleMessage(receivedMessage, TypeToDeserialize, MessageDeserializer);
-                                    MessageReceived(msg, receivedMessage);
+                                    await InvokeOnMessageReceived(msg, receivedMessage);
                                     break;
                                 case MessageModes.GZip:
                                     msg = await ReaderHandler.GetZippedMessage(receivedMessage, TypeToDeserialize, MessageDeserializer);
-                                    MessageReceived(msg, receivedMessage);
+                                    await InvokeOnMessageReceived(msg, receivedMessage);
                                     break;
                                 case MessageModes.Chunk:
                                     msg = await ReaderHandler.GetChunkedMessage(receivedMessage, ChunkDictionary, TypeToDeserialize, MessageDeserializer);
                                     if (msg != null)
                                     {
-                                        MessageReceived(msg, receivedMessage);
+                                        await InvokeOnMessageReceived(msg, receivedMessage);
                                     }
                                     break;
                                 case MessageModes.Storage:
                                     msg = await ReaderHandler.GetStoredMessage(receivedMessage, Storage, TypeToDeserialize, MessageDeserializer);
-                                    MessageReceived(msg, receivedMessage);
+                                    await InvokeOnMessageReceived(msg, receivedMessage);
                                     break;
                                 default:
                                     break;
@@ -233,22 +233,22 @@ namespace SBCompressor.Extensions.Reader
                             {
                                 case MessageModes.Simple:
                                     msg = ReaderHandler.GetSimpleMessage(functionInputData.ByteArrayMessage, TypeToDeserialize, MessageDeserializer);
-                                    MessageReceived(msg, functionInputData);
+                                    await InvokeOnMessageReceived(msg, functionInputData);
                                     break;
                                 case MessageModes.GZip:
                                     msg = await ReaderHandler.GetZippedMessage(functionInputData, TypeToDeserialize, MessageDeserializer);
-                                    MessageReceived(msg, functionInputData);
+                                    await InvokeOnMessageReceived(msg, functionInputData);
                                     break;
                                 case MessageModes.Chunk:
                                     msg = await ReaderHandler.GetChunkedMessage(functionInputData, ChunkDictionary, TypeToDeserialize, MessageDeserializer);
                                     if (msg != null)
                                     {
-                                        MessageReceived(msg, functionInputData);
+                                        await InvokeOnMessageReceived(msg, functionInputData);
                                     }
                                     break;
                                 case MessageModes.Storage:
                                     msg = await ReaderHandler.GetStoredMessage(functionInputData, Storage, TypeToDeserialize, MessageDeserializer);
-                                    MessageReceived(msg, functionInputData);
+                                    await InvokeOnMessageReceived(msg, functionInputData);
                                     break;
                                 default:
                                     break;
@@ -269,7 +269,44 @@ namespace SBCompressor.Extensions.Reader
         /// </summary>
         protected Action<MessageReceivedEventArgs> OnMessageReceived;
 
+        protected Func<MessageReceivedEventArgs, Task> OnMessageReceivedAsync;
 
+
+#if NET5_0 || NETCOREAPP3_1
+        private async Task InvokeOnMessageReceived(EventMessage message, Message receivedMessage)
+#endif
+#if NET6_0 || NET7_0
+        private async Task InvokeOnMessageReceived(EventMessage message, ServiceBusReceivedMessage receivedMessage)
+#endif
+        {
+            if (OnMessageReceivedAsync!=null)
+            {
+                await MessageReceivedAsync(message, receivedMessage);
+            }
+            else
+            {
+                if (OnMessageReceived != null)
+                {
+                    MessageReceived(message, receivedMessage);
+                }
+            }
+        }
+#if NET5_0 || NET6_0 || NET7_0
+        private async Task InvokeOnMessageReceived(EventMessage message, FunctionInputData functionInputData)
+        {
+            if (OnMessageReceivedAsync != null)
+            {
+                await MessageReceivedAsync(message, functionInputData);
+            }
+            else
+            {
+                if (OnMessageReceived != null)
+                {
+                    MessageReceived(message, functionInputData);
+                }
+            }
+        }
+#endif
         /// <summary>
         /// Raise OnMessageReceived event
         /// </summary>
@@ -294,6 +331,33 @@ namespace SBCompressor.Extensions.Reader
         private void MessageReceived(EventMessage message, FunctionInputData functionInputData)
         {
             OnMessageReceived?.Invoke(new MessageReceivedEventArgs(message, functionInputData));
+        }
+#endif
+
+        /// <summary>
+        /// Raise OnMessageReceived event
+        /// </summary>
+        /// <param name="message">Message managed by this library</param>
+        /// <param name="receivedMessage">Original message from queue or topic</param>
+#if NET5_0 || NETCOREAPP3_1
+        private async Task MessageReceivedAsync(EventMessage message, Message receivedMessage)
+#endif
+#if NET6_0 || NET7_0
+        private async Task MessageReceivedAsync(EventMessage message, ServiceBusReceivedMessage receivedMessage)
+#endif
+        {
+            await OnMessageReceivedAsync(new MessageReceivedEventArgs(message, receivedMessage));
+        }
+
+#if NET5_0 || NET6_0 || NET7_0
+        /// <summary>
+        /// Raise OnMessageReceived event
+        /// </summary>
+        /// <param name="message">Message managed by this library</param>
+        /// <param name="functionInputData">Data from the message by inpudbinding arguments</param>
+        private async Task MessageReceivedAsync(EventMessage message, FunctionInputData functionInputData)
+        {
+            await OnMessageReceivedAsync(new MessageReceivedEventArgs(message, functionInputData));
         }
 #endif
 

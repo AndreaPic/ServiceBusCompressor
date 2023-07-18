@@ -86,6 +86,25 @@ namespace SBCompressor.Extensions.Reader
             await MessageReceivedHandler(receivedMessage);
 #endif
         }
+
+#if NET5_0 || NETCOREAPP3_1
+        public async Task SubScribe(Message receivedMessage, Func<MessageReceivedEventArgs,Task> onMessageReceivedAsync)
+#endif
+#if NET6_0 || NET7_0
+        public async Task SubScribe(ServiceBusReceivedMessage receivedMessage, Func<MessageReceivedEventArgs,Task> onMessageReceivedAsync)
+#endif
+        {
+            OnMessageReceivedAsync = onMessageReceivedAsync;
+#if NET5_0 || NETCOREAPP3_1
+            CancellationToken token = new CancellationToken();
+            await MessageReceivedHandler(receivedMessage, token);
+#endif
+#if NET6_0 || NET7_0
+            await MessageReceivedHandler(receivedMessage);
+#endif
+        }
+
+
         /// <summary>
         /// Subscribe an action for reading message from queue or topic with Azure Function
         /// </summary>
@@ -100,8 +119,6 @@ namespace SBCompressor.Extensions.Reader
         public async Task SubScribe(ServiceBusReceivedMessage receivedMessage, Action<MessageReceivedEventArgs> onMessageReceived, CancellationToken token)
 #endif
         {
-            //try
-            //{
             OnMessageReceived = onMessageReceived;
 #if NET5_0 || NETCOREAPP3_1
                 await MessageReceivedHandler(receivedMessage, token);
@@ -109,12 +126,24 @@ namespace SBCompressor.Extensions.Reader
 #if NET6_0 || NET7_0
             await MessageReceivedHandler(receivedMessage);
 #endif
-            //}
-            //catch
-            //{
-
-            //}
         }
+
+#if NET5_0 || NETCOREAPP3_1
+        public async Task SubScribe(Message receivedMessage, Func<MessageReceivedEventArgs,Task> onMessageReceivedAsync, CancellationToken token)
+#endif
+#if NET6_0 || NET7_0
+        public async Task SubScribe(ServiceBusReceivedMessage receivedMessage, Func<MessageReceivedEventArgs,Task> onMessageReceivedAsync, CancellationToken token)
+#endif
+        {
+            OnMessageReceivedAsync = onMessageReceivedAsync;
+#if NET5_0 || NETCOREAPP3_1
+                await MessageReceivedHandler(receivedMessage, token);
+#endif
+#if NET6_0 || NET7_0
+            await MessageReceivedHandler(receivedMessage);
+#endif
+        }
+
 
 #if NET5_0 || NET6_0 || NET7_0
         /// <summary>
@@ -129,6 +158,12 @@ namespace SBCompressor.Extensions.Reader
             CancellationToken token = new CancellationToken();
             await MessageReceivedHandler(functionData, token);
         }
+        public async Task SubScribe(FunctionInputData functionData, Func<MessageReceivedEventArgs,Task> onMessageReceivedAsync)
+        {
+            OnMessageReceivedAsync = onMessageReceivedAsync;
+            CancellationToken token = new CancellationToken();
+            await MessageReceivedHandler(functionData, token);
+        }
         /// <summary>
         /// Subscribe an action for reading message from queue or topic with Azure Function
         /// </summary>
@@ -138,15 +173,13 @@ namespace SBCompressor.Extensions.Reader
         /// <returns></returns>
         public async Task SubScribe(FunctionInputData functionData, Action<MessageReceivedEventArgs> onMessageReceived, CancellationToken token)
         {
-            //try
-            //{
-                OnMessageReceived = onMessageReceived;
-                await MessageReceivedHandler(functionData, token);
-            //}
-            //catch
-            //{
-
-            //}
+            OnMessageReceived = onMessageReceived;
+            await MessageReceivedHandler(functionData, token);
+        }
+        public async Task SubScribe(FunctionInputData functionData, Func<MessageReceivedEventArgs,Task> onMessageReceivedAsync, CancellationToken token)
+        {
+            OnMessageReceivedAsync = onMessageReceivedAsync;
+            await MessageReceivedHandler(functionData, token);
         }
 #endif
     }
