@@ -1,4 +1,4 @@
-﻿#if NET6_0 || NET7_0
+﻿#if NET6_0 || NET7_0 || NET8_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -192,7 +192,7 @@ namespace SBCompressor
         private static void ConfigureWrapperForSimpleMessage(MessageWrapper messageWrapper, string jsonMessageString)
         {
             messageWrapper.MessageMode = MessageModes.Simple;
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
             ServiceBusMessage brokeredMessage = new ServiceBusMessage(Encoding.UTF8.GetBytes(jsonMessageString));
             brokeredMessage.ApplicationProperties.Add(MessageModePropertyName, messageWrapper.MessageMode.ToString());
 #endif
@@ -210,7 +210,7 @@ namespace SBCompressor
         private void ConfigureWrapperForZippedMessage(MessageWrapper messageWrapper, byte[] bytes)
         {
             messageWrapper.MessageMode = MessageModes.GZip;
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
             var s = Convert.ToBase64String(bytes);
             ServiceBusMessage brokeredMessage = new ServiceBusMessage(Encoding.UTF8.GetBytes(s));
             //ServiceBusMessage brokeredMessage = new ServiceBusMessage(bytes);
@@ -240,7 +240,7 @@ namespace SBCompressor
         private void ConfigureWrapperForStorage(MessageWrapper messageWrapper, byte[] bytes)
         {
             messageWrapper.MessageMode = MessageModes.Storage;
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
             ServiceBusMessage brokeredMessage = new ServiceBusMessage(bytes);
             brokeredMessage.ApplicationProperties.Add(MessageModePropertyName, messageWrapper.MessageMode.ToString());
 #endif
@@ -283,7 +283,7 @@ namespace SBCompressor
                 brokeredMessage.UserProperties.Add(MessageChunkGroupIdPropertyName, chunkGroupid);
                 brokeredMessage.UserProperties.Add(MessageChunkIndex, chunkIndex);
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
                 ServiceBusMessage brokeredMessage = new ServiceBusMessage(chunk);
                 brokeredMessage.ApplicationProperties.Add(MessageModePropertyName, messageWrapper.MessageMode.ToString());
                 if (fraction == 0)
@@ -312,7 +312,7 @@ namespace SBCompressor
                 brokeredMessage.UserProperties.Add(MessageChunkGroupIdPropertyName, chunkGroupid);
                 brokeredMessage.UserProperties.Add(MessageChunkIndex, chunkIndex);
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
                 ServiceBusMessage brokeredMessage = new ServiceBusMessage(chunk);
                 brokeredMessage.ApplicationProperties.Add(MessageModePropertyName, messageWrapper.MessageMode.ToString());
                 brokeredMessage.ApplicationProperties.Add(MessageChunkStatePropertyName, ChunkStates.End.ToString());
@@ -326,7 +326,7 @@ namespace SBCompressor
 #if NET5_0 || NETCOREAPP3_1
                 messageWrapper.Messages.Last().UserProperties[MessageChunkStatePropertyName] = ChunkStates.End.ToString();
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
                 messageWrapper.Messages.Last().ApplicationProperties[MessageChunkStatePropertyName] = ChunkStates.End.ToString();
 #endif
             }

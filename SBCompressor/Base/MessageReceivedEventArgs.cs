@@ -1,4 +1,4 @@
-﻿#if NET6_0 || NET7_0
+﻿#if NET6_0 || NET7_0 || NET8_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -21,7 +21,7 @@ namespace SBCompressor
         /// </summary>
         /// <param name="message">Message received</param>
         /// <param name="receivedMessage">Original service bus message</param>
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         public MessageReceivedEventArgs(EventMessage message, ServiceBusReceivedMessage receivedMessage)
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -55,7 +55,7 @@ namespace SBCompressor
             ReceivedByteArrayMessage = functionInputData?.ByteArrayMessage;
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         /// <summary>
         /// Initialize with arguments
         /// </summary>
@@ -90,11 +90,11 @@ namespace SBCompressor
 #if NET5_0 || NETCOREAPP3_1
         public Message ReceivedMessage { get; private set; }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         public ServiceBusReceivedMessage ReceivedMessage { get; private set; }
 #endif
 
-#if NET5_0 || NET6_0 || NET7_0
+#if NET5_0 || NET6_0 || NET7_0 || NET8_0
         /// <summary>
         /// Original Service Bus inbutbinding message 
         /// </summary>
