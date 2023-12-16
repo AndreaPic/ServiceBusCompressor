@@ -1,4 +1,4 @@
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -18,7 +18,7 @@ namespace SBCompressorTests
     {
         static string ServiceBusConnectionString = SBCSettings.ServiceBusConnectionString;
         const string QueueName = "sbq-testunitmessage";
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         static ServiceBusSender queueClient;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -29,7 +29,7 @@ namespace SBCompressorTests
         [ClassInitialize]
         public static void Initialize(TestContext context)
         {
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
             var sbClient = new ServiceBusClient(ServiceBusConnectionString);
             queueClient = sbClient.CreateSender(QueueName);            
 #endif

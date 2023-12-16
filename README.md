@@ -46,10 +46,10 @@ For example in .net core 3.1 you can read message using Microsoft.Azure.ServiceB
 
 You can read more details at this [link](https://github.com/Azure/azure-functions-dotnet-worker)
 
-## Bridge from .net core 3.1 to .NET 5
+## Bridge from .net core 3.1 to .NET5, .net6, .net7, .net8
 
-With this library you can send e read messsage in the same way of .net core 3.1 or .NET 5 and by Azure Functions or other type of subscriber.
-Using this library you can easly migrate from .net core 3.1 to .NET 5 and you can use the same logic and code to read message from Azure Functions and any reader.
+With this library you can send e read messsage in the same way of .net core 3.1 or .NET5,.NET6,.NET7,.NET8 and by Azure Functions or other type of subscriber.
+Using this library you can easly migrate from .net core 3.1 to .NET5,.NET6,.NET7,.NET8 and you can use the same logic and code to read message from Azure Functions and any reader.
 
 Instruction about how to read messages using Azure Functions in .NET 5 and .net core 3.1 are in the [readme.md of Samples directory](https://github.com/AndreaPic/ServiceBusCompressor/blob/master/Samples/README.md).
 

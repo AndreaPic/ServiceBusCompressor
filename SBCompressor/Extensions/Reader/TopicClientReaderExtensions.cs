@@ -1,4 +1,4 @@
-﻿#if NET6_0 || NET7_0
+﻿#if NET6_0 || NET7_0 || NET8_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -36,7 +36,7 @@ namespace SBCompressor.Extensions.TopicReader
             topicMessageReader.Subscribe(onMessageReceived);
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         //public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
         //public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
         //    Action<MessageReceivedEventArgs> onMessageReceived)
@@ -65,7 +65,7 @@ namespace SBCompressor.Extensions.TopicReader
             topicMessageReader.Subscribe(onMessageReceived);
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         //public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
         //public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
         //    Action<MessageReceivedEventArgs> onMessageReceived)
@@ -94,7 +94,7 @@ namespace SBCompressor.Extensions.TopicReader
             topicMessageReader.Subscribe(onMessageReceived);
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         //public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
         //public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
         //    Action<MessageReceivedEventArgs> onMessageReceived)
@@ -121,7 +121,7 @@ namespace SBCompressor.Extensions.TopicReader
             topicMessageReader.Subscribe(onMessageReceived);
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         //public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
         //    Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
         public static void SubscribeCompressor(this ServiceBusProcessor topicClient,
@@ -148,7 +148,7 @@ namespace SBCompressor.Extensions.TopicReader
             topicMessageReader.Subscribe(onMessageReceived);
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         //public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
         //    Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
         public static void SubscribeCompressor(this ServiceBusProcessor topicClient,
@@ -174,7 +174,7 @@ namespace SBCompressor.Extensions.TopicReader
             topicMessageReader.Subscribe(onMessageReceived);
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         //public static void SubscribeCompressor(this ServiceBusReceiver topicClient,
         //    Action<MessageReceivedEventArgs> onMessageReceived, StorageSettingData settingData)
         public static void SubscribeCompressor(this ServiceBusProcessor topicClient,
