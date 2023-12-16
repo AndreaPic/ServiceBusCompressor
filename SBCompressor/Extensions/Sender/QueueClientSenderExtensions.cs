@@ -1,4 +1,4 @@
-﻿#if NET6_0 || NET7_0
+﻿#if NET6_0 || NET7_0 || NET8_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -19,7 +19,7 @@ namespace SBCompressor.Extensions.Sender
 #if NETCOREAPP3_1 || NET5_0
     public static class QueueClientSenderExtensions
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
     static class QueueClientSenderExtensions
 #endif
     {
@@ -37,7 +37,7 @@ namespace SBCompressor.Extensions.Sender
             await queueConnector.SendAsync(message);
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         public static async Task SendCompressorAsync(this ServiceBusSender queueClient, string message)
         {
             SenderExtender<ServiceBusSender> queueConnector = new SenderExtender<ServiceBusSender>(queueClient);
@@ -51,7 +51,7 @@ namespace SBCompressor.Extensions.Sender
             await queueConnector.SendAsync(message);
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         public static async Task SendCompressorAsync(this ServiceBusSender queueClient, string message, StorageSettingData settingData)
         {
             SenderExtender<ServiceBusSender> queueConnector = new SenderExtender<ServiceBusSender>(queueClient, settingData);
@@ -75,7 +75,7 @@ namespace SBCompressor.Extensions.Sender
             await queueConnector.SendAsync(message);
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         public static async Task SendCompressorAsync<TMessage>(this ServiceBusSender queueClient, TMessage message)
             where TMessage : class, new()
         {
@@ -100,7 +100,7 @@ namespace SBCompressor.Extensions.Sender
             await queueConnector.SendAsync(message);
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         public static async Task SendCompressorAsync<TMessage>(this ServiceBusSender queueClient, TMessage message, IMessageSerializer serializer)
             where TMessage : class, new()
         {
@@ -117,7 +117,7 @@ namespace SBCompressor.Extensions.Sender
             await queueConnector.SendAsync(message);
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         public static async Task SendCompressorAsync<TMessage>(this ServiceBusSender queueClient, TMessage message, StorageSettingData settingData)
             where TMessage : class, new()
         {
@@ -135,7 +135,7 @@ namespace SBCompressor.Extensions.Sender
             await queueConnector.SendAsync(message);
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         public static async Task SendCompressorAsync<TMessage>(this ServiceBusSender queueClient, TMessage message, StorageSettingData settingData, IMessageSerializer serializer)
             where TMessage : class, new()
         {

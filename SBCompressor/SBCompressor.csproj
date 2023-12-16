@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>   
-    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0;net7.0</TargetFrameworks>
-    <AssemblyVersion>0.7.1.0</AssemblyVersion>
-    <FileVersion>0.7.1.0</FileVersion>
+  <PropertyGroup>
+	  <TargetFrameworks>net8.0;net7.0;net6.0;net5.0;netcoreapp3.1</TargetFrameworks>
+	  <AssemblyVersion>0.8.0.0</AssemblyVersion>
+    <FileVersion>0.8.0.0</FileVersion>
     <Version>$(VersionPrefix)$(VersionSuffix)</Version>
-	<VersionPrefix>0.7.1</VersionPrefix>
+	<VersionPrefix>0.8.0</VersionPrefix>
 	<VersionSuffix></VersionSuffix>
     <PackageId>SPS.SBCompressor</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -20,10 +20,11 @@
     <Copyright />
     <Title>Azure Service Bus Compressor</Title>
     <PackageReleaseNotes>
-        - Subscriber code now can be an async Func as well an Action
-        - Previous features
-        -- Add .net7
-	    -- Now you can use your Serialization Deserialization implementation using IMessageDeserializer and IMessageSerializer interfaces
+		-- Add .net8
+		- Subscriber code now can be an async Func as well an Action
+		- Previous features
+		-- Add .net7
+		-- Now you can use your Serialization Deserialization implementation using IMessageDeserializer and IMessageSerializer interfaces
 		-- Now you can choose the object's Type to deserialize while reading a message
 		--- Passing explicitly the Type as argument in Reader objects initialization
 		--- No more binary dependency
@@ -58,27 +59,45 @@
 		<Compile Remove="Sender\QueueConnector.cs" />
 		<Compile Remove="Sender\TopicConnector.cs" />
 	</ItemGroup>
-  <ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+		<Compile Remove="Base\BaseConnector.cs" />
+		<Compile Remove="Base\BaseMessageReader.cs" />
+		<Compile Remove="Base\ConnectionCore.cs" />
+		<Compile Remove="Base\IMessageReader.cs" />
+		<Compile Remove="Reader\QueueMessageReader.cs" />
+		<Compile Remove="Reader\TopicMessageReader.cs" />
+		<Compile Remove="Sender\QueueConnector.cs" />
+		<Compile Remove="Sender\TopicConnector.cs" />
+	</ItemGroup>
+	<ItemGroup>
     <None Remove="nuget.exe" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
+		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.17.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
 	  <PackageReference Include="Azure.Storage.Blobs" Version="12.15.1" />
 		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.13.1" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.15.1" />
-		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.13.1" />
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
+		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.17.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
 	  <PackageReference Include="Azure.Storage.Blobs" Version="12.15.1" />
         <PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.1.2" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />

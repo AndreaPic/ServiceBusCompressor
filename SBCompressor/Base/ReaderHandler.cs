@@ -1,4 +1,4 @@
-﻿#if NET6_0 || NET7_0
+﻿#if NET6_0 || NET7_0 || NET8_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -31,7 +31,7 @@ namespace SBCompressor
 #if NETCOREAPP3_1 || NET5_0
         internal static EventMessage GetSimpleMessage(Message receivedMessage, Type typeToDeserialize, IMessageDeserializer messagedeserializer)
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         internal static EventMessage GetSimpleMessage(ServiceBusReceivedMessage receivedMessage, Type typeToDeserialize, IMessageDeserializer messagedeserializer)
 #endif
         {
@@ -106,7 +106,7 @@ namespace SBCompressor
             var bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(receivedMessage.Body));
             //var bytes = receivedMessage.Body.ToArray();
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         internal static async Task<EventMessage> GetZippedMessage(ServiceBusReceivedMessage receivedMessage, Type typeToDeserialize, IMessageDeserializer messagedeserializer)
         {
             var bytes = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(receivedMessage.Body));
@@ -118,7 +118,7 @@ namespace SBCompressor
             return message;
         }
 
-#if NET5_0 || NET6_0 || NET7_0
+#if NET5_0 || NET6_0 || NET7_0 || NET8_0
         /// <summary>
         /// Get the message from compressed state
         /// </summary>
@@ -150,7 +150,7 @@ namespace SBCompressor
 
             byte[] bytes = receivedMessage.Body;
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         internal static async Task<EventMessage> GetChunkedMessage(ServiceBusReceivedMessage receivedMessage, ConcurrentDictionary<string, List<byte[]>> chunkDictionary, Type typeToDeserialize, IMessageDeserializer messagedeserializer)
         {
             object chunkGroupIdObject = receivedMessage.ApplicationProperties[MessageFactory.MessageChunkGroupIdPropertyName];
@@ -173,7 +173,7 @@ namespace SBCompressor
 #if NETCOREAPP3_1 || NET5_0
             var chunkState = receivedMessage.UserProperties[MessageFactory.MessageChunkStatePropertyName];
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
             var chunkState = receivedMessage.ApplicationProperties[MessageFactory.MessageChunkStatePropertyName];
 #endif
             string chunkStateString = Convert.ToString(chunkState);
@@ -199,7 +199,7 @@ namespace SBCompressor
             return ret;
         }
 
-#if NET5_0 || NET6_0 || NET7_0
+#if NET5_0 || NET6_0 || NET7_0 || NET8_0
         /// <summary>
         /// Get the message by chunks
         /// </summary>
@@ -257,7 +257,7 @@ namespace SBCompressor
 #if NET5_0 || NETCOREAPP3_1
         internal static async Task<EventMessage> GetStoredMessage(Message receivedMessage, MessageStorage storage, Type typeToDeserialize, IMessageDeserializer messagedeserializer)
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
         internal static async Task<EventMessage> GetStoredMessage(ServiceBusReceivedMessage receivedMessage, MessageStorage storage, Type typeToDeserialize, IMessageDeserializer messagedeserializer)
 #endif
         {
@@ -268,7 +268,7 @@ namespace SBCompressor
             return message;
         }
 
-#if NET5_0 || NET6_0 || NET7_0
+#if NET5_0 || NET6_0 || NET7_0 || NET8_0
         /// <summary>
         /// Get message from the storage
         /// </summary>

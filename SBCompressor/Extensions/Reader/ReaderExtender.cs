@@ -1,4 +1,4 @@
-﻿#if NET6_0 || NET7_0
+﻿#if NET6_0 || NET7_0 || NET8_0
 using Azure.Messaging.ServiceBus;
 #endif
 #if NETCOREAPP3_1 || NET5_0
@@ -25,7 +25,7 @@ namespace SBCompressor.Extensions.Reader
 #if NETCOREAPP3_1 || NET5_0
        where TClient : IReceiverClient
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
        where TClient : ServiceBusProcessor//ServiceBusReceiver
 #endif
     {
@@ -109,7 +109,7 @@ namespace SBCompressor.Extensions.Reader
         /// </summary>
         protected virtual void RegisterForMessage()
         {
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
             Client.ProcessMessageAsync += MessageReceivedHandler;
             Client.ProcessErrorAsync += ErrorHandler;
 #endif
@@ -157,7 +157,7 @@ namespace SBCompressor.Extensions.Reader
             }
         }
 #endif
-#if NET6_0 || NET7_0
+#if NET6_0 || NET7_0 || NET8_0
 
         //protected override async Task MessageReceivedHandler(ServiceBusReceivedMessage receivedMessage, CancellationToken token)
         protected override async Task MessageReceivedHandler(ProcessMessageEventArgs receivedMessage)//, CancellationToken token)
