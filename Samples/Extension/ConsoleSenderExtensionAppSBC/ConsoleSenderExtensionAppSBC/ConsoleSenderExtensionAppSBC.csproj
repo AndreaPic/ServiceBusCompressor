@@ -2,24 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\SBCompressor\SBCompressor.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\DTO\DTOLibrary\DTOLibrary\DTOLibrary.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="SBCompressor">
-      <HintPath>..\..\..\..\SBCompressor\bin\Debug\net5.0\SBCompressor.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-		<PackageReference Include="SPS.SBCompressor" Version="0.6.5" />
-	</ItemGroup>
 
 </Project>
